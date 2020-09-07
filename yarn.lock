@@ -7841,6 +7841,11 @@ mkdirp@^0.5.5:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.18.1:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -9644,6 +9649,13 @@ raw-body@2.4.0:
     http-errors "1.7.2"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-add-to-calendar@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-add-to-calendar/-/react-add-to-calendar-0.1.5.tgz#ab077fe98ca0f178a5a3b70a3590d4b630c0f275"
+  integrity sha512-DI+q3vvHCiYhxgh+83sg9UrPD9sdyBYcuY77UMcfX3y1MUPMW+f/w/6EG0MZg7B07vLQ4R6nxqk6wtMtcXOicA==
+  optionalDependencies:
+    moment "^2.18.1"
 
 react-animation-components@^3.0.0:
   version "3.0.0"

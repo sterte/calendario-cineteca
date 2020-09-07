@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
 import { baseUrl } from '../shared/baseUrl';
 
 class Header extends Component{
@@ -23,28 +22,10 @@ class Header extends Component{
             <Navbar dark expand="md">
             <div className="container">
             <NavbarToggler onClick={this.toggleNav} />
-            <NavbarBrand className="mr-auto" href="/">
-            <img src={baseUrl + "/assets/images/logo.png"} height="30" width="41" alt="Calendario Cineteca" />
+            <NavbarBrand className="offset-md-4 mr-auto" href="/">
+            <img src={baseUrl + "/assets/images/logo.png"} height="30" width="41" alt="Calendario Cineteca" />Calendario Cineteca di Bologna
             </NavbarBrand>
-            <Collapse isOpen={this.state.isNavOpen} navbar>
-            <Nav navbar>
-            <NavItem>
-            <NavLink className="nav-link" to="/home">
-            <span className="fa fa-home fa-lg"></span> Home
-            </NavLink>
-            </NavItem>
-            <NavItem>
-            <NavLink className="nav-link" to="/aboutus">
-            <span className="fa fa-info fa-lg"></span> About
-            </NavLink>
-            </NavItem>
-            <NavItem>
-            <NavLink className="nav-link" to="/menu">
-            <span className="fa fa-list fa-lg"></span> Menu
-            </NavLink>
-            </NavItem>            
-            </Nav>
-            </Collapse>
+            
             </div>
             </Navbar>
             </>
