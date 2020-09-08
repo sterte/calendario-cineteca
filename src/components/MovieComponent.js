@@ -132,7 +132,7 @@ class Movie extends Component {
             <div className='col-6 d-flex align-self-center'>
               <div className='row'>
                 <div className='col-12 d-flex align-self-center'>
-                  <h4>{this.props.movie.movies.title}</h4>
+                  <h2>{this.props.movie.movies.title}</h2>
                 </div>
                 <div className='col-12 d-flex align-self-center'>
                   {this.props.movie.movies.duration}

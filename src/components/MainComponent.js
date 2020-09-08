@@ -39,7 +39,7 @@ class Main extends Component{
       <Redirect exact from="/calendar" to={todayUrl} />
       <Route path="/calendar/:year/:month/:day" component={CalendarWithDate} />
       <Route path="/movie/:movieId" component={MovieWithId} />
-      <Redirect to="/calendar" />
+      <Redirect to={todayUrl} />
       </Switch>
       </CSSTransition>
       </TransitionGroup>

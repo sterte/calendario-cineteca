@@ -23,7 +23,7 @@ class Header extends Component{
             <div className="container">
             <NavbarToggler onClick={this.toggleNav} />
             <NavbarBrand className="offset-md-4 mr-auto" href="/">
-            <img src={baseUrl + "/assets/images/logo.png"} height="30" width="41" alt="Calendario Cineteca" />Calendario Cineteca di Bologna
+            <img src={baseUrl + "/assets/images/logo.png"} height="60" alt="Calendario Cineteca" /> Calendario Cineteca di Bologna
             </NavbarBrand>
             
             </div>

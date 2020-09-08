@@ -31,14 +31,22 @@ const parseMovieDetail = (html) => {
     var durata = paragraphs.length > 0 ? paragraphs[0].innerHTML : '';
     if(durata.length){        
         const to = durata.indexOf('<br>');
-        durata = durata.substr(0, to);
-        durata = durata.replace('<em>', '');
-        durata = durata.replace('</em>', '');
+        if(to > -1){
+            durata = durata.substr(0, to);    
+        }        
+        durata = durata.replace(/<[^>]*>/g, '');        
     }
 
-    var sinossi = paragraphs.length > 1 ? paragraphs[1].innerHTML : '';        
-    sinossi = sinossi.replace(/<[^>]*>/g, '');
-    
+    var sinossi = '';
+    if(paragraphs[0].getElementsByTagName('span').length > 0){
+        sinossi = paragraphs[0].getElementsByTagName('span')[0].innerHTML;
+        sinossi = '<p>' + sinossi + '</p><p>' + paragraphs[0].innerHTML.substr(paragraphs[0].innerHTML.indexOf('</span>')) + '</p>';
+        sinossi = sinossi + paragraphs[1].innerHTML;
+    }
+    else{
+        sinossi = paragraphs.length > 1 ? paragraphs[1].innerHTML : '';        
+    }
+    sinossi = sinossi.replace(/<[^>]*>/g, '');        
 
     const pagRepliche = parsed.getElementsByClassName('dettagli_cal extra');    
     var i;    
@@ -73,8 +81,8 @@ const parseDayProgram = (html) => {
     var i;
     var moviesJson = { movies: []};
     for(i=0; i<movies.length; i++){
-        const movie = movies[i]
-        const place = movie.getElementsByClassName('luogo').length > 0 ?  movie.getElementsByClassName('luogo')[0].innerHTML : '-';
+        const movie = movies[i]        
+        var place = movie.getElementsByClassName('luogo').length > 0 ?  movie.getElementsByClassName('luogo')[0].innerHTML : '-';        
 
         const time = movie.getElementsByClassName('ora').length > 0 ?  movie.getElementsByClassName('ora')[0].innerHTML : '-';
         const title = movie.getElementsByClassName('caption').length > 0 ? movie.getElementsByClassName('caption')[0].getElementsByTagName('a')[0].innerHTML : '-';
@@ -124,6 +132,7 @@ const parseDayProgram = (html) => {
         }
 
         moviesJson.movies.push({           
+            key: i,
             id: id,             
             title: title,
             place: place,
@@ -140,8 +149,10 @@ const parseDayProgram = (html) => {
 export const getDayProgram = (year, month, day) => (dispatch) => {
     dispatch(dayLoading(true))
     const url=cinetecaUrl + '/vedere/programmazione/dp_dt_'+year+'/'+month+'/'+day;    
-    return fetch(url)
-    .then(res => res.text())
+    return fetch(url, {headers:{
+        contentType: "text/html; charset=iso-8859-1",
+      }})    
+    .then(res => res.text())        
     .then(html => parseDayProgram(html))
     .then(day => dispatch(addDay(day)));
 }
@@ -159,8 +170,10 @@ const addDay = (program) => ({
 export const getMovieDetail = (movieId) => (dispatch) => {
     dispatch(movieLoading(true))
     const url=cinetecaUrl + '/vedere/programmazione/' + movieId;    
-    return fetch(url)
-    .then(res => res.text())
+    return fetch(url, {headers:{
+        contentType: "text/html; charset=iso-8859-1",
+      }})
+    .then(res => res.text())        
     .then(html => parseMovieDetail(html))
     .then(movie => dispatch(addMovie(movie)));    
 }

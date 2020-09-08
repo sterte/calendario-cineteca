@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, CardText } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { getDayProgram } from '../redux/ActionCreators'
 import { Fade, Stagger } from 'react-animation-components';
@@ -58,11 +58,12 @@ function CalendarButtons(props) {
     const labelStyle = today === date ? { color: 'red' } : today > date ? { color: 'gray' } : { color: 'black' };
 
     return (
-        <div className='row row-content d-flex justify-content-center'>
+        <div className='row row-content d-flex justify-content-between justify-content-md-center'>
             <div className='d-flex align-items-center col-2 col-md-1 order-2 order-md-1'>
                 <Link to={`/calendar/${prevWeekYear}/${prevWeekMonth}/${prevWeekDay}`} >
-                    <Button>
-                        <span className="fa fa-angle-double-left"> Prev</span>
+                    <Button>                    
+                        <span className="fa fa-angle-double-left" />
+                        <span>Week</span>
                     </Button>
                 </Link>
             </div>
@@ -70,7 +71,8 @@ function CalendarButtons(props) {
             <div className='d-flex align-items-center col-2 col-md-1 order-3 order-md-2'>
                 <Link to={`/calendar/${yesterdayYear}/${yesterdayMonth}/${yesterdayDay}`} >
                     <Button>
-                        <span className="fa fa-angle-left"> Prev</span>
+                        <span className="fa fa-angle-left" />
+                        <span> Day</span>
                     </Button>
                 </Link>
             </div>
@@ -86,16 +88,18 @@ function CalendarButtons(props) {
 
             <div className='d-flex align-items-center col-2 col-md-1 order-4 order-md-4'>
                 <Link to={`/calendar/${tomorrowYear}/${tomorrowMonth}/${tomorrowDay}`} >
-                    <Button>
-                        <span className="fa fa-angle-right"> Next</span>
+                    <Button>                        
+                        <span className="fa fa-angle-right" />                        
+                        <span> Day</span>
                     </Button>
                 </Link>
             </div>
 
             <div className='d-flex align-items-center col-2 col-md-1 order-5 order-md-5'>
                 <Link to={`/calendar/${nextWeekYear}/${nextWeekMonth}/${nextWeekDay}`} >
-                    <Button>
-                        <span className="fa fa-angle-double-right"> Next</span>
+                    <Button>                        
+                        <span className="fa fa-angle-double-right" />
+                        <span>Week</span>
                     </Button>
                 </Link>
             </div>
@@ -163,10 +167,8 @@ class Calendar extends Component {
                 <div className='container'>
                     <CalendarButtons year={this.props.year} month={this.props.month} day={this.props.day} />
                     <div className='row row-content d-flex justify-content-center'>
-                        <Fade in>
-                            <CardText>
-                                {movielist}
-                            </CardText>
+                        <Fade in>                            
+                            {movielist}                            
                         </Fade>
                     </div>
                 </div>
