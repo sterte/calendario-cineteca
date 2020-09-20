@@ -92,6 +92,7 @@ class Movie extends Component {
         oraInizio.setDate(day);
 
         return (
+          <div className='container'>
           <Fade in>
             <div className='row mt-4'>
               <h5>{hour.day}</h5>
@@ -108,7 +109,8 @@ class Movie extends Component {
                 title: this.props.movie.movies.title,
                 location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
                 startTime: oraInizio.toISOString(),
-                endTime: oraFine.toISOString()
+                endTime: oraFine.toISOString(),
+                description: this.props.movie.movies.originalUrl
               };
 
               return (
@@ -123,6 +125,7 @@ class Movie extends Component {
               );
             })}
           </Fade>
+          </div>
         );
       });
 
@@ -144,15 +147,22 @@ class Movie extends Component {
             </div>
           </div>
           <div className='row d-flex justify-content-center'>
-            <div className='col-12 mt-3'>
-              <p>{this.props.movie.movies.summary}</p>
+            <div className='col-12 mt-3' dangerouslySetInnerHTML={{__html: this.props.movie.movies.summary}} >
             </div>
           </div>
+
+
+          <div className='row d-flex justify-content-center'>
+            <div className='col-12 mt-3' dangerouslySetInnerHTML={{__html: this.props.movie.movies.prices}} >
+            </div>
+          </div>
+
+
           <div className='row d-flex justify-content-center'>
             <div className='col-12 mt-3'>
               {timetable}
             </div>
-          </div>
+          </div>          
         </div>
       );
     }

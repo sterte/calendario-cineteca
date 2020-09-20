@@ -3,10 +3,11 @@ import { cinetecaUrl } from '../shared/baseUrl';
 
 
 
-const parseMovieDetail = (html) => {
+const parseMovieDetail = (html, originalUrl) => {
     var movie = {};    
     const parser = new DOMParser();
     const parsed = parser.parseFromString(html, 'text/html');    
+    
     const title = parsed.getElementsByClassName('pagetitle minisito').length > 0 ? parsed.getElementsByClassName('pagetitle minisito')[0].innerHTML : '';    
     const extra = parsed.getElementsByClassName('proiezione_corpo');
     const paragraphs = extra.length > 0 ? extra[0].getElementsByTagName('p') : [];
@@ -39,14 +40,16 @@ const parseMovieDetail = (html) => {
 
     var sinossi = '';
     if(paragraphs[0].getElementsByTagName('span').length > 0){
-        sinossi = paragraphs[0].getElementsByTagName('span')[0].innerHTML;
+        sinossi = paragraphs[0].getElementsByTagName('span')[0].innerHTML;                
         sinossi = '<p>' + sinossi + '</p><p>' + paragraphs[0].innerHTML.substr(paragraphs[0].innerHTML.indexOf('</span>')) + '</p>';
-        sinossi = sinossi + paragraphs[1].innerHTML;
+        sinossi = sinossi + '<p>' + paragraphs[1].innerHTML + '</p>';        
     }
     else{
-        sinossi = paragraphs.length > 1 ? paragraphs[1].innerHTML : '';        
+        sinossi = paragraphs.length > 1 ? paragraphs[1].innerHTML : '';                        
     }
-    sinossi = sinossi.replace(/<[^>]*>/g, '');        
+    sinossi = paragraphs.length > 2 ? sinossi + '<p>' + paragraphs[2].innerHTML + '</p>': sinossi;            
+
+    const costi = parsed.getElementsByClassName('costi')[0].innerHTML.replace(/<a .*<\/a>/g, '') .replace('h2', 'h5');    
 
     const pagRepliche = parsed.getElementsByClassName('dettagli_cal extra');    
     var i;    
@@ -68,8 +71,8 @@ const parseMovieDetail = (html) => {
                 days.push({day: giornoString, hours: ora});                
             }            
         }   
-    }
-    movie = {title: title, duration: durata, summary: sinossi, image: image, hours: days};        
+    }    
+    movie = {title: title, duration: durata, summary: sinossi, image: image, hours: days, prices: costi, originalUrl: originalUrl};        
     return movie;
 }
 
@@ -174,7 +177,7 @@ export const getMovieDetail = (movieId) => (dispatch) => {
         contentType: "text/html; charset=iso-8859-1",
       }})
     .then(res => res.text())        
-    .then(html => parseMovieDetail(html))
+    .then(html => parseMovieDetail(html, url))
     .then(movie => dispatch(addMovie(movie)));    
 }
 
