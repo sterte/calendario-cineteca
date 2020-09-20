@@ -49,7 +49,7 @@ const parseMovieDetail = (html, originalUrl) => {
     }
     sinossi = paragraphs.length > 2 ? sinossi + '<p>' + paragraphs[2].innerHTML + '</p>': sinossi;            
 
-    const costi = parsed.getElementsByClassName('costi')[0].innerHTML.replace(/<a .*<\/a>/g, '') .replace('h2', 'h5');    
+    const costi = parsed.getElementsByClassName('costi')[0].innerHTML.replace(/<a .*<\/a>/g, '').replace('h2', 'h5');    
 
     const pagRepliche = parsed.getElementsByClassName('dettagli_cal extra');    
     var i;    
