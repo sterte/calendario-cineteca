@@ -60,7 +60,7 @@ function CalendarButtons(props) {
     return (
         <div className='row row-content d-flex justify-content-between justify-content-md-center'>
             <div className='d-flex align-items-center col-2 col-md-1 order-2 order-md-1'>
-                <Link to={`/calendar/${prevWeekYear}/${prevWeekMonth}/${prevWeekDay}`} >
+                <Link to={`/days/${prevWeekYear}/${prevWeekMonth}/${prevWeekDay}`} >
                     <Button>                    
                         <span className="fa fa-angle-double-left" />
                         <span>Week</span>
@@ -69,7 +69,7 @@ function CalendarButtons(props) {
             </div>
 
             <div className='d-flex align-items-center col-2 col-md-1 order-3 order-md-2'>
-                <Link to={`/calendar/${yesterdayYear}/${yesterdayMonth}/${yesterdayDay}`} >
+                <Link to={`/days/${yesterdayYear}/${yesterdayMonth}/${yesterdayDay}`} >
                     <Button>
                         <span className="fa fa-angle-left" />
                         <span> Day</span>
@@ -87,7 +87,7 @@ function CalendarButtons(props) {
             </div>
 
             <div className='d-flex align-items-center col-2 col-md-1 order-4 order-md-4'>
-                <Link to={`/calendar/${tomorrowYear}/${tomorrowMonth}/${tomorrowDay}`} >
+                <Link to={`/days/${tomorrowYear}/${tomorrowMonth}/${tomorrowDay}`} >
                     <Button>                        
                         <span className="fa fa-angle-right" />                        
                         <span> Day</span>
@@ -96,7 +96,7 @@ function CalendarButtons(props) {
             </div>
 
             <div className='d-flex align-items-center col-2 col-md-1 order-5 order-md-5'>
-                <Link to={`/calendar/${nextWeekYear}/${nextWeekMonth}/${nextWeekDay}`} >
+                <Link to={`/days/${nextWeekYear}/${nextWeekMonth}/${nextWeekDay}`} >
                     <Button>                        
                         <span className="fa fa-angle-double-right" />
                         <span>Week</span>
@@ -125,7 +125,7 @@ class Calendar extends Component {
 
             const Vo = (props) => {
                 if (props.isVO) {
-                    return (<img className='mr-3' src={baseUrl + "/assets/images/subtitles.gif"} alt='subtitles' />);
+                    return (<img className='mr-3' src={baseUrl + "/images/subtitles.gif"} alt='subtitles' />);
                 } else {
                     return (<></>);
                 }
@@ -133,7 +133,7 @@ class Calendar extends Component {
 
             const Music = (props) => {
                 if (props.isMUSIC) {
-                    return (<img className='mr-3' src={baseUrl + "/assets/images/nota.gif"} alt='music' />);
+                    return (<img className='mr-3' src={baseUrl + "/images/nota.gif"} alt='music' />);
                 } else {
                     return (<></>);
                 }

@@ -1,163 +1,14 @@
+import { baseUrl } from '../shared/baseUrl';
 import * as ActionTypes from './ActionTypes';
-import { cinetecaUrl } from '../shared/baseUrl';
 
-
-
-const parseMovieDetail = (html, originalUrl) => {
-    var movie = {};    
-    const parser = new DOMParser();
-    const parsed = parser.parseFromString(html, 'text/html');    
-    
-    const title = parsed.getElementsByClassName('pagetitle minisito').length > 0 ? parsed.getElementsByClassName('pagetitle minisito')[0].innerHTML : '';    
-    const extra = parsed.getElementsByClassName('proiezione_corpo');
-    const paragraphs = extra.length > 0 ? extra[0].getElementsByTagName('p') : [];
-
-    var image = parsed.getElementsByClassName('mainthumbwrapper');
-    if(image.length){
-        if(image[0].getElementsByTagName('img').length){
-            image = image[0].getElementsByTagName('img');
-            if(image.length){
-                image = image[0].getAttribute('src').valueOf();
-                image = cinetecaUrl + image.substr(image.indexOf('/imageserver'));
-            }
-            else{
-                image ='';
-            }
-        }
-    }
-    else{
-        image =''
-    }
-
-    var durata = paragraphs.length > 0 ? paragraphs[0].innerHTML : '';
-    if(durata.length){        
-        const to = durata.indexOf('<br>');
-        if(to > -1){
-            durata = durata.substr(0, to);    
-        }        
-        durata = durata.replace(/<[^>]*>/g, '');        
-    }
-
-    var sinossi = '';
-    if(paragraphs[0].getElementsByTagName('span').length > 0){
-        sinossi = paragraphs[0].getElementsByTagName('span')[0].innerHTML;                
-        sinossi = '<p>' + sinossi + '</p><p>' + paragraphs[0].innerHTML.substr(paragraphs[0].innerHTML.indexOf('</span>')) + '</p>';
-        sinossi = sinossi + '<p>' + paragraphs[1].innerHTML + '</p>';        
-    }
-    else{
-        sinossi = paragraphs.length > 1 ? paragraphs[1].innerHTML : '';                        
-    }
-    sinossi = paragraphs.length > 2 ? sinossi + '<p>' + paragraphs[2].innerHTML + '</p>': sinossi;            
-
-    const costi = parsed.getElementsByClassName('costi')[0].innerHTML.replace(/<a .*<\/a>/g, '').replace('h2', 'h5');    
-
-    const pagRepliche = parsed.getElementsByClassName('dettagli_cal extra');    
-    var i;    
-    var days = [];
-    for(i=0; i<pagRepliche.length; i++){        
-        const giorniRepliche = pagRepliche[i].getElementsByClassName('repliche');        
-        var j;
-        for(j=0; j<giorniRepliche.length; j++){
-            const giornoRepliche = giorniRepliche[j];
-            const giorno = giornoRepliche.getElementsByClassName('data_repliche');                        
-            if(giorno.length > 0){
-                const giornoString = giorno[0].innerHTML
-                const orari = giornoRepliche.getElementsByClassName('ora_wrapper').length > 0 ? giornoRepliche.getElementsByClassName('ora_wrapper')[0].getElementsByClassName('ora_repliche') : [];
-                var ora = [];
-                var k;
-                for(k=0; k<orari.length; k++){
-                    ora.push(orari[k].innerHTML);
-                }
-                days.push({day: giornoString, hours: ora});                
-            }            
-        }   
-    }    
-    movie = {title: title, duration: durata, summary: sinossi, image: image, hours: days, prices: costi, originalUrl: originalUrl};        
-    return movie;
-}
-
-const parseDayProgram = (html) => {    
-    const parser = new DOMParser();
-    const parsed = parser.parseFromString(html, 'text/html');
-    const day = parsed.getElementById("elenco_giorno");
-    const movies = day.getElementsByClassName('clearfix');
-    var i;
-    var moviesJson = { movies: []};
-    for(i=0; i<movies.length; i++){
-        const movie = movies[i]        
-        var place = movie.getElementsByClassName('luogo').length > 0 ?  movie.getElementsByClassName('luogo')[0].innerHTML : '-';        
-
-        const time = movie.getElementsByClassName('ora').length > 0 ?  movie.getElementsByClassName('ora')[0].innerHTML : '-';
-        const title = movie.getElementsByClassName('caption').length > 0 ? movie.getElementsByClassName('caption')[0].getElementsByTagName('a')[0].innerHTML : '-';
-        var url = movie.getElementsByClassName('caption');
-        var id;
-        if(url.length > 0){
-            url = url[0].getElementsByTagName('a')[0].getAttribute('href')
-            const from = url.indexOf('/app_');
-            const to = url.indexOf('/', from+1);            
-            id = url.substr(from+1, to-from-1);
-            url = cinetecaUrl + url.substr(url.indexOf('/vedere'));
-        }else{
-            url=''
-        }
-
-        var image = movie.getElementsByClassName('thumb')
-        if(image.length > 0){
-            image = image[0].getElementsByTagName('img')[0].getAttribute('src')            
-            image = cinetecaUrl + image.substr(image.indexOf('/imageserver'));
-        }else{
-            image=''
-        }                
-
-        var isVO = false;
-        var extras = movie.getElementsByClassName('extra');        
-        if(extras.length > 0){            
-            extras = extras[0].getElementsByTagName('img');            
-            var j;
-            for(j=0; j<extras.length; j++){                                
-                if(extras[j].getAttribute('src').valueOf().indexOf('subtitles.gif') > -1){
-                    isVO = true;
-                    break;
-                }
-            }
-        }
-
-        var isMUSIC = false;
-        extras = movie.getElementsByClassName('extra');
-        if(extras.length > 0){
-            extras = extras[0].getElementsByTagName('img');
-            for(j=0; j<extras.length; j++){                                
-                if(extras[j].getAttribute('src').valueOf().indexOf('nota.gif') > -1){
-                    isMUSIC = true;
-                    break;
-                }
-            }
-        }
-
-        moviesJson.movies.push({           
-            key: i,
-            id: id,             
-            title: title,
-            place: place,
-            time: time,
-            url: url,
-            image: image,
-            isVO: isVO,
-            isMUSIC: isMUSIC
-        });        
-    }    
-    return moviesJson;    
-}
 
 export const getDayProgram = (year, month, day) => (dispatch) => {
     dispatch(dayLoading(true))
-    const url=cinetecaUrl + '/vedere/programmazione/dp_dt_'+year+'/'+month+'/'+day;    
-    return fetch(url, {headers:{
-        contentType: "text/html; charset=iso-8859-1",
-      }})    
-    .then(res => res.text())        
-    .then(html => parseDayProgram(html))
-    .then(day => dispatch(addDay(day)));
+    const url = baseUrl + '/days/' + year + '/' + month + '/' + day;    
+    return fetch(url)
+    .then(res => res.json())
+    .then(day => dispatch(addDay(day)))
+    .catch((err) => console.log(err));
 }
 
 export const dayLoading = () => ({
@@ -172,13 +23,11 @@ const addDay = (program) => ({
 
 export const getMovieDetail = (movieId) => (dispatch) => {
     dispatch(movieLoading(true))
-    const url=cinetecaUrl + '/vedere/programmazione/' + movieId;    
-    return fetch(url, {headers:{
-        contentType: "text/html; charset=iso-8859-1",
-      }})
-    .then(res => res.text())        
-    .then(html => parseMovieDetail(html, url))
-    .then(movie => dispatch(addMovie(movie)));    
+    const url= baseUrl + '/movies/' + movieId;    
+    return fetch(url)
+    .then(res => res.json())            
+    .then(movie => dispatch(addMovie(movie)))
+    .catch((err) => console.log(err));
 }
 
 export const movieLoading = () => ({
@@ -189,3 +38,150 @@ const addMovie = (program) => ({
     type: ActionTypes.ADD_MOVIE,
     payload: program
 })
+
+
+
+
+//USER
+export const requestLogin = (creds) => {
+    return {
+        type: ActionTypes.LOGIN_REQUEST,
+        creds
+    }
+}
+  
+export const receiveLogin = (response) => {
+    return {
+        type: ActionTypes.LOGIN_SUCCESS,
+        token: response.token
+    }
+}
+  
+export const loginError = (message) => {
+    return {
+        type: ActionTypes.LOGIN_FAILURE,
+        message
+    }
+}
+
+
+export const requestSignup = (creds) => {
+    return {
+        type: ActionTypes.SIGNUP_REQUEST,
+        creds
+    }
+}
+  
+export const receiveSignup = (response) => {
+    return {
+        type: ActionTypes.SIGNUP_SUCCESS,        
+    }
+}
+  
+export const signupError = (message) => {
+    return {
+        type: ActionTypes.SIGNUP_FAILURE,
+        message
+    }
+}
+
+export const loginUser = (creds) => (dispatch) => {
+    // We dispatch requestLogin to kickoff the call to the API
+    dispatch(requestLogin(creds))
+
+    return fetch(baseUrl + '/users/login', {
+        method: 'POST',
+        headers: { 
+            'Content-Type':'application/json' 
+        },
+        body: JSON.stringify(creds)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+        },
+        error => {
+            throw error;
+        })
+    .then(response => response.json())
+    .then(response => {
+        if (response.success) {
+            // If login was successful, set the token in local storage
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('creds', JSON.stringify(creds));
+            // Dispatch the success action
+            //dispatch(fetchFavorites());
+            dispatch(receiveLogin(response));
+        }
+        else {
+            var error = new Error('Error ' + response.status);
+            error.response = response;
+            throw error;
+        }
+    })
+    .catch(error => dispatch(loginError(error.message)))
+};
+
+export const requestLogout = () => {
+    return {
+      type: ActionTypes.LOGOUT_REQUEST
+    }
+}
+  
+export const receiveLogout = () => {
+    return {
+      type: ActionTypes.LOGOUT_SUCCESS
+    }
+}
+
+// Logs the user out
+export const logoutUser = () => (dispatch) => {
+    dispatch(requestLogout())
+    localStorage.removeItem('token');
+    localStorage.removeItem('creds');
+    //dispatch(favoritesFailed("Error 401: Unauthorized"));
+    dispatch(receiveLogout())
+}
+
+export const signupUser = (creds) => (dispatch) => {
+// We dispatch requestLogin to kickoff the call to the API
+dispatch(requestSignup(creds))
+
+return fetch(baseUrl + '/users/signup', {
+    method: 'POST',
+    headers: { 
+        'Content-Type':'application/json' 
+    },
+    body: JSON.stringify(creds)
+})
+.then(response => {
+    if (response.ok) {
+        return response;
+    } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+    }
+    },
+    error => {
+        throw error;
+    })
+.then(response => response.json())
+.then(response => {
+    if (response.success) {        
+        dispatch(receiveSignup(response));
+    }
+    else {
+        var error = new Error('Error ' + response.status);
+        error.response = response;
+        throw error;
+    }
+})
+.catch(error => dispatch(signupError(error.message)))}
+
+//USER END

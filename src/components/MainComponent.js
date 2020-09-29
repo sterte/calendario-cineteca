@@ -5,6 +5,23 @@ import Calendar from './CalendarComponent';
 import Movie from './MovieComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { connect } from 'react-redux';
+import { loginUser, logoutUser, signupUser } from '../redux/ActionCreators';
+
+
+
+
+const mapStateToProps = state => {
+  return {    
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  loginUser: (creds) => dispatch(loginUser(creds)),
+  logoutUser: () => dispatch(logoutUser()),
+  signupUser: (creds) => dispatch(signupUser(creds))
+});
 
 
 const CalendarWithDate = ({match}) => {
@@ -28,16 +45,19 @@ class Main extends Component{
     const day = today.getDate();
     const month = today.getMonth() + 1;
     const year = today.getFullYear();    
-    const todayUrl = '/calendar/'+year+'/'+month+'/'+day;
+    const todayUrl = '/days/'+year+'/'+month+'/'+day;
 
     return (
       <div>      
-      <Header />
+      <Header auth={this.props.auth} 
+          loginUser={this.props.loginUser} 
+          logoutUser={this.props.logoutUser}
+          signupUser={this.props.signupUser} />
       <TransitionGroup>
       <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
       <Switch>
-      <Redirect exact from="/calendar" to={todayUrl} />
-      <Route path="/calendar/:year/:month/:day" component={CalendarWithDate} />
+      <Redirect exact from="/days" to={todayUrl} />
+      <Route path="/days/:year/:month/:day" component={CalendarWithDate} />
       <Route path="/movie/:movieId" component={MovieWithId} />
       <Redirect to={todayUrl} />
       </Switch>
@@ -49,4 +69,4 @@ class Main extends Component{
   }
 }
 
-export default withRouter(Main);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (Main));
