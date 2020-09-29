@@ -4,6 +4,9 @@ export const ADD_DAY = 'ADD_DAY';
 export const MOVIE_LOADING = 'MOVIE_LOADING';
 export const MOVIE_FAILED = 'MOVIE_FAILED';
 export const ADD_MOVIE = 'ADD_MOVIE';
+export const FAVOURITES_LOADING = 'FAVOURITES_LOADING';
+export const FAVOURITES_FAILED = 'FAVOURITES_FAILED';
+export const ADD_FAVOURITES = 'ADD_FAVOURITES';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

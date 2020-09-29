@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Calendar from './CalendarComponent';
+import PersonalArea from './PersonalAreaComponent';
 import Movie from './MovieComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -47,6 +48,17 @@ class Main extends Component{
     const year = today.getFullYear();    
     const todayUrl = '/days/'+year+'/'+month+'/'+day;
 
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+      <Route {...rest} render={(props) => (
+        this.props.auth.isAuthenticated
+          ? <Component {...props} />
+          : <Redirect to={{
+              pathname: '/days',
+              state: { from: props.location }
+            }} />
+      )} />
+    );
+
     return (
       <div>      
       <Header auth={this.props.auth} 
@@ -59,6 +71,7 @@ class Main extends Component{
       <Redirect exact from="/days" to={todayUrl} />
       <Route path="/days/:year/:month/:day" component={CalendarWithDate} />
       <Route path="/movie/:movieId" component={MovieWithId} />
+      <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
       <Redirect to={todayUrl} />
       </Switch>
       </CSSTransition>

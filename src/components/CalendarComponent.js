@@ -151,7 +151,7 @@ class Calendar extends Component {
                                     <Link to={`/movie/${movie.id}`}><h4>{movie.title}</h4></Link>
                                 </div>
                                 <div className='row'>
-                                    <h5>{movie.time}</h5> - {movie.place}
+                                    <h5>{movie.time}</h5> - {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}
                                 </div>
                                 <div className='row'>
                                     <Vo isVO={movie.isVO} />

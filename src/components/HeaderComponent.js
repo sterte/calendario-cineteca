@@ -39,7 +39,6 @@ class Header extends Component{
     }
 
     handleLogin(event) {
-        alert('handlelogin');
         this.toggleLoginModal();
         this.props.loginUser({username: this.username.value, password: this.password.value});
         event.preventDefault();
@@ -52,7 +51,6 @@ class Header extends Component{
     handleSignup(event){
         if(this.password.value === this.confirmpassword.value){        
             this.toggleSignupModal();
-            alert(JSON.stringify({firstname: this.firstname.value, lastname: this.lastname.value, username: this.username.value, password: this.password.value}));
             this.props.signupUser({firstname: this.firstname.value, lastname: this.lastname.value, username: this.username.value, password: this.password.value});                                    
         }
         else{
@@ -79,7 +77,7 @@ class Header extends Component{
             </NavLink>
             </NavItem>            
             <NavItem>
-            <NavLink className="nav-link" to="/userprofile">
+            <NavLink className="nav-link" to="/personalarea">
             <span className="fa fa-list fa-lg"></span> Personal Area
             </NavLink>
             </NavItem>            
@@ -88,11 +86,11 @@ class Header extends Component{
             <NavItem>
             { !this.props.auth.isAuthenticated ?
             <Button outline onClick={this.toggleLoginModal}>
-            <span className="fa fa-sign-in fa-lg"> Login</span>
+            <span className="fa fa-sign-in fa-lg"></span> Login
             </Button>			
             :
             <Button outline onClick={this.handleLogout}>
-            <span className="fa fa-sign-in fa-lg"> Logout</span>
+            <span className="fa fa-sign-in fa-lg"></span> Logout
             </Button>			
             }            
             </NavItem>
@@ -159,13 +157,6 @@ class Header extends Component{
                                 <Label htmlFor="password">Password</Label>
                                 <Input type="password" id="password" name="password"
                                     innerRef={(input) => this.password = input}  />
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="remember"
-                                    innerRef={(input) => this.remember = input}  />
-                                    Remember me
-                                </Label>
                             </FormGroup>
                             <div className="row">
                             <div className="col-2 d-flex">  

@@ -15,7 +15,7 @@ export const dayLoading = () => ({
 	type: ActionTypes.DAY_LOADING
 })
 
-const addDay = (program) => ({
+export const addDay = (program) => ({
     type: ActionTypes.ADD_DAY,
     payload: program
 })
@@ -34,9 +34,148 @@ export const movieLoading = () => ({
 	type: ActionTypes.MOVIE_LOADING
 })
 
-const addMovie = (program) => ({
+export const addMovie = (program) => ({
     type: ActionTypes.ADD_MOVIE,
     payload: program
+})
+
+
+export const fetchFavourites = () => (dispatch) => {
+    dispatch(favouritesLoading(true));
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + '/favourites', {
+        headers: {
+            'Authorization': bearer
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(favourites => dispatch(addFavourites(favourites)))
+    .catch(error => dispatch(favouritesFailed(error.message)));
+}
+
+
+export const addFavourite = (fav) => (dispatch) => {
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + '/favourites/', {
+        method: 'POST',
+        body: JSON.stringify(fav),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })    
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(favourites => dispatch(fetchFavourites()))
+    .catch(error => dispatch(favouritesFailed(error.message)));
+}
+
+export const editFavourite = (fav) => (dispatch) => {
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + '/favourites/' + fav.id, {
+        method: 'PUT',
+        body: JSON.stringify(fav),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })    
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(favourites => dispatch(fetchFavourites()))
+    .catch(error => dispatch(favouritesFailed(error.message)));
+}
+
+
+export const deleteFavourite = (id) => (dispatch) => {
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + '/favourites/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })    
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(favourites => dispatch(fetchFavourites()))
+    .catch(error => dispatch(favouritesFailed(error.message)));
+}
+
+
+export const favouritesLoading = () => ({
+	type: ActionTypes.FAVOURITES_LOADING
+})
+
+export const addFavourites = (favourites) => ({
+    type: ActionTypes.ADD_FAVOURITES,
+    payload: favourites
+})
+
+export const favouritesFailed = (errmess) => ({
+    type: ActionTypes.FAVOURITES_FAILED,
+    payload: errmess
 })
 
 
