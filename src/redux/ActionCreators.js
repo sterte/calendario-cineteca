@@ -1,10 +1,10 @@
-import { baseUrl } from '../shared/baseUrl';
+import { baseUrl, fetchUrl } from '../shared/baseUrl';
 import * as ActionTypes from './ActionTypes';
 
 
 export const getDayProgram = (year, month, day) => (dispatch) => {
     dispatch(dayLoading(true))
-    const url = baseUrl + '/days/' + year + '/' + month + '/' + day;    
+    const url = fetchUrl + '/days/' + year + '/' + month + '/' + day;    
     return fetch(url)
     .then(res => res.json())
     .then(day => dispatch(addDay(day)))
@@ -23,7 +23,7 @@ export const addDay = (program) => ({
 
 export const getMovieDetail = (movieId) => (dispatch) => {
     dispatch(movieLoading(true))
-    const url= baseUrl + '/movies/' + movieId;    
+    const url= fetchUrl + '/movies/' + movieId;    
     return fetch(url)
     .then(res => res.json())            
     .then(movie => dispatch(addMovie(movie)))
@@ -45,7 +45,7 @@ export const fetchFavourites = () => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + '/favourites', {
+    return fetch(fetchUrl + '/favourites', {
         headers: {
             'Authorization': bearer
         },
@@ -73,7 +73,7 @@ export const fetchFavourites = () => (dispatch) => {
 export const addFavourite = (fav) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + '/favourites/', {
+    return fetch(fetchUrl + '/favourites/', {
         method: 'POST',
         body: JSON.stringify(fav),
         headers: {
@@ -104,7 +104,7 @@ export const addFavourite = (fav) => (dispatch) => {
 export const editFavourite = (fav) => (dispatch) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + '/favourites/' + fav.id, {
+    return fetch(fetchUrl + '/favourites/' + fav.id, {
         method: 'PUT',
         body: JSON.stringify(fav),
         headers: {
@@ -137,7 +137,7 @@ export const deleteFavourite = (id) => (dispatch) => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(baseUrl + '/favourites/' + id, {
+    return fetch(fetchUrl + '/favourites/' + id, {
         method: 'DELETE',
         headers: {
             'Authorization': bearer
@@ -228,7 +228,7 @@ export const loginUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
 
-    return fetch(baseUrl + '/users/login', {
+    return fetch(fetchUrl + '/users/login', {
         method: 'POST',
         headers: { 
             'Content-Type':'application/json' 
@@ -291,7 +291,7 @@ export const signupUser = (creds) => (dispatch) => {
 // We dispatch requestLogin to kickoff the call to the API
 dispatch(requestSignup(creds))
 
-return fetch(baseUrl + '/users/signup', {
+return fetch(fetchUrl + '/users/signup', {
     method: 'POST',
     headers: { 
         'Content-Type':'application/json' 

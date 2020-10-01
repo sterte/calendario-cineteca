@@ -168,8 +168,8 @@ class Movie extends Component {
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
-                  <div className='col-12 d-flex align-self-center'>
-                    {this.props.movie.movies.duration}
+                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>
+                    
                   </div>
                 </div>
               </div>

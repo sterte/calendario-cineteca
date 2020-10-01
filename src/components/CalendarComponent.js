@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { getDayProgram } from '../redux/ActionCreators'
 import { Fade, Stagger } from 'react-animation-components';
 import { connect } from 'react-redux';
-import { baseUrl } from '../shared/baseUrl'
+import { fetchUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
 
 
@@ -125,7 +125,7 @@ class Calendar extends Component {
 
             const Vo = (props) => {
                 if (props.isVO) {
-                    return (<img className='mr-3' src={baseUrl + "/images/subtitles.gif"} alt='subtitles' />);
+                    return (<img className='mr-3' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' />);
                 } else {
                     return (<></>);
                 }
@@ -133,7 +133,7 @@ class Calendar extends Component {
 
             const Music = (props) => {
                 if (props.isMUSIC) {
-                    return (<img className='mr-3' src={baseUrl + "/images/nota.gif"} alt='music' />);
+                    return (<img className='mr-3' src={fetchUrl + "/images/nota.gif"} alt='music' />);
                 } else {
                     return (<></>);
                 }
