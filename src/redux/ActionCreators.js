@@ -1,10 +1,10 @@
-import { baseUrl, fetchUrl } from '../shared/baseUrl';
+import { fetchUrl } from '../shared/baseUrl';
 import * as ActionTypes from './ActionTypes';
 
 
-export const getDayProgram = (year, month, day) => (dispatch) => {
+export const getDayProgram = (from, to) => (dispatch) => {
     dispatch(dayLoading(true))
-    const url = fetchUrl + '/days/' + year + '/' + month + '/' + day;    
+    const url = fetchUrl + '/days/' + from + '/' + to;    
     return fetch(url)
     .then(res => res.json())
     .then(day => dispatch(addDay(day)))

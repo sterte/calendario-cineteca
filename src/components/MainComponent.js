@@ -25,12 +25,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-const CalendarWithDate = ({match}) => {
-  return(
-    <Calendar year={match.params.year} month ={match.params.month} day={match.params.day} />
-  );
-}
-
 const MovieWithId = ({match}) => {
   return(
     <Movie movieId={match.params.movieId} />
@@ -41,12 +35,6 @@ class Main extends Component{
 
 
   render() {
-
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();    
-    const todayUrl = '/days/'+year+'/'+month+'/'+day;
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route {...rest} render={(props) => (
@@ -67,12 +55,11 @@ class Main extends Component{
           signupUser={this.props.signupUser} />
       <TransitionGroup>
       <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
-      <Switch>
-      <Redirect exact from="/days" to={todayUrl} />
-      <Route path="/days/:year/:month/:day" component={CalendarWithDate} />
+      <Switch>      
       <Route path="/movie/:movieId" component={MovieWithId} />
+      <Route path="/days" component={() => <Calendar />} />
       <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
-      <Redirect to={todayUrl} />
+      <Redirect to="/days" />
       </Switch>
       </CSSTransition>
       </TransitionGroup>

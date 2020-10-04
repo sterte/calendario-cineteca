@@ -61,48 +61,47 @@ class Movie extends Component {
         ];
 
         let icon = { 'calendar-plus-o': 'left' };
-
         //hour.day = hour.day.replace('&igrave;', 'ì');
         const splitDate = hour.day.trim().split(/\s+/);
-        const year = splitDate[3];
+        const year = '20' + splitDate[3];
         var month = splitDate[2];
         const day = splitDate[1];
 
         switch (month) {
-          case 'gennaio':
+          case 'Gen':
             month = 0;
             break;
-          case 'febbraio':
+          case 'Feb':
             month = 1;
             break;
-          case 'marzo':
+          case 'Mar':
             month = 2;
             break;
-          case 'aprile':
+          case 'Apr':
             month = 3;
             break;
-          case 'maggio':
+          case 'Mag':
             month = 4;
             break;
-          case 'giugno':
+          case 'Giu':
             month = 5;
             break;
-          case 'luglio':
+          case 'Lug':
             month = 6;
             break;
-          case 'agosto':
+          case 'Ago':
             month = 7;
             break;
-          case 'settembre':
+          case 'Set':
             month = 8;
             break;
-          case 'ottobre':
+          case 'Ott':
             month = 9;
             break;
-          case 'novembre':
+          case 'Nov':
             month = 10;
             break;
-          case 'dicembre':
+          case 'Dic':
             month = 11;
             break;
           default:
@@ -124,7 +123,7 @@ class Movie extends Component {
               </div>
               {hour.hours.map((show) => {
 
-
+                show = show.replace('H ', '');
                 let [hh, mm] = show.split('.');
 
                 oraInizio.setHours(hh, mm, 0, 0);
@@ -168,8 +167,10 @@ class Movie extends Component {
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
-                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>
-                    
+                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
+                  </div>                  
+                  <div className='col-12 mt-3' >
+                    <a href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>
                   </div>
                 </div>
               </div>
@@ -180,11 +181,7 @@ class Movie extends Component {
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-3' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
               </div>
-            </div>
-            <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-3' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.prices }} >
-              </div>
-            </div>
+            </div>            
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-3'>
                 {timetable}
