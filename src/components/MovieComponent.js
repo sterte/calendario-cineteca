@@ -195,6 +195,8 @@ aaa(hour){
               <div className='col-12 mt-3' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
               </div>
             </div>            
+            {
+            this.props.movie.movies.hours.length ?               
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-4'>
                 <p>
@@ -203,6 +205,8 @@ aaa(hour){
                 </p>
               </div>
             </div>
+            :<></>
+            }
           </div>
 
           <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
