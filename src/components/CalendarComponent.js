@@ -111,10 +111,13 @@ class Calendar extends Component {
                             </div>
                             <div className='col-10'>
                                 <div className='row'>
-                                    <Link to={`/movie/${movie.id}`}><h4>{movie.title}</h4></Link>
+                                    <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                                 </div>
                                 <div className='row'>
                                     <h5>{movie.time}</h5> - {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}
+                                </div>
+                                <div className='row'>
+                                    <em>{movie.extras}</em>
                                 </div>
                                 <div className='row'>
                                     <Vo isVO={movie.isVO} />

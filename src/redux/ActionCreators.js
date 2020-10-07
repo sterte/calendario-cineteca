@@ -21,9 +21,9 @@ export const addDay = (program) => ({
 })
 
 
-export const getMovieDetail = (movieId) => (dispatch) => {
+export const getMovieDetail = (categoryId, movieId, repeatId) => (dispatch) => {
     dispatch(movieLoading(true))
-    const url= fetchUrl + '/movies/' + movieId;    
+    var url= fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId;
     return fetch(url)
     .then(res => res.json())            
     .then(movie => dispatch(addMovie(movie)))

@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getMovieDetail: (movieId) => { dispatch(getMovieDetail(movieId)) },
+  getMovieDetail: (categoryId, movieId, repeatId) => { dispatch(getMovieDetail(categoryId, movieId, repeatId)) },
   addFavourite: (fav) => dispatch(addFavourite(fav)),
 });
 
@@ -43,115 +43,118 @@ class Movie extends Component {
 
 
   componentDidMount() {
-    this.props.getMovieDetail(this.props.movieId)
+    this.props.getMovieDetail(this.props.categoryId, this.props.movieId, this.props.repeatId)
   }
 
-  render() {
 
+
+aaa(hour){
+  let items = [
+    { google: 'Google' },
+    { outlook: 'Outlook' },
+    { yahoo: 'Yahoo' }
+  ];
+
+  let icon = { 'calendar-plus-o': 'left' };
+  //hour.day = hour.day.replace('&igrave;', 'ì');
+  const splitDate = hour.day.trim().split(/\s+/);
+  const year = '20' + splitDate[3];
+  var month = splitDate[2];
+  const day = splitDate[1];
+
+  switch (month) {
+    case 'Gen':
+      month = 0;
+      break;
+    case 'Feb':
+      month = 1;
+      break;
+    case 'Mar':
+      month = 2;
+      break;
+    case 'Apr':
+      month = 3;
+      break;
+    case 'Mag':
+      month = 4;
+      break;
+    case 'Giu':
+      month = 5;
+      break;
+    case 'Lug':
+      month = 6;
+      break;
+    case 'Ago':
+      month = 7;
+      break;
+    case 'Set':
+      month = 8;
+      break;
+    case 'Ott':
+      month = 9;
+      break;
+    case 'Nov':
+      month = 10;
+      break;
+    case 'Dic':
+      month = 11;
+      break;
+    default:
+      month = 0;
+      break;
+  }
+
+
+  var oraInizio = new Date();
+  oraInizio.setFullYear(year);
+  oraInizio.setMonth(month);
+  oraInizio.setDate(day);
+
+  return (
+    <div className='container'>
+      <Fade in>
+        <div className='row mt-4'>                
+          <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
+        </div>
+        {hour.hours.map((show) => {
+
+          show = show.replace('H ', '');
+          let [hh, mm] = show.split('.');
+
+          oraInizio.setHours(hh, mm, 0, 0);
+          let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * 60 * 2));
+
+          let event = {
+            title: this.props.movie.movies.title,
+            location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
+            startTime: oraInizio.toISOString(),
+            endTime: oraFine.toISOString(),
+            description: this.props.movie.movies.originalUrl
+          };
+
+          return (
+            <div className='row'>
+              <div className='col-2'>
+                {show}
+              </div>
+              <div className='col-4'>
+                <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
+              </div>
+            </div>
+          );
+        })}
+      </Fade>
+    </div>
+  );
+}
+
+
+  render() {
     if (this.props.movie.isLoading) {
       return (<div className='container'><Loading /></div>);
     }
     else {
-
-      const timetable = this.props.movie.movies.hours.map((hour) => {
-        let items = [
-          { google: 'Google' },
-          { outlook: 'Outlook' },
-          { yahoo: 'Yahoo' }
-        ];
-
-        let icon = { 'calendar-plus-o': 'left' };
-        //hour.day = hour.day.replace('&igrave;', 'ì');
-        const splitDate = hour.day.trim().split(/\s+/);
-        const year = '20' + splitDate[3];
-        var month = splitDate[2];
-        const day = splitDate[1];
-
-        switch (month) {
-          case 'Gen':
-            month = 0;
-            break;
-          case 'Feb':
-            month = 1;
-            break;
-          case 'Mar':
-            month = 2;
-            break;
-          case 'Apr':
-            month = 3;
-            break;
-          case 'Mag':
-            month = 4;
-            break;
-          case 'Giu':
-            month = 5;
-            break;
-          case 'Lug':
-            month = 6;
-            break;
-          case 'Ago':
-            month = 7;
-            break;
-          case 'Set':
-            month = 8;
-            break;
-          case 'Ott':
-            month = 9;
-            break;
-          case 'Nov':
-            month = 10;
-            break;
-          case 'Dic':
-            month = 11;
-            break;
-          default:
-            month = 0;
-            break;
-        }
-
-
-        var oraInizio = new Date();
-        oraInizio.setFullYear(year);
-        oraInizio.setMonth(month);
-        oraInizio.setDate(day);
-
-        return (
-          <div className='container'>
-            <Fade in>
-              <div className='row mt-4'>                
-                <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
-              </div>
-              {hour.hours.map((show) => {
-
-                show = show.replace('H ', '');
-                let [hh, mm] = show.split('.');
-
-                oraInizio.setHours(hh, mm, 0, 0);
-                let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * 60 * 2));
-
-                let event = {
-                  title: this.props.movie.movies.title,
-                  location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
-                  startTime: oraInizio.toISOString(),
-                  endTime: oraFine.toISOString(),
-                  description: this.props.movie.movies.originalUrl
-                };
-
-                return (
-                  <div className='row'>
-                    <div className='col-2'>
-                      {show}
-                    </div>
-                    <div className='col-4'>
-                      <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
-                    </div>
-                  </div>
-                );
-              })}
-            </Fade>
-          </div>
-        );
-      });
+      const timetable = this.props.movie.movies.hours.map((hour) => this.aaa(hour));
 
       return (
         <>
@@ -168,23 +171,36 @@ class Movie extends Component {
                     </Button>
                   </div>
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
-                  </div>                  
-                  <div className='col-12 mt-3' >
-                    <a href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>
+                  </div>     
+                  <div className='col-12 d-flex align-self-center'>
+                  {this.aaa(this.props.movie.movies.currentHour)}
                   </div>
+                  <div className='col-12 mt-3 d-flex align-self-center'>
+                  <a href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
+                  </div>
+                      
                 </div>
               </div>
               <div className='col-3'>
                 <img src={this.props.movie.movies.image} className='img-fluid d' alt={'img-' + this.props.movie.movies.image} />
               </div>
-            </div>
+            </div>            
+
+            <div className='row d-flex justify-content-center'>
+              <div className='col-12 mt-5' >
+                {this.props.movie.movies.extras}
+              </div>
+            </div>            
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-3' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
               </div>
             </div>            
             <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-3'>
+              <div className='col-12 mt-4'>
+                <p>
+                <h4>Altre repliche</h4>                
                 {timetable}
+                </p>
               </div>
             </div>
           </div>

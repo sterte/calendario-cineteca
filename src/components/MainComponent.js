@@ -25,11 +25,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-const MovieWithId = ({match}) => {
+const MovieWithCategoryAndId = ({match}) => {  
   return(
-    <Movie movieId={match.params.movieId} />
+  <Movie categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
   );
 }
+
 
 class Main extends Component{
 
@@ -56,7 +57,7 @@ class Main extends Component{
       <TransitionGroup>
       <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
       <Switch>      
-      <Route path="/movie/:movieId" component={MovieWithId} />
+      <Route exact path="/movie/:categoryId/:movieId/:repeatId" component={MovieWithCategoryAndId} />
       <Route path="/days" component={() => <Calendar />} />
       <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
       <Redirect to="/days" />
