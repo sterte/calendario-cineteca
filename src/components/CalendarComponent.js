@@ -6,6 +6,7 @@ import { Fade, Stagger } from 'react-animation-components';
 import { connect } from 'react-redux';
 import { fetchUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
+import moment from 'moment';
 
 
 const mapStateToProps = (state) => {
@@ -25,41 +26,42 @@ class Calendar extends Component {
     constructor(props){
         super(props);
         this.state = {
-            currentDate: new Date(),            
+            currentDate: new Date();            
         }
     }
-    componentDidMount() {
-        var tmpDate = new Date();
-        tmpDate.setDate(tmpDate.getDate() - 7);
-        const from = tmpDate.toISOString().split('T')[0].replaceAll('-', '');            
-        tmpDate.setDate(tmpDate.getDate() + 14);
-        var to = tmpDate.toISOString().split('T')[0].replaceAll('-', '');        
+    componentDidMount() {        
+        var tmpMoment = moment(new Date());        
+        var from = tmpMoment.format('YYYYMMDD');                        
+        tmpMoment.add(7, 'days');                 
+        var to = tmpMoment.format('YYYYMMDD');                
         this.props.getDayProgram(from, to)
     }
 
     changeCurrentDate(days){        
         var origDate = new Date(this.state.currentDate);
-        var tmpDate = new Date(origDate);
-        tmpDate.setDate(tmpDate.getDate() + days);
-        var newDate = new Date(tmpDate);
-        const formattedDate = tmpDate.toISOString().split('T')[0].replaceAll('-', '');  
-        if(this.props.days.days.length !== 0 && formattedDate < this.props.days.days[0].day){
-            const to = tmpDate.toISOString().split('T')[0].replaceAll('-', '');
-            tmpDate.setDate(tmpDate.getDate() - 7);
-            const from = tmpDate.toISOString().split('T')[0].replaceAll('-', '');
+        var tmpMoment = moment(origDate);
+        tmpMoment.add(days, 'days');
+        var newDate = tmpMoment.toDate();
+        const formattedDate = tmpMoment.format('YYYYMMDD');
+        if(this.props.days.days.length !== 0 && formattedDate < this.props.days.days[0].day){            
+            tmpMoment.add(1, 'days');
+            const to = tmpMoment.format('YYYYMMDD');
+            tmpMoment.add(-8, 'days');
+            const from = tmpMoment.format('YYYYMMDD');
             this.props.getDayProgram(from, to);               
         }
         else if(this.props.days.days.length !== 0 && formattedDate > this.props.days.days[this.props.days.days.length - 1].day){
-            const from = tmpDate.toISOString().split('T')[0].replaceAll('-', '');
-            tmpDate.setDate(tmpDate.getDate() + 7);
-            var to = tmpDate.toISOString().split('T')[0].replaceAll('-', '');
+            tmpMoment.add(-1, 'days');
+            const from = tmpMoment.format('YYYYMMDD');
+            tmpMoment.add(7, 'days');
+            const to = tmpMoment.format('YYYYMMDD');
             this.props.getDayProgram(from, to);                        
         }       
         else if(this.props.days.days.length === 0){
-            tmpDate.setDate(origDate.getDate() - 7);
-            const from = tmpDate.toISOString().split('T')[0].replaceAll('-', '');            
-            tmpDate.setDate(origDate.getDate() + 14);
-            var to = tmpDate.toISOString().split('T')[0].replaceAll('-', '');
+            tmpMoment.add(-7, 'days');
+            const from = tmpMoment.format('YYYYMMDD');            
+            tmpMoment.add(14, 'days');
+            const to = tmpMoment.format('YYYYMMDD');            
             this.props.getDayProgram(from, to);               
         }   
         this.setState({currentDate: newDate});     
@@ -67,7 +69,8 @@ class Calendar extends Component {
 
     formatDate(date){
         var tmpDate = new Date(date);
-        return tmpDate.toISOString().split('T')[0].replaceAll('-', '');
+        var tmpMoment = moment(tmpDate);
+        return tmpMoment.format('YYYYMMDD');
     }
 
     render() {
