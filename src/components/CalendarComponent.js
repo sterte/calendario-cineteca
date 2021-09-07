@@ -26,7 +26,7 @@ class Calendar extends Component {
     constructor(props){
         super(props);
         this.state = {
-            currentDate: new Date();            
+            currentDate: new Date()          
         }
     }
     componentDidMount() {        
