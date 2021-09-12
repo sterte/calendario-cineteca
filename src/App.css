@@ -6,7 +6,9 @@
 .row-content {
   margin:0px auto;
   padding: 20px 0px 20px 0px;
-  border: 1px solid;
+  border: 2px solid;
+  border-radius: 10px;
+  border-color: #fccd00;
 }
 
 .footer{
@@ -42,15 +44,16 @@
 }
 
 .react-add-to-calendar__button {
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #aab9d4;
+  padding: 10px;  
+  border: 1px solid;
   border-radius: 3px;
   color: #000;
+  background-color: #f99e00;
+  border-color: #fccd00;
 }
 
 .react-add-to-calendar__button:hover {  
-  background-color: #a9a9a9;  
+  background-color: #fccd00;  
 }
 
 
@@ -62,8 +65,9 @@
     width: 50%;  
     height: 350%;
     box-shadow: 1px 3px 6px rgb(0 0 0 / 15%);
-    border: 1px solid #a8a8a8;
-    background-color: #fff;
+    border: 1px solid;
+    background-color: #fccd00;
+    border-color: #f99e00;
     text-align: left;
     padding: 0;
     z-index: 10;
@@ -83,4 +87,26 @@ li {
 a:link, a:hover, a:visited {
   color: black;
   text-decoration: none;
+}
+.past-movie-title a {
+  color: inherit;
+}
+
+.navigation-button {
+  background-color: #f99e00;
+  border-color: #fccd00;
+}
+
+.past-movie-title {
+  color: #a8a8a8;
+}
+
+.jumbotron {
+  background-color: #f99e00;
+}
+
+.white-back {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
 }

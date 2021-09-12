@@ -97,8 +97,19 @@ class Calendar extends Component {
                     return (<></>);
                 }
             };
+            
 
-            const movielist = this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate)).length === 0 ?            
+            const isFuture = (movieTime) => {
+                const now = new Date();
+                const oraInizio = this.state.currentDate;
+                movieTime = movieTime.replace('H ', '');
+                let [hh, mm] = movieTime.split('.');                
+                oraInizio.setHours(hh);
+                oraInizio.setMinutes(mm);
+                return now < oraInizio;
+            }
+
+            const movielist = this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate)).length === 0 ?
                 <Stagger in>
                 <div className='row mt-4'>
                     <h4>Programma non disponibile per la data selezionata</h4>
@@ -108,12 +119,12 @@ class Calendar extends Component {
             this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies.map((movie) => {
                 return (
                     <Stagger in>
-                        <div className='row mt-5 ml-1 mr-1'>
+                        <div className='row ml-1 mr-1 mb-5'>
                             <div className='col-2'>
                                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
                             </div>
                             <div className='col-10'>
-                                <div className='row'>
+                                <div className={isFuture(movie.time) ? 'row' : 'row past-movie-title'}>
                                     <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                                 </div>
                                 <div className='row'>
@@ -133,17 +144,17 @@ class Calendar extends Component {
             });
 
             return (
-                <div className='container'>
+                <div className='container white-back'>
                     <div className='row row-content d-flex justify-content-between justify-content-md-center'>
                         <div className='d-flex align-items-center col-2 col-md-1 order-2 order-md-1'>                
-                            <Button onClick={() => this.changeCurrentDate(-7)}>                    
+                            <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
                                 <span className="fa fa-angle-double-left" />
                                 <span class="d-none d-md-block">Week</span>
                             </Button>                
                         </div>
 
                         <div className='d-flex align-items-center col-2 col-md-1 order-3 order-md-2'>                
-                            <Button onClick={() => this.changeCurrentDate(-1)}>                    
+                            <Button className='navigation-button' onClick={() => this.changeCurrentDate(-1)}>                    
                                 <span className="fa fa-angle-left" />
                                 <span class="d-none d-md-block">Day</span>
                             </Button>                
@@ -159,14 +170,14 @@ class Calendar extends Component {
                         </div>
 
                         <div className='d-flex align-items-center col-2 col-md-1 order-4 order-md-4'>                
-                            <Button onClick={() => this.changeCurrentDate(1)}>                    
+                            <Button className='navigation-button' onClick={() => this.changeCurrentDate(1)}>                    
                                 <span className="fa fa-angle-right" />                        
                                 <span class="d-none d-md-block">Day</span>
                             </Button>                
                         </div>
 
                         <div className='d-flex align-items-center col-2 col-md-1 order-5 order-md-5'>
-                            <Button onClick={() => this.changeCurrentDate(7)}>                    
+                            <Button className='navigation-button' onClick={() => this.changeCurrentDate(7)}>                    
                                 <span className="fa fa-angle-double-right" />
                                 <span class="d-none d-md-block">Week</span>
                             </Button>

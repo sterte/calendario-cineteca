@@ -107,15 +107,22 @@ composeCalendarButton(hour, showBuyButton = true){
   }
 
 
+  var now = new Date();
   var oraInizio = new Date();
   oraInizio.setFullYear(year);
   oraInizio.setMonth(month);
   oraInizio.setDate(day);
 
+  var giornoInizio = new Date(oraInizio);
+  giornoInizio.setHours(23);
+  giornoInizio.setMinutes(59);
+  
+
+
   return (
     <div className='container'>
       <Fade in>
-        <div className='row mt-4'>                
+        <div className={giornoInizio > now ? 'row mt-5 mb-0 mb-md-3' : 'row mt-5 mb-0 mb-md-3 past-movie-title'}>      
           <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
         </div>
         {hour.hours.map((show) => {
@@ -137,11 +144,11 @@ composeCalendarButton(hour, showBuyButton = true){
 
           return (
             <div className='row d-flex'>
-              <div className='col-12 col-md-2 mt-0 mb-0 mb-md-4'>
+              <div className={isFuture ? 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4' : 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4 past-movie-title'}>
                 {show}
               </div>
               { isFuture && 
-              <div className='col-12 col-md-3 mt-2 mt-md-0  mb-0 mb-md-4'>
+              <div className='col-12 col-md-7 mt-2 mt-md-0  mb-0 mb-md-4'>
                 <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
               </div>                            
               }
@@ -170,15 +177,16 @@ composeCalendarButton(hour, showBuyButton = true){
 
       return (
         <>
-          <div className='container'>
+        <div className='container white-back'>
+          <div className='row row-content ml-1 mr-1 p-5'>
             <div className='row d-flex justify-content-center mt-5'>
-              <div className='col-9 d-flex align-self-center'>
+              <div className='col-md-9 d-flex align-self-center'>
                 <div className='row'>
                   <div className='col-auto d-flex align-self-center'>
                     <h2>{this.props.movie.movies.title}</h2>
                   </div>
                   <div className='col-auto'>
-                    <Button color='primary' onClick={() => this.toggleEditModal(this.props.movie.movies.title)}>
+                    <Button className='navigation-button' onClick={() => this.toggleEditModal(this.props.movie.movies.title)}>
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
@@ -189,8 +197,8 @@ composeCalendarButton(hour, showBuyButton = true){
                   }
                 </div>
               </div>
-              <div className='col-3'>
-                <img src={this.props.movie.movies.image} className='img-fluid d' alt={'img-' + this.props.movie.movies.image} />
+              <div className='col-12 col-md-3 mt-3 mt-md-0'>
+                <img src={this.props.movie.movies.image} className='img-fluid' alt={'img-' + this.props.movie.movies.image} />
               </div>
             </div>            
 
@@ -212,15 +220,14 @@ composeCalendarButton(hour, showBuyButton = true){
             {
             this.props.movie.movies.hours.length ?               
             <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-4'>
-                <p>
+              <div className='col-12 mt-4'>                
                 <h4>Altre repliche</h4>                
-                {timetable}
-                </p>
+                {timetable}                
               </div>
             </div>
             :<></>
             }
+          </div>
           </div>
 
           <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
