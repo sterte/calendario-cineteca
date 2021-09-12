@@ -8,6 +8,7 @@ import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
 import { addFavourite, getMovieDetail } from '../redux/ActionCreators';
 import ReactAddToCalendar from 'react-add-to-calendar';
+import { fetchUrl } from '../shared/baseUrl';
 
 
 const mapStateToProps = (state) => {
@@ -171,7 +172,10 @@ aaa(hour){
                     </Button>
                   </div>
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
-                  </div>     
+                  </div>    
+                  { this.props.movie.movies.isVO > 0 &&
+                  <div><img className='col-12 d-flex align-self-center' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' /></div>
+                  }
                   <div className='col-12 d-flex align-self-center'>
                   {this.aaa(this.props.movie.movies.currentHour)}
                   </div>
