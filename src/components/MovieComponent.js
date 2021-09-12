@@ -9,6 +9,7 @@ import Loading from './LoadingComponent';
 import { addFavourite, getMovieDetail } from '../redux/ActionCreators';
 import ReactAddToCalendar from 'react-add-to-calendar';
 import { fetchUrl } from '../shared/baseUrl';
+import '../App.css';
 
 
 const mapStateToProps = (state) => {
@@ -49,7 +50,7 @@ class Movie extends Component {
 
 
 
-aaa(hour){
+composeCalendarButton(hour, showBuyButton = false){
   let items = [
     { google: 'Google' },
     { outlook: 'Outlook' },
@@ -134,13 +135,20 @@ aaa(hour){
           };
 
           return (
-            <div className='row'>
-              <div className='col-2'>
+            <div className='row d-flex'>
+              <div className='col-12 col-md-2 mt-0 mb-0 mb-md-4'>
                 {show}
               </div>
-              <div className='col-4'>
+              <div className='col-12 col-md-3 mt-2 mt-md-0  mb-0 mb-md-4'>
                 <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
+              </div>              
+              { showBuyButton ?
+              <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
+                  <a class='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
               </div>
+              :
+              <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'></div>
+              }
             </div>
           );
         })}
@@ -155,7 +163,7 @@ aaa(hour){
       return (<div className='container'><Loading /></div>);
     }
     else {
-      const timetable = this.props.movie.movies.hours.map((hour) => this.aaa(hour));
+      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, false));
 
       return (
         <>
@@ -176,19 +184,18 @@ aaa(hour){
                   { this.props.movie.movies.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' /></div>
                   }
-                  <div className='col-12 d-flex align-self-center'>
-                  {this.aaa(this.props.movie.movies.currentHour)}
-                  </div>
-                  <div className='col-12 mt-3 d-flex align-self-center'>
-                  <a href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
-                  </div>
-                      
                 </div>
               </div>
               <div className='col-3'>
                 <img src={this.props.movie.movies.image} className='img-fluid d' alt={'img-' + this.props.movie.movies.image} />
               </div>
             </div>            
+
+            <div className='row d-flex'>
+              <div className='col-12 d-flex align-self-center'>
+                {this.composeCalendarButton(this.props.movie.movies.currentHour, true)}
+              </div>
+            </div>
 
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-5' >
