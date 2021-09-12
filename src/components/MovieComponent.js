@@ -50,7 +50,7 @@ class Movie extends Component {
 
 
 
-composeCalendarButton(hour, showBuyButton = false){
+composeCalendarButton(hour, showBuyButton = true){
   let items = [
     { google: 'Google' },
     { outlook: 'Outlook' },
@@ -122,8 +122,9 @@ composeCalendarButton(hour, showBuyButton = false){
 
           show = show.replace('H ', '');
           let [hh, mm] = show.split('.');
-
+      
           oraInizio.setHours(hh, mm, 0, 0);
+          var isFuture = new Date() < oraInizio;
           let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * 60 * 2));
 
           let event = {
@@ -139,10 +140,12 @@ composeCalendarButton(hour, showBuyButton = false){
               <div className='col-12 col-md-2 mt-0 mb-0 mb-md-4'>
                 {show}
               </div>
+              { isFuture && 
               <div className='col-12 col-md-3 mt-2 mt-md-0  mb-0 mb-md-4'>
                 <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
-              </div>              
-              { showBuyButton ?
+              </div>                            
+              }
+              { showBuyButton && isFuture ?
               <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
                   <a class='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
               </div>
@@ -163,7 +166,7 @@ composeCalendarButton(hour, showBuyButton = false){
       return (<div className='container'><Loading /></div>);
     }
     else {
-      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, false));
+      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour));
 
       return (
         <>
@@ -193,7 +196,7 @@ composeCalendarButton(hour, showBuyButton = false){
 
             <div className='row d-flex'>
               <div className='col-12 d-flex align-self-center'>
-                {this.composeCalendarButton(this.props.movie.movies.currentHour, true)}
+                {this.composeCalendarButton(this.props.movie.movies.currentHour)}
               </div>
             </div>
 
