@@ -12,11 +12,13 @@ class Header extends Component{
         this.state = {
             isNavOpen: false,        
             isLoginModalOpen: false,
+            isLoginErrorToShow: true,
             isSignupModalOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this);   
         this.toggleSignupModal = this.toggleSignupModal.bind(this);     
         this.toggleLoginModal = this.toggleLoginModal.bind(this);     
+        this.toggleLoginErrorModal = this.toggleLoginErrorModal.bind(this);     
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.handleSignup = this.handleSignup.bind(this);
@@ -36,7 +38,12 @@ class Header extends Component{
     }
 
     toggleLoginModal() {
-        this.setState({isLoginModalOpen: !this.state.isLoginModalOpen});
+        this.setState({isLoginModalOpen: !this.state.isLoginModalOpen, isLoginErrorToShow: true});
+    }
+
+    toggleLoginErrorModal() {
+        this.props.auth.errMess = '';
+        this.setState({isLoginErrorToShow: !this.state.isLoginErrorToShow});
     }
 
     handleLogin(event) {
@@ -60,7 +67,7 @@ class Header extends Component{
         event.preventDefault();   
     }
 
-    render(){
+    render(){       
         return(
             <>
             <Navbar dark expand="md">
@@ -117,7 +124,7 @@ class Header extends Component{
 
 
             <Modal isOpen={this.state.isSignupModalOpen} toggle={this.toggleSignupModal}>
-                    <ModalHeader toggle={this.toggleSignupModal}>Signup</ModalHeader>
+                    <ModalHeader className='navigation-button' toggle={this.toggleSignupModal}>Signup</ModalHeader>
                     <ModalBody>
                     <div className='white-back row-content' >
                     <Form onSubmit={this.handleSignup}>
@@ -153,7 +160,7 @@ class Header extends Component{
                 </Modal>
 
             <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
-                    <ModalHeader toggle={this.toggleLoginModal}>Login</ModalHeader>
+                    <ModalHeader className='navigation-button' toggle={this.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
                     <div className='white-back row-content' >
                         <Form onSubmit={this.handleLogin}>
@@ -184,6 +191,16 @@ class Header extends Component{
                     </ModalBody>
                 </Modal>
 
+                <Modal isOpen={this.state.isLoginErrorToShow && !this.props.auth.isAuthenticated && this.props.auth.errMess} toggle={this.toggleLoginErrorModal}>                
+                <ModalHeader className='navigation-button' toggle={this.toggleLoginErrorModal}>Login errato</ModalHeader>
+                    <ModalBody>
+                        <div className='white-back row-content' >
+                            {this.props.auth.errMess}
+                        </div>
+                    </ModalBody>
+                </Modal>
+            
+        }
             </>
         );
     }

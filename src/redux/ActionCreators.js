@@ -260,6 +260,7 @@ export const loginUser = (creds) => (dispatch) => {
         else {
             var error = new Error('Error ' + response.status);
             error.response = response;
+            dispatch(loginError(response));
             throw error;
         }
     })
