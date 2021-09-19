@@ -62,7 +62,7 @@ class Header extends Component{
             this.props.signupUser({firstname: this.firstname.value, lastname: this.lastname.value, username: this.username.value, password: this.password.value});                                    
         }
         else{
-            alert('Passwords do not match');            
+            alert('Le password inserite non coincidono');            
         }     
         event.preventDefault();   
     }
