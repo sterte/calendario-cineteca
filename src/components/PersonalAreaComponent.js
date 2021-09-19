@@ -60,7 +60,6 @@ class PersonalArea extends Component {
         else{
             const favlist = this.props.favourites.favourites.map((fav) => {
                 return (
-                    <div className='container'>                                            
                         <Stagger in>
                             <div className='row row-content d-flex mt-4'>
                                 <div className='col-5 col-sm-3'>
@@ -73,33 +72,35 @@ class PersonalArea extends Component {
                                     {fav.comment}
                                 </div>
                                 <div className='col-1'>
-                                    <Button onClick={() => this.toggleEditModal(fav)}>
+                                    <Button className='navigation-button' onClick={() => this.toggleEditModal(fav)}>
                                     <span className="fa fa-edit" />
                                     </Button>
                                 </div>
                                 <div className='col-1'>
-                                    <Button onClick={() => this.props.deleteFavourite(fav._id)}>
+                                    <Button className='navigation-button' onClick={() => this.props.deleteFavourite(fav._id)}>
                                     <span className="fa fa-trash" />
                                     </Button>
                                 </div>
                             </div>
                         </Stagger>                        
-                    </div>
                 );
             });
             return(
                 <>
+                <div className='container white-back'>                                            
                 {favlist}
-                
+                </div>
                 <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
-                    <ModalHeader toggle={this.toggleEditModal}>Edit Movie</ModalHeader>
+                    <ModalHeader toggle={this.toggleEditModal}>Valuta film</ModalHeader>
                     <ModalBody>
+                        <div className='white-back row-content' >
                     <Form onSubmit={this.handleFavouriteEdit}>
                             <FormGroup>
-                                <Label htmlFor="title">Title:</Label> {this.state.currentlyEdited ? this.state.currentlyEdited.title : ''}
+                                <Label htmlFor="title">Film:</Label> {this.state.currentlyEdited ? this.state.currentlyEdited.title : ''}
                             </FormGroup>
+
                             <FormGroup>
-                                <Label className='mr-2' htmlFor="rating">Rating</Label>
+                                <Label className='mr-2' htmlFor="rating">Voto</Label>
                                 <select value={this.rating} onChange={(evt) => this.rating = evt.target.value}>
                                 {this.state.currentlyEdited && this.state.currentlyEdited.rating===1 ? <option selected value="1">1</option> : <option value="1">1</option>}
                                 {this.state.currentlyEdited && this.state.currentlyEdited.rating===2 ? <option selected value="2">2</option> : <option value="2">2</option>}
@@ -112,15 +113,18 @@ class PersonalArea extends Component {
                                 {this.state.currentlyEdited && this.state.currentlyEdited.rating===9 ? <option selected value="9">9</option> : <option value="9">9</option>}
                                 {this.state.currentlyEdited && this.state.currentlyEdited.rating===10 ? <option selected value="10">10</option> : <option value="10">10</option>}
                                 </select>                                      
-                            </FormGroup>                      
+                            </FormGroup>                     
+
                             <FormGroup>
-                                <Label htmlFor="comment">Comment</Label>
+                                <Label htmlFor="comment">Commento</Label>
                                 <Input type="text" id="comment" name="comment" defaultValue={this.state.currentlyEdited ? this.state.currentlyEdited.comment: ''}
                                     innerRef={(input) => this.comment = input} />
-                            </FormGroup>                            
-                            <Button className='mr-3' type="submit" value="Edit" color="primary">Save</Button>
-                            <Button onClick={this.toggleEditModal}>Cancel</Button>
+                            </FormGroup>                     
+
+                            <Button className='navigation-button mr-3' type="submit" value="Edit" color="primary">Salva</Button>
+                            <Button onClick={this.toggleEditModal}>Annulla</Button>
                         </Form>
+                        </div>
                         </ModalBody>
                 </Modal>
                 </>

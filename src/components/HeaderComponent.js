@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Text } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
 	Button, Modal, ModalHeader, ModalBody,
 	Form, FormGroup, Label, Input } from 'reactstrap';
@@ -76,27 +76,32 @@ class Header extends Component{
             <NavLink className="nav-link" to="/home">
             <span className="fa fa-home fa-lg"></span> Home
             </NavLink>
-            </NavItem>            
+            </NavItem>                        
+            {this.props.auth.isAuthenticated ?
+            <>
             <NavItem>
             <NavLink className="nav-link" to="/personalarea">
             <span className="fa fa-list fa-lg"></span> Personal Area
             </NavLink>
-            </NavItem>            
-            </Nav>
-            <Nav className="ml-auto">
-            <NavItem>
-            { !this.props.auth.isAuthenticated ?
-            <Button outline onClick={this.toggleLoginModal}>
-            <span className="fa fa-sign-in fa-lg"></span> Login
-            </Button>			
-            :
-            <Button outline onClick={this.handleLogout}>
-            <span className="fa fa-sign-in fa-lg"></span> Logout
-            </Button>			
-            }            
-            </NavItem>
+            </NavItem>     
+            <NavItem className="nav-link" onClick={this.handleLogout}>            
+            <span className="fa fa-sign-out fa-lg"></span> Logout            
+            </NavItem>                
+            </>
+            :            
+            <NavItem className="nav-link" onClick={this.toggleLoginModal}>            
+            <span className="fa fa-sign-in fa-lg"></span> Login            
+            </NavItem>                
+            }                        
             </Nav>
             </Collapse>
+            {this.props.auth.isAuthenticated &&
+            <Nav className='ml-auto'>
+                <NavItem className='nav-link'>                    
+                    <span style={{color: 'white'}}>Ciao {this.props.auth.user.username}</span>
+                </NavItem>
+            </Nav>
+            }
             </div>
             </Navbar>
             <Jumbotron className='jumbotron'>
@@ -114,6 +119,7 @@ class Header extends Component{
             <Modal isOpen={this.state.isSignupModalOpen} toggle={this.toggleSignupModal}>
                     <ModalHeader toggle={this.toggleSignupModal}>Signup</ModalHeader>
                     <ModalBody>
+                    <div className='white-back row-content' >
                     <Form onSubmit={this.handleSignup}>
                             <FormGroup>
                                 <Label htmlFor="firstname">First Name</Label>
@@ -140,14 +146,16 @@ class Header extends Component{
                                 <Input type="password" id="confirmpassword" name="confirmpassword"
                                     innerRef={(input) => this.confirmpassword = input}  />
                             </FormGroup>                            
-                            <Button type="submit" value="Signup" color="primary">Signup</Button>
+                            <Button className='navigation-button' type="submit" value="Signup" color="primary">Signup</Button>
                         </Form>
+                        </div>
                         </ModalBody>
                 </Modal>
 
             <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
                     <ModalHeader toggle={this.toggleLoginModal}>Login</ModalHeader>
                     <ModalBody>
+                    <div className='white-back row-content' >
                         <Form onSubmit={this.handleLogin}>
                             <FormGroup>
                                 <Label htmlFor="username">Username</Label>
@@ -161,17 +169,18 @@ class Header extends Component{
                             </FormGroup>
                             <div className="row">
                             <div className="col-2 d-flex">  
-                            <Button type="submit" value="Login" color="primary">
-                                <span className="fa fa-sign-in fa-lg"> Login</span>
+                            <Button className='navigation-button'type="submit" value="Login" color="primary">
+                                <span> Login</span>
                             </Button>
                             </div>
                             <div className="col-2 d-flex">  
-                            <Button onClick={this.toggleSignupModal}>
-                                <span className="fa fa-sign-in fa-lg" color="primary"> Signup</span>
+                            <Button className='navigation-button' onClick={this.toggleSignupModal}>
+                                <span color="primary"> Signup</span>
                             </Button>	
                             </div>
                             </div>
                         </Form>
+                        </div>
                     </ModalBody>
                 </Modal>
 
