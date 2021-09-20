@@ -120,7 +120,7 @@ composeCalendarButton(hour, showBuyButton = true){
 
 
   return (
-    <div className='container'>
+    <div className='container' key={hour.day}>
       <Fade in>
         <div className={giornoInizio > now ? 'row mt-5 mb-0 mb-md-3' : 'row mt-5 mb-0 mb-md-3 past-movie-title'}>      
           <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
@@ -143,7 +143,7 @@ composeCalendarButton(hour, showBuyButton = true){
           };
 
           return (
-            <div className='row d-flex'>
+            <div className='row d-flex' key={event.title+event.startTime}>
               <div className={isFuture ? 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4' : 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4 past-movie-title'}>
                 {show}
               </div>
@@ -154,7 +154,7 @@ composeCalendarButton(hour, showBuyButton = true){
               }
               { showBuyButton && isFuture ?
               <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
-                  <a class='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
+                  <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
               </div>
               :
               <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'></div>
@@ -185,11 +185,13 @@ composeCalendarButton(hour, showBuyButton = true){
                   <div className='col-auto d-flex align-self-center'>
                     <h2>{this.props.movie.movies.title}</h2>
                   </div>
+                  {this.props.auth.isAuthenticated &&
                   <div className='col-auto'>
                     <Button className='navigation-button' onClick={() => this.toggleEditModal(this.props.movie.movies.title)}>
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
+                  }
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
                   </div>    
                   { this.props.movie.movies.isVO > 0 &&
@@ -231,8 +233,9 @@ composeCalendarButton(hour, showBuyButton = true){
           </div>
 
           <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
-            <ModalHeader toggle={this.toggleEditModal}>Add Movie</ModalHeader>
+            <ModalHeader className='navigation-button' toggle={this.toggleEditModal}>Add Movie</ModalHeader>
             <ModalBody>
+            <div className='white-back row-content' >
               <Form onSubmit={this.handleFavouriteAdd}>
                 <FormGroup>
                   <Label htmlFor="title">Title:</Label> {this.state.title}
@@ -257,9 +260,10 @@ composeCalendarButton(hour, showBuyButton = true){
                   <Input type="text" id="comment" name="comment" defaultValue={this.state.currentlyEdited ? this.state.currentlyEdited.comment : ''}
                     innerRef={(input) => this.comment = input} />
                 </FormGroup>
-                <Button className='mr-3' type="submit" value="Edit" color="primary">Edit</Button>
-                <Button onClick={() => this.toggleEditModal()}>Cancel</Button>
+                <Button className='navigation-button mr-3' type="submit" value="Edit" color="primary">Salva</Button>
+                <Button onClick={() => this.toggleEditModal()}>Annulla</Button>
               </Form>
+              </div>
             </ModalBody>
           </Modal>
         </>

@@ -1,4 +1,4 @@
-import React, { Component, Text } from 'react';
+import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
 	Button, Modal, ModalHeader, ModalBody,
 	Form, FormGroup, Label, Input } from 'reactstrap';
@@ -174,18 +174,9 @@ class Header extends Component{
                                 <Input type="password" id="password" name="password"
                                     innerRef={(input) => this.password = input}  />
                             </FormGroup>
-                            <div className="row">
-                            <div className="col-2 d-flex">  
-                            <Button className='navigation-button'type="submit" value="Login" color="primary">
-                                <span> Login</span>
-                            </Button>
-                            </div>
-                            <div className="col-2 d-flex">  
-                            <Button className='navigation-button' onClick={this.toggleSignupModal}>
-                                <span color="primary"> Signup</span>
-                            </Button>	
-                            </div>
-                            </div>
+                            
+                            <Button className='navigation-button mr-4'type="submit" value="Login" color="primary">Login</Button>                            
+                            <Button className='navigation-button' onClick={this.toggleSignupModal}>Signup</Button>	                        
                         </Form>
                         </div>
                     </ModalBody>
