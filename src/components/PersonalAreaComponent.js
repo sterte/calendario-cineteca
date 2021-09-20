@@ -61,22 +61,22 @@ class PersonalArea extends Component {
             const favlist = this.props.favourites.favourites.map((fav) => {
                 return (
                         <Stagger in>
-                            <div className='row row-content d-flex mt-4'>
-                                <div className='col-5 col-sm-3'>
+                            <div className='row row-content justify-content-around d-flex mt-4'>
+                                <div className='col-4 col-md-3'>
                                     {fav.title}
                                 </div>
-                                <div className='col-5 col-sm-3 '>
+                                <div className='col-4 col-md-3'>
                                     {fav.rating}
                                 </div>
-                                <div className='d-none d-sm-block col-6 col-sm-4 '>
+                                <div className='col-4 col-md-4 '>
                                     {fav.comment}
                                 </div>
-                                <div className='col-1'>
+                                <div className='col-1 mr-2 mr-md-0'>
                                     <Button className='navigation-button' onClick={() => this.toggleEditModal(fav)}>
                                     <span className="fa fa-edit" />
                                     </Button>
                                 </div>
-                                <div className='col-1'>
+                                <div className='col-1 mr-auto'>
                                     <Button className='navigation-button' onClick={() => this.props.deleteFavourite(fav._id)}>
                                     <span className="fa fa-trash" />
                                     </Button>
@@ -91,7 +91,7 @@ class PersonalArea extends Component {
                 {favlist}
                 </div>
                 <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
-                    <ModalHeader toggle={this.toggleEditModal}>Valuta film</ModalHeader>
+                    <ModalHeader className='navigation-button' toggle={this.toggleEditModal}>Valuta film</ModalHeader>
                     <ModalBody>
                         <div className='white-back row-content' >
                     <Form onSubmit={this.handleFavouriteEdit}>
