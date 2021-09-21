@@ -190,8 +190,6 @@ class Header extends Component{
                         </div>
                     </ModalBody>
                 </Modal>
-            
-        }
             </>
         );
     }

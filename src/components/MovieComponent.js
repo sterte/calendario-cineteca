@@ -148,17 +148,15 @@ composeCalendarButton(hour, showBuyButton = true){
                 {show}
               </div>
               { isFuture && 
-              <div className='col-12 col-md-7 mt-2 mt-md-0  mb-0 mb-md-4'>
+              <div className='col-12 col-md-auto mt-2 mt-md-0  mb-0 mb-md-4'>
                 <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
               </div>                            
               }
-              { showBuyButton && isFuture ?
               <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
+              { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
                   <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
-              </div>
-              :
-              <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'></div>
               }
+              </div>
             </div>
           );
         })}
