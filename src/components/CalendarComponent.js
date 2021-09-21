@@ -117,51 +117,55 @@ class Calendar extends Component {
                 </Stagger>
             :            
             this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies.map((movie) => {
+                const isSoldOut = 'Sold Out' === movie.extras;
                 return (
-                    <Stagger in>
-                        <div className='row ml-1 mr-1 mb-5'>
-                            <div className='col-2'>
+                    <Stagger in className='row ml-1 mr-1 mb-5'>
+                            <div className='col-4 col-md-4'>
                                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
                             </div>
-                            <div className='col-10'>
-                                <div className={isFuture(movie.time) ? 'row' : 'row past-movie-title'}>
+                            <div className='ml-3 ml-md-0 col-12 col-md-8'>
+                                <div className={isFuture(movie.time) && !isSoldOut ? 'row' : 'row past-movie-title'}>
                                     <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                                 </div>
                                 <div className='row'>
                                     <h5>{movie.time}</h5><span class='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
                                 </div>
                                 <div className='row'>
-                                    <em>{movie.extras}</em>
+                                    {isSoldOut ?
+                                        <b>{movie.extras}</b>
+                                        :
+                                        <em>{movie.extras}</em>
+                                    }
                                 </div>
                                 <div className='row mt-1'>
                                     <Vo isVO={movie.isVO} />
                                     <Music isMUSIC={movie.isMUSIC} />
                                 </div>
                             </div>
-                        </div>
                     </Stagger>
                 );
             });
 
             return (
                 <div className='container white-back'>
-                    <div className='row row-content d-flex justify-content-between justify-content-md-center'>
-                        <div className='d-flex align-items-center col-2 col-md-1 order-2 order-md-1'>                
+                    <div className='row row-content d-flex justify-content-center'>
+
+                        <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
                                 <span className="fa fa-angle-double-left" />
-                                <span class="d-none d-md-block">Week</span>
+                                <span class="d-none d-md-block">Settimana</span>
                             </Button>                
                         </div>
 
-                        <div className='d-flex align-items-center col-2 col-md-1 order-3 order-md-2'>                
+                        <div className='col-3 col-md-auto order-3 order-md-2'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-1)}>                    
                                 <span className="fa fa-angle-left" />
-                                <span class="d-none d-md-block">Day</span>
+                                <span class="d-none d-md-block">Giorno</span>
                             </Button>                
                         </div>
 
                         <div className='col-12 col-md-auto order-1 order-md-3'>
-                        <div className='row d-flex justify-content-center'>
+                            <div className='row d-flex justify-content-center'>
                                 <h5 style={this.labelStyle}>{weekDays[this.state.currentDate.getDay()]}</h5>
                             </div>
                             <div className='row d-flex justify-content-center'>
@@ -169,17 +173,17 @@ class Calendar extends Component {
                             </div>
                         </div>
 
-                        <div className='d-flex align-items-center col-2 col-md-1 order-4 order-md-4'>                
+                        <div className='col-3 col-md-auto order-4'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(1)}>                    
                                 <span className="fa fa-angle-right" />                        
-                                <span class="d-none d-md-block">Day</span>
+                                <span class="d-none d-md-block">Giorno</span>
                             </Button>                
                         </div>
 
-                        <div className='d-flex align-items-center col-2 col-md-1 order-5 order-md-5'>
+                        <div className='col-3 col-md-auto order-5'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(7)}>                    
                                 <span className="fa fa-angle-double-right" />
-                                <span class="d-none d-md-block">Week</span>
+                                <span class="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
                     </div>
