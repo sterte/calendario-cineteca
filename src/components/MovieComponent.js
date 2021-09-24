@@ -8,6 +8,7 @@ import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
 import { addFavourite, getMovieDetail } from '../redux/ActionCreators';
 import ReactAddToCalendar from 'react-add-to-calendar';
+import ScrollToTopButton from './ScrollToTopButton';
 import { fetchUrl } from '../shared/baseUrl';
 import '../App.css';
 
@@ -228,6 +229,7 @@ composeCalendarButton(hour, showBuyButton = true){
             :<></>
             }
           </div>
+          <ScrollToTopButton />
           </div>
 
           <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
