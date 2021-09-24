@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
 import moment from 'moment';
+import ScrollToTopButton from './ScrollToTopButton';
 
 
 const mapStateToProps = (state) => {
@@ -192,7 +193,8 @@ class Calendar extends Component {
                             {movielist}                            
                         </Fade>
                     </div>
-                </div>
+                    <ScrollToTopButton />
+                </div>                
             );
         }
     }
