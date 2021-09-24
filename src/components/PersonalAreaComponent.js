@@ -62,24 +62,28 @@ class PersonalArea extends Component {
                 return (
                         <Stagger in>
                             <div className='row row-content justify-content-around d-flex mt-4'>
-                                <div className='col-4 col-md-3'>
-                                    {fav.title}
+                                <div className='col-12 col-md-10'>
+                                    <div className='row p-1 p-md-0'>
+                                        <div className='col-4 col-md-3'>
+                                            {fav.title}
+                                        </div>
+                                        <div className='col-4 col-md-3'>
+                                            {fav.rating}
+                                        </div>
+                                        <div className='col-4 col-md-4 '>
+                                            {fav.comment}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='col-4 col-md-3'>
-                                    {fav.rating}
-                                </div>
-                                <div className='col-4 col-md-4 '>
-                                    {fav.comment}
-                                </div>
-                                <div className='col-1 mr-2 mr-md-0'>
-                                    <Button className='navigation-button' onClick={() => this.toggleEditModal(fav)}>
-                                    <span className="fa fa-edit" />
-                                    </Button>
-                                </div>
-                                <div className='col-1 mr-auto'>
-                                    <Button className='navigation-button' onClick={() => this.props.deleteFavourite(fav._id)}>
-                                    <span className="fa fa-trash" />
-                                    </Button>
+                                <div className='col-12 col-md-2'>
+                                    <div className='row ml-1 ml-md-0 mt-1 mt-md-0'>
+                                        <Button className='navigation-button' onClick={() => this.toggleEditModal(fav)}>
+                                            <span className="fa fa-edit" />
+                                        </Button>                                
+                                        <Button className='navigation-button ml-1 mr-auto' onClick={() => this.props.deleteFavourite(fav._id)}>
+                                            <span className="fa fa-trash" />
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </Stagger>                        

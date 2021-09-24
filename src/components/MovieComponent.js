@@ -233,15 +233,15 @@ composeCalendarButton(hour, showBuyButton = true){
           </div>
 
           <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
-            <ModalHeader className='navigation-button' toggle={this.toggleEditModal}>Add Movie</ModalHeader>
+            <ModalHeader className='navigation-button' toggle={this.toggleEditModal}>Valuta Film</ModalHeader>
             <ModalBody>
             <div className='white-back row-content' >
               <Form onSubmit={this.handleFavouriteAdd}>
                 <FormGroup>
-                  <Label htmlFor="title">Title:</Label> {this.state.title}
+                  <Label htmlFor="title">Film:</Label> {this.state.title}
                 </FormGroup>
                 <FormGroup>
-                  <Label className='mr-2' htmlFor="rating">Rating</Label>
+                  <Label className='mr-2' htmlFor="rating">Voto</Label>
                   <select value={this.rating} onChange={(evt) => this.rating = evt.target.value}>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -256,7 +256,7 @@ composeCalendarButton(hour, showBuyButton = true){
                   </select>
                 </FormGroup>
                 <FormGroup>
-                  <Label htmlFor="comment">Comment</Label>
+                  <Label htmlFor="comment">Commento</Label>
                   <Input type="text" id="comment" name="comment" defaultValue={this.state.currentlyEdited ? this.state.currentlyEdited.comment : ''}
                     innerRef={(input) => this.comment = input} />
                 </FormGroup>
