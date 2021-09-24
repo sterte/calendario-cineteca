@@ -111,10 +111,8 @@ class Calendar extends Component {
             }
 
             const movielist = this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate)).length === 0 ?
-                <Stagger in>
-                <div className='row mt-4'>
-                    <h4>Programma non disponibile per la data selezionata</h4>
-                </div>
+                <Stagger in>                
+                    <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
             :            
             this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies.map((movie) => {
@@ -150,7 +148,6 @@ class Calendar extends Component {
             return (
                 <div className='container white-back'>
                     <div className='row row-content d-flex justify-content-center'>
-
                         <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
                                 <span className="fa fa-angle-double-left" />
