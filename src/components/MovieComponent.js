@@ -184,40 +184,36 @@ composeCalendarButton(hour, showBuyButton = true){
                   <div className='col-auto d-flex align-self-center'>
                     <h2>{this.props.movie.movies.title}</h2>
                   </div>
-                  {this.props.auth.isAuthenticated &&
+                  {this.props.auth.isAuthenticated && this.props.movie.movies.duration &&
                   <div className='col-auto'>
                     <Button className='navigation-button' onClick={() => this.toggleEditModal(this.props.movie.movies.title)}>
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
                   }
+                  {this.props.movie.movies.duration &&
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
                   </div>    
+                  }
                   { this.props.movie.movies.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' /></div>
                   }
                 </div>
               </div>
-              <div className='col-12 col-md-3 mt-3 mt-md-0'>
+              <div className='col-12 d-flex col-md-3 mt-3 mt-md-0'>
                 <img src={this.props.movie.movies.image} className='img-fluid' alt={'img-' + this.props.movie.movies.image} />
               </div>
             </div>            
 
-            <div className='row d-flex'>
               <div className='col-12 d-flex align-self-center'>
                 {this.composeCalendarButton(this.props.movie.movies.currentHour)}
               </div>
-            </div>
 
-            <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-5' >
+              <div className='col-12 mt-2' >
                 {this.props.movie.movies.extras}
               </div>
-            </div>            
-            <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-3' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
+              <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
               </div>
-            </div>            
             {
             this.props.movie.movies.hours.length ?               
             <div className='row d-flex justify-content-center'>
