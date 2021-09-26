@@ -177,7 +177,7 @@ composeCalendarButton(hour, showBuyButton = true){
       return (
         <>
         <div className='container white-back'>
-          <div className='row row-content ml-1 mr-1 p-5'>
+          <div className='row row-content ml-1 mr-1 p-2 p-md-5'>
             <div className='row d-flex justify-content-center mt-5'>
               <div className='col-md-9 d-flex align-self-center'>
                 <div className='row'>
@@ -205,7 +205,7 @@ composeCalendarButton(hour, showBuyButton = true){
               </div>
             </div>            
 
-              <div className='col-12 d-flex align-self-center'>
+              <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
                 {this.composeCalendarButton(this.props.movie.movies.currentHour)}
               </div>
 
