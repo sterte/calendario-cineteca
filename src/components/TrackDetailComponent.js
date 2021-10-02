@@ -50,10 +50,10 @@ class TrackDetail extends Component {
             return (                
                 <div className='container white-back'>                                                            
                     <div className='row row-content d-flex justify-content-center'>
-                        <div className='mt-4 col-auto d-flex align-self-center'>
+                        <div className='col-12 mt-4 col-auto d-flex align-self-center'>
                             <h2>{this.props.trackDetail.trackDetail.title}</h2>
                         </div>
-                        <div className='m-4' dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.description}} />
+                        <div className='col-12 m-4' dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.description}} />
                         <div className='m-4'>
                         <Fade in>                            
                             {tracksList}                            
