@@ -81,14 +81,19 @@ class Header extends Component{
             <Nav navbar>
             <NavItem>
             <NavLink className="nav-link" to="/home">
-            <span className="fa fa-home fa-lg"></span> Home
+            <span className="fa fa-calendar fa-lg"></span> Calendario
+            </NavLink>
+            </NavItem>                        
+            <NavItem>
+            <NavLink className="nav-link" to="/tracks">
+            <span className="fa fa-film fa-lg"></span> Rassegne
             </NavLink>
             </NavItem>                        
             {this.props.auth.isAuthenticated ?
             <>
             <NavItem>
             <NavLink className="nav-link" to="/personalarea">
-            <span className="fa fa-list fa-lg"></span> Personal Area
+            <span className="fa fa-user-o fa-lg"></span> Area Personale
             </NavLink>
             </NavItem>     
             <NavItem className="nav-link" onClick={this.handleLogout}>            

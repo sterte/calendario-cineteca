@@ -21,6 +21,43 @@ export const addDay = (program) => ({
 })
 
 
+export const getTracks = () => (dispatch) => {
+    dispatch(tracksLoading(true))
+    const url = fetchUrl + '/tracks';
+    return fetch(url)
+    .then(res => res.json())
+    .then(tracks => dispatch(addTracks(tracks)))
+    .catch((err) => console.log(err));
+}
+
+export const tracksLoading = () => ({
+	type: ActionTypes.TRACKS_LOADING
+})
+
+export const addTracks = (tracks) => ({
+    type: ActionTypes.ADD_TRACKS,
+    payload: tracks
+})
+
+export const getTrackDetail = (trackId) => (dispatch) => {
+    dispatch(trackDetailLoading(true))
+    const url = fetchUrl + '/tracks/' + trackId;
+    return fetch(url)
+    .then(res => res.json())
+    .then(tracks => dispatch(addTrackDetail(tracks)))
+    .catch((err) => console.log(err));
+}
+
+export const trackDetailLoading = () => ({
+	type: ActionTypes.TRACK_DETAIL_LOADING
+})
+
+export const addTrackDetail = (tracks) => ({
+    type: ActionTypes.ADD_TRACK_DETAIL,
+    payload: tracks
+})
+
+
 export const getMovieDetail = (categoryId, movieId, repeatId) => (dispatch) => {
     dispatch(movieLoading(true))
     var url= fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId;
