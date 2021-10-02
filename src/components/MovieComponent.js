@@ -11,6 +11,7 @@ import ReactAddToCalendar from 'react-add-to-calendar';
 import ScrollToTopButton from './ScrollToTopButton';
 import { fetchUrl } from '../shared/baseUrl';
 import '../App.css';
+import { monthToNum } from './MovieUtils';
 
 
 const mapStateToProps = (state) => {
@@ -65,49 +66,8 @@ composeCalendarButton(hour, showBuyButton = true){
   var month = splitDate[2];
   const day = splitDate[1];
 
-  switch (month) {
-    case 'Gen':
-      month = 0;
-      break;
-    case 'Feb':
-      month = 1;
-      break;
-    case 'Mar':
-      month = 2;
-      break;
-    case 'Apr':
-      month = 3;
-      break;
-    case 'Mag':
-      month = 4;
-      break;
-    case 'Giu':
-      month = 5;
-      break;
-    case 'Lug':
-      month = 6;
-      break;
-    case 'Ago':
-      month = 7;
-      break;
-    case 'Set':
-      month = 8;
-      break;
-    case 'Ott':
-      month = 9;
-      break;
-    case 'Nov':
-      month = 10;
-      break;
-    case 'Dic':
-      month = 11;
-      break;
-    default:
-      month = 0;
-      break;
-  }
-
-
+  month = monthToNum(month);
+  
   var now = new Date();
   var oraInizio = new Date();
   oraInizio.setFullYear(year);
