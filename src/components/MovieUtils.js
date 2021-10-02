@@ -38,7 +38,7 @@ return (
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
             <div className='ml-3 ml-md-0 col-12 col-md-8'>
-                <div className={isFuture(movie.time, new Date()) && !isSoldOut ? 'row' : 'row past-movie-title'}>
+                <div className={(isFuture(movie.time, new Date()) && !isSoldOut) || showDay ? 'row' : 'row past-movie-title'}>
                     <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                 </div>
                 {showDay &&
