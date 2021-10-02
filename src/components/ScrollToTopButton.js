@@ -33,6 +33,7 @@ const ScrollToTopButton = () =>{
         bottom: '40px',             
         cursor: 'pointer',
         color: 'white',
+        zIndex : 1,
         display: visible ? 'inline' : 'none'}}>
         <span className="fa fa-arrow-up" />
     </Button>    
