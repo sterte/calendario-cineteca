@@ -1,0 +1,70 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Loading from './LoadingComponent';
+import ScrollToTopButton from './ScrollToTopButton';
+import { getTrackDetail } from '../redux/ActionCreators';
+import { movieListDetail } from './MovieUtils';
+import { Fade, Stagger } from 'react-animation-components';
+
+
+const mapStateToProps = (state) => {
+    return {
+        trackDetail: state.trackDetail
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    getTrackDetail: (trackId) => { dispatch(getTrackDetail(trackId)) }
+});
+
+
+class TrackDetail extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            currentDate: new Date()          
+        }
+    }
+   
+    componentDidMount() {
+        this.props.getTrackDetail(this.props.trackId)
+    }
+
+    render() {
+        if (this.props.trackDetail.isLoading) {
+            return (<div className='container'>            
+                <Loading />
+            </div>);
+        }
+        else {
+            const tracksList = this.props.trackDetail.trackDetail.movies.length === 0 ?
+                <Stagger in>                
+                    <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
+                </Stagger>
+            :            
+            this.props.trackDetail.trackDetail.movies.map((movie) => {
+                return movieListDetail(movie, true);                
+            });
+
+            return (                
+                <div className='container white-back'>                                                            
+                    <div className='row row-content d-flex justify-content-center'>
+                        <div className='mt-4 col-auto d-flex align-self-center'>
+                            <h2>{this.props.trackDetail.trackDetail.title}</h2>
+                        </div>
+                        <div className='m-4' dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.description}} />
+                        <div className='m-4'>
+                        <Fade in>                            
+                            {tracksList}                            
+                        </Fade>
+                        </div>
+                    </div>
+                    <ScrollToTopButton />
+                </div>                
+            );
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackDetail);

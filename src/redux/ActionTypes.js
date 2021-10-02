@@ -1,6 +1,12 @@
 export const DAY_LOADING = 'DAY_LOADING';
 export const DAY_FAILED = 'DAY_FAILED';
 export const ADD_DAY = 'ADD_DAY';
+export const TRACKS_LOADING = 'TRACKS_LOADING';
+export const TRACKS_FAILED = 'TRACKS_FAILED';
+export const ADD_TRACKS = 'ADD_TRACKS';
+export const TRACK_DETAIL_LOADING = 'TRACK_DETAIL_LOADING';
+export const TRACK_DETAIL_FAILED = 'TRACK_DETAIL_FAILED';
+export const ADD_TRACK_DETAIL = 'ADD_TRACK_DETAIL';
 export const MOVIE_LOADING = 'MOVIE_LOADING';
 export const MOVIE_FAILED = 'MOVIE_FAILED';
 export const ADD_MOVIE = 'ADD_MOVIE';

@@ -8,6 +8,7 @@ import { fetchUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
+import { movieListDetail } from './MovieUtils';
 
 
 const mapStateToProps = (state) => {
@@ -82,67 +83,13 @@ class Calendar extends Component {
         }
         else {
 
-
-            const Vo = (props) => {
-                if (props.isVO) {
-                    return (<img className='mr-3' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' />);
-                } else {
-                    return (<></>);
-                }
-            };
-
-            const Music = (props) => {
-                if (props.isMUSIC) {
-                    return (<img className='mr-3' src={fetchUrl + "/images/nota.gif"} alt='music' />);
-                } else {
-                    return (<></>);
-                }
-            };
-            
-
-            const isFuture = (movieTime) => {
-                const now = new Date();
-                const oraInizio = this.state.currentDate;
-                movieTime = movieTime.replace('H ', '');
-                let [hh, mm] = movieTime.split('.');                
-                oraInizio.setHours(hh);
-                oraInizio.setMinutes(mm);
-                return now < oraInizio;
-            }
-
             const movielist = this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate)).length === 0 ?
                 <Stagger in>                
                     <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
             :            
             this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies.map((movie) => {
-                const isSoldOut = 'Sold Out' === movie.extras;
-                return (
-                    <Stagger in className='row ml-1 mr-1 mb-5'>
-                            <div className='col-4 col-md-4'>
-                                <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
-                            </div>
-                            <div className='ml-3 ml-md-0 col-12 col-md-8'>
-                                <div className={isFuture(movie.time) && !isSoldOut ? 'row' : 'row past-movie-title'}>
-                                    <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
-                                </div>
-                                <div className='row'>
-                                    <h5>{movie.time}</h5><span class='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
-                                </div>
-                                <div className='row'>
-                                    {isSoldOut ?
-                                        <b>{movie.extras}</b>
-                                        :
-                                        <em>{movie.extras}</em>
-                                    }
-                                </div>
-                                <div className='row mt-1'>
-                                    <Vo isVO={movie.isVO} />
-                                    <Music isMUSIC={movie.isMUSIC} />
-                                </div>
-                            </div>
-                    </Stagger>
-                );
+                return movieListDetail(movie);
             });
 
             return (
