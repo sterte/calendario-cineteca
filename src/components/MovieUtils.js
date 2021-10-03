@@ -1,11 +1,10 @@
 import React from 'react';
-import { fetchUrl } from '../shared/baseUrl'
 import { Link } from 'react-router-dom';
 import { Stagger } from 'react-animation-components';
 
 export const Vo = (props) => {
     if (props.isVO) {
-        return (<img className='mr-3' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' />);
+        return (<img className='mr-3' src='/assets/images/subtitles.gif' alt='subtitles' />);
     } else {
         return (<></>);
     }
@@ -13,7 +12,7 @@ export const Vo = (props) => {
 
 export const Music = (props) => {
     if (props.isMUSIC) {
-        return (<img className='mr-3' src={fetchUrl + "/images/nota.gif"} alt='music' />);
+        return (<img className='mr-3' src='/assets/images/nota.gif' alt='music' />);
     } else {
         return (<></>);
     }

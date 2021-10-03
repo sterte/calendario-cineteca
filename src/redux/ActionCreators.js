@@ -216,6 +216,80 @@ export const favouritesFailed = (errmess) => ({
 })
 
 
+export const fetchImdb = (title, year) => (dispatch) => {
+    dispatch(imdbLoading(true));
+    console.log(title)
+    console.log(year)
+    return fetch("https://imdb8.p.rapidapi.com/auto-complete?q=" + title, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "imdb8.p.rapidapi.com",
+            "x-rapidapi-key": "4eac66e9b5msh32881c1535a40e0p1d8ceajsn8f74f898d71d"
+        }
+    })    
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(JSON.stringify(response))
+        let items = response.d.filter(el => el.l === title || el.y === year);        
+        let id = items[0].id;
+        return id;
+    })
+    .then(id => {
+        return fetch("https://imdb8.p.rapidapi.com/title/get-overview-details?tconst=" + id + "&currentCountry=IT", {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "imdb8.p.rapidapi.com",
+            "x-rapidapi-key": "4eac66e9b5msh32881c1535a40e0p1d8ceajsn8f74f898d71d"
+        }
+    })    
+    })
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(response => {return({imdbId: response.id, imdbRating: response.ratings.rating, imdbRatingCount: response.ratings.ratingCount })} )
+    .then(imdb => dispatch(addImdb(imdb)))
+    .catch(error => dispatch(imdbFailed(error.message)));
+}
+
+export const imdbLoading = () => ({
+	type: ActionTypes.IMDB_LOADING
+})
+
+export const addImdb = (favourites) => ({
+    type: ActionTypes.ADD_IMDB,
+    payload: favourites
+})
+
+export const imdbFailed = (errmess) => ({
+    type: ActionTypes.IMDB_FAILED,
+    payload: errmess
+})
 
 
 //USER

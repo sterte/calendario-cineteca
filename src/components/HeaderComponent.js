@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
 	Button, Modal, ModalHeader, ModalBody,
 	Form, FormGroup, Label, Input } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import { fetchUrl } from '../shared/baseUrl';
+
 
 class Header extends Component{
 
@@ -74,7 +74,7 @@ class Header extends Component{
             <div className="container">
             <NavbarToggler onClick={this.toggleNav} />
             <NavbarBrand className="mr-auto" href="/">
-            <img src={fetchUrl + "/images/logo-white.png"} height="60" alt="Calendario Cineteca" />
+            <img src='/assets/images/logo-white.png' height="60" alt="Calendario Cineteca" />
             </NavbarBrand>
             
             <Collapse isOpen={this.state.isNavOpen} navbar>
@@ -120,7 +120,7 @@ class Header extends Component{
             <div className="container">
             <div className="row row-header">
             <div className="col-12 d-flex justify-content-center">                        
-            <h1><img src={fetchUrl + "/images/logo-black.png"} height="60" alt="Calendario Cineteca" /> 
+            <h1><img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" /> 
             Calendario Cineteca di Bologna</h1>
             </div>
             </div>

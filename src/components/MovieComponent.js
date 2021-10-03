@@ -6,12 +6,13 @@ import {
 import { connect } from 'react-redux';
 import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
-import { addFavourite, getMovieDetail } from '../redux/ActionCreators';
+import { addFavourite, getMovieDetail, fetchImdb } from '../redux/ActionCreators';
 import ReactAddToCalendar from 'react-add-to-calendar';
 import ScrollToTopButton from './ScrollToTopButton';
-import { fetchUrl } from '../shared/baseUrl';
 import '../App.css';
 import { monthToNum } from './MovieUtils';
+import { cinetecaUrl, imdbUrl } from '../shared/baseUrl';
+import StarRatings from 'react-star-ratings';
 
 
 const mapStateToProps = (state) => {
@@ -23,6 +24,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getMovieDetail: (categoryId, movieId, repeatId) => { dispatch(getMovieDetail(categoryId, movieId, repeatId)) },
   addFavourite: (fav) => dispatch(addFavourite(fav)),
+  fetchImdb: (title, year) => { dispatch(fetchImdb(title, year)) }
 });
 
 class Movie extends Component {
@@ -47,9 +49,17 @@ class Movie extends Component {
 
 
   componentDidMount() {
-    this.props.getMovieDetail(this.props.categoryId, this.props.movieId, this.props.repeatId)
+    this.props.getMovieDetail(this.props.categoryId, this.props.movieId, this.props.repeatId)    
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.auth.isAuthenticated && prevProps.movie.isLoading && !this.props.movie.isLoading) {
+        let from = this.props.movie.movies.duration.indexOf('/') + 1;
+        let to = this.props.movie.movies.duration.indexOf(')');
+        let year = parseInt(this.props.movie.movies.duration.substring(from, to));
+        this.props.fetchImdb(this.props.movie.movies.title, year)
+    }
+}
 
 
 composeCalendarButton(hour, showBuyButton = true){
@@ -115,7 +125,7 @@ composeCalendarButton(hour, showBuyButton = true){
               }
               <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
               { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
-                  <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} rel='noopenoer noreferrer'>Acquista</a>          
+                  <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
               }
               </div>
             </div>
@@ -156,7 +166,7 @@ composeCalendarButton(hour, showBuyButton = true){
                   </div>    
                   }
                   { this.props.movie.movies.isVO > 0 &&
-                  <div><img className='col-12 d-flex align-self-center' src={fetchUrl + "/images/subtitles.gif"} alt='subtitles' /></div>
+                  <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
                   }
                 </div>
               </div>
@@ -164,6 +174,28 @@ composeCalendarButton(hour, showBuyButton = true){
                 <img src={this.props.movie.movies.image} className='img-fluid' alt={'img-' + this.props.movie.movies.image} />
               </div>
             </div>            
+
+            <div className='col-12 p-0 d-flex align-self-center mt-3'>
+            <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-black.png' alt='link-cineteca' /></a>
+            {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
+            <div><Loading /></div>
+            : this.props.auth.isAuthenticated &&
+            <div className='col-auto d-flex align-self-center'>
+              <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+              <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>
+
+              <StarRatings
+        rating={parseFloat(this.props.movie.imdbRating) / 2}
+        numberOfStars={5}
+        starRatedColor="#f99e00"
+        starEmptyColor="#a8a8a8"
+        starDimension="30px"
+        starSpacing="0px"
+      />
+
+            </div>
+            }
+            </div>
 
               <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
                 {this.composeCalendarButton(this.props.movie.movies.currentHour)}
