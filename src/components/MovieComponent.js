@@ -176,7 +176,7 @@ composeCalendarButton(hour, showBuyButton = true){
             </div>            
 
             <div className='col-12 p-0 d-flex align-self-center mt-3'>
-            <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-black.png' alt='link-cineteca' /></a>
+            <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
             {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
             <div><Loading /></div>
             : this.props.auth.isAuthenticated && this.props.movie.imdbRatingCount > -1 &&
