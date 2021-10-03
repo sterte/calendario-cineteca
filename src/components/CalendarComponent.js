@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { getDayProgram } from '../redux/ActionCreators'
 import { Fade, Stagger } from 'react-animation-components';
 import { connect } from 'react-redux';
-import { fetchUrl } from '../shared/baseUrl'
 import Loading from './LoadingComponent';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { fetchUrl } from '../shared/baseUrl'
 import { Link } from 'react-router-dom';
-import { Fade, Stagger } from 'react-animation-components';
+import { Stagger } from 'react-animation-components';
 
 export const Vo = (props) => {
     if (props.isVO) {
@@ -22,13 +22,13 @@ export const Music = (props) => {
 export const isFuture = (movie, currentDate) => {
     const now = new Date();
     const oraInizio = currentDate;
-    let dateDay = movie.date.split(' ')[1];
-    let dateMonth = monthToNum(movie.date.split(' ')[2]);
+    let dateDay = parseInt(movie.date.split(' ')[1]);
+    let dateMonth = parseInt(monthToNum(movie.date.split(' ')[2]));
     let currentDay = currentDate.getUTCDate();
     let currentMonth = currentDate.getUTCMonth();
 
-    if(currentMonth==dateMonth){
-        if(currentDay == dateDay){
+    if(currentMonth === dateMonth){
+        if(currentDay === dateDay){
             let movieTime = movie.time.replace('H ', '');
             let [hh, mm] = movieTime.split('.');                
             oraInizio.setHours(hh);
