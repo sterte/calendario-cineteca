@@ -19,7 +19,7 @@ export const Movies = (state = {isLoading: true, errMess: null, movies: [], isLo
 			return {...state, isLoadingImdb : true, errMessImdb: null, imdbId: null, imdbRating: null, imdbRatingCount: null }
 
 		case ActionTypes.IMDB_FAILED:
-			return {...state, isLoadingImdb : false, errMessImdb: action.payload, imdbId: null, imdbRating: null, imdbRatingCount: null }
+			return {...state, isLoadingImdb : false, errMessImdb: action.payload, imdbId: null, imdbRating: 0, imdbRatingCount: -1 }
 
 		default:
 			return state;
