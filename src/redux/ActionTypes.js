@@ -13,6 +13,9 @@ export const ADD_MOVIE = 'ADD_MOVIE';
 export const FAVOURITES_LOADING = 'FAVOURITES_LOADING';
 export const FAVOURITES_FAILED = 'FAVOURITES_FAILED';
 export const ADD_FAVOURITES = 'ADD_FAVOURITES';
+export const IMDB_LOADING = 'IMDB_LOADING';
+export const IMDB_FAILED = 'IMDB_FAILED';
+export const ADD_IMDB = 'ADD_IMDB';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
