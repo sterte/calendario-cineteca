@@ -48,7 +48,10 @@ export const isFuture = (movie, currentDate) => {
 
 
 export const movieListDetail = (movie, showDay = false) => {
-const isSoldOut = 'Sold Out' === movie.extras;
+let movieExtras = movie.extras;
+if(movie.extras.includes('Sold Out')){
+  movieExtras = movieExtras.replace('Sold Out', '<b>Sold Out</b>');
+}
 return (
     <Stagger in className='row ml-1 mr-1 mb-5'>
             <div className='col-4 col-md-4'>
@@ -65,13 +68,9 @@ return (
                 }
                 <div className='row'>
                     <h5>{movie.time}</h5><span class='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
-                </div>
-                <div className='row'>
-                    {isSoldOut ?
-                        <b>{movie.extras}</b>
-                        :
-                        <em>{movie.extras}</em>
-                    }
+                </div>                
+                <div className='row' dangerouslySetInnerHTML={{ __html: movieExtras }}>
+
                 </div>
                 <div className='row mt-1'>
                     <Vo isVO={movie.isVO} />
