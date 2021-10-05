@@ -179,9 +179,11 @@ composeCalendarButton(hour, showBuyButton = true){
             <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
             {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
             <div><Loading /></div>
-            : this.props.auth.isAuthenticated && this.props.movie.imdbRatingCount > -1 &&
+            : this.props.auth.isAuthenticated && this.props.movie.imdbId &&
             <div className='col-auto d-flex align-self-center'>
               <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+              {this.props.movie.imdbRatingCount > -1 &&
+              <div>
               <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>              
               <StarRatings
         rating={parseFloat(this.props.movie.imdbRating) / 2}
@@ -191,7 +193,8 @@ composeCalendarButton(hour, showBuyButton = true){
         starDimension="30px"
         starSpacing="0px"
       />
-
+      </div>
+              }
             </div>
             }
             </div>

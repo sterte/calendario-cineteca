@@ -242,9 +242,28 @@ export const fetchImdb = (title, year) => (dispatch) => {
         throw errmess;
     })
     .then(response => response.json())
-    .then(response => {
-        console.log(JSON.stringify(response))
-        let items = response.d.filter(el => el.l === title || el.y === year);        
+    .then(response => {        
+        let items = response.d.filter(el => el.l === title && (el.y && el.y === year));                  
+        if(items.length == 0){
+            items = response.d.filter(el => el.l === title && (el.y && el.y-1 === year));            
+        }
+        if(items.length == 0){
+            items = response.d.filter(el => el.l === title && (el.y && el.y+1 === year));            
+        }
+        if(items.length == 0){
+            items = response.d.filter(el => el.l === title || (el.y && el.y === year));  
+        }
+        if(items.length == 0){
+            items = response.d.filter(el => el.l === title || (el.y && el.y-1 === year));
+            console.log('2')
+        console.log(JSON.stringify(items))
+        }
+        if(items.length == 0){
+            items = response.d.filter(el => el.l === title || (el.y && el.y+1 === year));
+            console.log('2')
+        console.log(JSON.stringify(items))
+        }
+
         let id = items[0].id;
         return id;
     })
