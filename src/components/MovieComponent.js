@@ -203,8 +203,7 @@ composeCalendarButton(hour, showBuyButton = true){
                 {this.composeCalendarButton(this.props.movie.movies.currentHour)}
               </div>
 
-              <div className='col-12 mt-2' >
-                {this.props.movie.movies.extras}
+              <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.extras }}>                
               </div>
               <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
               </div>
