@@ -91,8 +91,8 @@ composeCalendarButton(hour, showBuyButton = true){
 
 
   return (
-    <div className='container' key={hour.day}>
-      <Fade in>
+    <div className='container'>
+      <Fade in='true' key={hour.day}>
         <div className={giornoInizio > now ? 'row mt-5 mb-0 mb-md-3' : 'row mt-5 mb-0 mb-md-3 past-movie-title'}>      
           <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
         </div>

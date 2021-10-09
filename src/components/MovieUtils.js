@@ -53,7 +53,7 @@ if(movie.extras.includes('Sold Out')){
   movieExtras = movieExtras.replace('Sold Out', '<b>Sold Out</b>');
 }
 return (
-    <Stagger in className='row ml-1 mr-1 mb-5'>
+    <Stagger in='true' className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
             <div className='col-4 col-md-4'>
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
@@ -67,7 +67,7 @@ return (
                 </div>
                 }
                 <div className='row'>
-                    <h5>{movie.time}</h5><span class='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
+                    <h5>{movie.time}</h5><span className='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
                 </div>                
                 <div className='row' dangerouslySetInnerHTML={{ __html: movieExtras }}>
 

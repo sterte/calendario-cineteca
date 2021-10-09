@@ -39,7 +39,7 @@ class TrackDetail extends Component {
         }
         else {
             const tracksList = this.props.trackDetail.trackDetail.movies.length === 0 ?
-                <Stagger in>                
+                <Stagger in='true'>                
                     <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
             :            
@@ -55,7 +55,7 @@ class TrackDetail extends Component {
                         </div>
                         <div className='col-12 m-4' dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.description}} />
                         <div className='m-4'>
-                        <Fade in>                            
+                        <Fade in='true'>                            
                             {tracksList}                            
                         </Fade>
                         </div>

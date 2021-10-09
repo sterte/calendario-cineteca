@@ -25,6 +25,14 @@ class Header extends Component{
         this.requestSignupForm = this.requestSignupForm.bind(this);
     }
 
+    
+    componentDidMount(){
+        if(this.props.auth.isAuthenticated){
+            this.props.loginUser({username: this.props.auth.user.username, password: this.props.auth.user.password});
+        }
+    }            
+
+
     toggleNav() {
         this.setState({isNavOpen: !this.state.isNavOpen});
     }
