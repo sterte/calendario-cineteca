@@ -64,7 +64,7 @@ class Main extends Component{
           signupUser={this.props.signupUser} />
       <TransitionGroup>
       <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
-      <Switch>      
+      <Switch location={this.props.location}>      
       <Route exact path="/movie/:categoryId/:movieId/:repeatId" component={MovieWithCategoryAndId(this.props.auth)} />
       <Route path="/calendar" component={() => <Calendar />} />
       <Route path="/tracks/:trackId" component={TrackDetailWithId()} />

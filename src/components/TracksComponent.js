@@ -38,18 +38,15 @@ class Tracks extends Component {
             </div>);
         }
         else {
-
-
-
-
+            
             const tracksList = this.props.tracks.tracks.length === 0 ?
-                <Stagger in>                
+                <Stagger in='true'>                
                     <h4 className='row mt-4 p-4 p-md-0'>Non ci sono rassegne in corso</h4>                
                 </Stagger>
             :            
             this.props.tracks.tracks.map((track) => {                
                 return (
-                    <Stagger in className='row ml-1 mr-1 mb-5'>
+                    <Stagger in='true' className='row ml-1 mr-1 mb-5' key={track.id}>
                             <div className='col-4 col-md-4'>
                                 <img src={track.image} className='img-fluid' alt={'img-' + track.id} />
                             </div>
@@ -68,7 +65,7 @@ class Tracks extends Component {
             return (
                 <div className='container white-back'>
                     <div className='row row-content d-flex justify-content-center'>
-                        <Fade in>                            
+                        <Fade in='true'>                            
                             {tracksList}                            
                         </Fade>
                     </div>

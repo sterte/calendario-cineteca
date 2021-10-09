@@ -60,7 +60,7 @@ class PersonalArea extends Component {
         else{
             const favlist = this.props.favourites.favourites.map((fav) => {
                 return (
-                        <Stagger in>
+                        <Stagger in='true'>
                             <div className='row row-content justify-content-around d-flex mt-4'>
                                 <div className='col-12 col-md-10'>
                                     <div className='row p-1 p-md-0'>

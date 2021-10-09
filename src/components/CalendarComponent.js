@@ -82,7 +82,7 @@ class Calendar extends Component {
         else {
 
             const movielist = this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate)).length === 0 ?
-                <Stagger in>                
+                <Stagger in='true'>                
                     <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
             :            
@@ -96,14 +96,14 @@ class Calendar extends Component {
                         <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
                                 <span className="fa fa-angle-double-left" />
-                                <span class="d-none d-md-block">Settimana</span>
+                                <span className="d-none d-md-block">Settimana</span>
                             </Button>                
                         </div>
 
                         <div className='col-3 col-md-auto order-3 order-md-2'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-1)}>                    
                                 <span className="fa fa-angle-left" />
-                                <span class="d-none d-md-block">Giorno</span>
+                                <span className="d-none d-md-block">Giorno</span>
                             </Button>                
                         </div>
 
@@ -119,19 +119,19 @@ class Calendar extends Component {
                         <div className='col-3 col-md-auto order-4'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(1)}>                    
                                 <span className="fa fa-angle-right" />                        
-                                <span class="d-none d-md-block">Giorno</span>
+                                <span className="d-none d-md-block">Giorno</span>
                             </Button>                
                         </div>
 
                         <div className='col-3 col-md-auto order-5'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(7)}>                    
                                 <span className="fa fa-angle-double-right" />
-                                <span class="d-none d-md-block">Settimana</span>
+                                <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
                     </div>
                     <div className='row row-content d-flex justify-content-center'>
-                        <Fade in>                            
+                        <Fade in='true'>                            
                             {movielist}                            
                         </Fade>
                     </div>
