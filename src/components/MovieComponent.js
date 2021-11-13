@@ -65,6 +65,7 @@ class Movie extends Component {
 composeCalendarButton(hour, showBuyButton = true){
   let items = [
     { google: 'Google' },
+    { apple: 'Apple' },
     { outlook: 'Outlook' },
     { yahoo: 'Yahoo' }
   ];
