@@ -97,9 +97,9 @@ composeCalendarButton(hour, showBuyButton = true){
           <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
         </div>
         {hour.hours.map((show) => {
-
-          show = show.replace('H ', '');
-          let [hh, mm] = show.split('.');
+          let orario = show.orario;
+          orario = orario.replace('H ', '');
+          let [hh, mm] = orario.split('.');
       
           oraInizio.setHours(hh, mm, 0, 0);
           var isFuture = new Date() < oraInizio;
@@ -114,19 +114,28 @@ composeCalendarButton(hour, showBuyButton = true){
           };
 
           return (
-            <div className='row d-flex' key={event.title+event.startTime}>
-              <div className={isFuture ? 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4' : 'col-12 col-md-2 mt-4 mt-md-0 mb-0 mb-md-4 past-movie-title'}>
-                {show}
-              </div>
-              { isFuture && 
-              <div className='col-12 col-md-auto mt-2 mt-md-0  mb-0 mb-md-4'>
-                <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
-              </div>                            
-              }
-              <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
-              { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
-                  <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
-              }
+            <div className='row d-flex' key={event.title+event.startTime}>            
+                <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
+                  <span>
+                    {orario} - {hour.place}
+                  </span>
+                  { show.isVO > 0 &&
+                    <img className='ml-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
+                  }
+                </div>
+                <div className={'col-12 mt-0 mb-0 mb-md-2'}>                
+                  <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
+                </div>
+                { isFuture && 
+                <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4'>
+                  <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
+                </div>                            
+                }
+                <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
+                { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
+                    <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
+                }
+              
               </div>
             </div>
           );
@@ -165,7 +174,7 @@ composeCalendarButton(hour, showBuyButton = true){
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
                   </div>    
                   }
-                  { this.props.movie.movies.isVO > 0 &&
+                  { this.props.movie.movies.currentHour.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
                   }
                 </div>
@@ -175,38 +184,40 @@ composeCalendarButton(hour, showBuyButton = true){
               </div>
             </div>            
 
-            <div className='col-12 p-0 d-flex align-self-center mt-3'>
-            <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
-            {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
-            <div><Loading /></div>
-            : this.props.auth.isAuthenticated && this.props.movie.imdbId &&
-            <div className='col-auto d-flex align-self-center'>
-              <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
-              {this.props.movie.imdbRatingCount > -1 &&
+            <div className='col-12 p-0 d-flex align-items-center mt-3'>
+              Link: <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+              {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
               <div>
-              <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>              
-              <StarRatings
-        rating={parseFloat(this.props.movie.imdbRating) / 2}
-        numberOfStars={5}
-        starRatedColor="#f99e00"
-        starEmptyColor="#a8a8a8"
-        starDimension="30px"
-        starSpacing="0px"
-      />
-      </div>
+                <Loading />
+              </div>
+              : this.props.auth.isAuthenticated && this.props.movie.imdbId &&
+              <div className='col-auto d-flex align-self-center'>
+                <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+                {this.props.movie.imdbRatingCount > -1 &&
+                <div>
+                  <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>              
+                  <StarRatings
+                    rating={parseFloat(this.props.movie.imdbRating) / 2}
+                    numberOfStars={5}
+                    starRatedColor="#f99e00"
+                    starEmptyColor="#a8a8a8"
+                    starDimension="30px"
+                    starSpacing="0px"
+                  />
+                </div>
+                }
+              </div>
               }
             </div>
-            }
+
+            <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
+              {this.composeCalendarButton(this.props.movie.movies.currentHour)}
             </div>
-
-              <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
-                {this.composeCalendarButton(this.props.movie.movies.currentHour)}
-              </div>
-
-              <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.extras }}>                
-              </div>
-              <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
-              </div>
+            
+            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.currentHour.additionalInfo }}>                
+            </div>
+            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
+            </div>
             {
             this.props.movie.movies.hours.length ?               
             <div className='row d-flex justify-content-center'>
