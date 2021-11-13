@@ -97,9 +97,9 @@ composeCalendarButton(hour, showBuyButton = true){
           <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
         </div>
         {hour.hours.map((show) => {
-
-          show = show.replace('H ', '');
-          let [hh, mm] = show.split('.');
+          let orario = show.orario;
+          orario = orario.replace('H ', '');
+          let [hh, mm] = orario.split('.');
       
           oraInizio.setHours(hh, mm, 0, 0);
           var isFuture = new Date() < oraInizio;
@@ -114,10 +114,17 @@ composeCalendarButton(hour, showBuyButton = true){
           };
 
           return (
-            <div className='row d-flex' key={event.title+event.startTime}>
-              
-                <div className={isFuture ? 'col-12 mt-2 mb-0 mb-md-2' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
-                  {show} - {hour.place}
+            <div className='row d-flex' key={event.title+event.startTime}>            
+                <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
+                  <span>
+                    {orario} - {hour.place}
+                  </span>
+                  { show.isVO > 0 &&
+                    <img className='ml-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
+                  }
+                </div>
+                <div className={'col-12 mt-0 mb-0 mb-md-2'}>                
+                  <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
                 </div>
                 { isFuture && 
                 <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4'>
@@ -167,7 +174,7 @@ composeCalendarButton(hour, showBuyButton = true){
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
                   </div>    
                   }
-                  { this.props.movie.movies.isVO > 0 &&
+                  { this.props.movie.movies.currentHour.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
                   }
                 </div>
@@ -206,8 +213,8 @@ composeCalendarButton(hour, showBuyButton = true){
             <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
               {this.composeCalendarButton(this.props.movie.movies.currentHour)}
             </div>
-
-            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.extras }}>                
+            
+            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.currentHour.additionalInfo }}>                
             </div>
             <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
             </div>
