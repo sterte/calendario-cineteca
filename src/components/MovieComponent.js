@@ -10,7 +10,7 @@ import { addFavourite, getMovieDetail, fetchImdb } from '../redux/ActionCreators
 import ReactAddToCalendar from 'react-add-to-calendar';
 import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
-import { monthToNum } from './MovieUtils';
+import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
 
@@ -74,10 +74,10 @@ composeCalendarButton(hour, showBuyButton = true){
   //hour.day = hour.day.replace('&igrave;', 'ì');
   const splitDate = hour.day.trim().split(/\s+/);
   const year = '20' + splitDate[3];
-  var month = splitDate[2];
+  var monthString = splitDate[2];
   const day = splitDate[1];
 
-  month = monthToNum(month);
+  const month = monthToNum(monthString);
   
   var now = new Date();
   var oraInizio = new Date();
@@ -89,13 +89,16 @@ composeCalendarButton(hour, showBuyButton = true){
   giornoInizio.setHours(23);
   giornoInizio.setMinutes(59);
   
-
+var dateString = weekDays[giornoInizio.getDay()] + ' ' +  day + ' ' + monthToCompleteName(monthString);
+if(year !== now.getFullYear().toString()){  
+  dateString = dateString + ' ' + year;
+}
 
   return (
     <div className='container'>
       <Fade in='true' key={hour.day}>
         <div className={giornoInizio > now ? 'row mt-5 mb-0 mb-md-3' : 'row mt-5 mb-0 mb-md-3 past-movie-title'}>      
-          <h5 dangerouslySetInnerHTML={{__html:hour.day}}></h5>
+          <h5>{dateString}</h5>
         </div>
         {hour.hours.map((show) => {
           let orario = show.orario;
