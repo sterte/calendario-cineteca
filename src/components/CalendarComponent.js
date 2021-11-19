@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
-import { movieListDetail } from './MovieUtils';
+import { weekDays, movieListDetail } from './MovieUtils';
 
 
 const mapStateToProps = (state) => {
@@ -19,7 +19,6 @@ const mapDispatchToProps = (dispatch) => ({
     getDayProgram: (from, to) => { dispatch(getDayProgram(from, to)) }
 });
 
-const weekDays = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
 
 class Calendar extends Component {
 

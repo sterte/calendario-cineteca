@@ -53,7 +53,7 @@ if(movie.extras.includes('Sold Out')){
   movieExtras = movieExtras.replace('Sold Out', '<b>Sold Out</b>');
 }
 return (
-    <Stagger in='true' className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
+    <Stagger in={true} className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
             <div className='col-4 col-md-4'>
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
@@ -125,3 +125,50 @@ switch (month) {
   }
   return month;
 }
+
+export const monthToCompleteName = (month) => {
+  switch (month) {
+      case 'Gen':
+        month = 'Gennaio';
+        break;
+      case 'Feb':
+        month = 'Febbraio';
+        break;
+      case 'Mar':
+        month = 'Marzo';
+        break;
+      case 'Apr':
+        month = 'Aprile';
+        break;
+      case 'Mag':
+        month = 'Maggio';
+        break;
+      case 'Giu':
+        month = 'Giugno';
+        break;
+      case 'Lug':
+        month = 'Luglio';
+        break;
+      case 'Ago':
+        month = 'Agosto';
+        break;
+      case 'Set':
+        month = 'Settembre';
+        break;
+      case 'Ott':
+        month = 'Ottobre';
+        break;
+      case 'Nov':
+        month = 'Novembre';
+        break;
+      case 'Dic':
+        month = 'Dicembre';
+        break;
+      default:
+        month = 0;
+        break;
+    }
+    return month;
+  }
+
+export const weekDays = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
