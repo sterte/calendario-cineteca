@@ -109,12 +109,14 @@ if(year !== now.getFullYear().toString()){
           var isFuture = new Date() < oraInizio;
           let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * 60 * 2));
 
+          let eventDescription = window.location.href + "\n\n" + this.props.movie.movies.originalUrl + "\n\n" + imdbUrl + this.props.movie.imdbId
+
           let event = {
             title: this.props.movie.movies.title,
             location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
             startTime: oraInizio.toISOString(),
             endTime: oraFine.toISOString(),
-            description: this.props.movie.movies.originalUrl
+            description: eventDescription
           };
 
           return (
