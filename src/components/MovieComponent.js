@@ -62,7 +62,7 @@ class Movie extends Component {
 }
 
 
-composeCalendarButton(hour, showBuyButton = true){
+composeCalendarButton(hour, durationNumber, showBuyButton = true){
   let items = [
     { google: 'Google' },
     { apple: 'Apple' },
@@ -107,14 +107,17 @@ if(year !== now.getFullYear().toString()){
       
           oraInizio.setHours(hh, mm, 0, 0);
           var isFuture = new Date() < oraInizio;
-          let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * 60 * 2));
+          durationNumber = isNaN(durationNumber) ? 120 : durationNumber;
+          let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * durationNumber));
+
+          let eventDescription = window.location.href + "\n\n" + this.props.movie.movies.originalUrl + "\n\n" + imdbUrl + this.props.movie.imdbId
 
           let event = {
             title: this.props.movie.movies.title,
             location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
             startTime: oraInizio.toISOString(),
             endTime: oraFine.toISOString(),
-            description: this.props.movie.movies.originalUrl
+            description: eventDescription
           };
 
           return (
@@ -154,9 +157,10 @@ if(year !== now.getFullYear().toString()){
     if (this.props.movie.isLoading) {
       return (<div className='container'><Loading /></div>);
     }
-    else {
-      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour));
-
+    else {      
+      const durationString = this.props.movie.movies.duration;
+      const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')')))
+      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, durationNumber));      
       return (
         <>
         <div className='container white-back'>
@@ -215,7 +219,7 @@ if(year !== now.getFullYear().toString()){
             </div>
 
             <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
-              {this.composeCalendarButton(this.props.movie.movies.currentHour)}
+              {this.composeCalendarButton(this.props.movie.movies.currentHour, durationNumber)}
             </div>
             
             <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.currentHour.additionalInfo }}>                
