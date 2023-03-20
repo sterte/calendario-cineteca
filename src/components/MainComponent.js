@@ -6,6 +6,7 @@ import PersonalArea from './PersonalAreaComponent';
 import Movie from './MovieComponent';
 import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
+import ChatAI from './ChatAIComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
@@ -70,6 +71,7 @@ class Main extends Component{
       <Route path="/tracks/:trackId" component={TrackDetailWithId()} />
       <Route path="/tracks" component={() => <Tracks />} />      
       <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
+      <PrivateRoute path="/chat-ai" component={() => <ChatAI />} />
       <Redirect to="/calendar" />
       </Switch>
       </CSSTransition>

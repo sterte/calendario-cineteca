@@ -311,6 +311,61 @@ export const imdbFailed = (errmess) => ({
 })
 
 
+export const fetchChatResponse = (conversationId, lastMessage) => (dispatch) => {
+    dispatch(addChatResponse({conversationId: conversationId, content: lastMessage, role: "user"}))
+    dispatch(chatResponseLoading(true));
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    var body = {};
+    body.conversationId = conversationId;
+    body.charachter = 'pornActressIT';
+    body.question = lastMessage;
+    return fetch(fetchUrl + '/chat/prompt', {
+        "method": "POST",
+        headers: {
+            'Authorization': bearer,
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(body)
+    })    
+    .then(response => {
+        if (response.ok) {
+            return response;
+        }
+        else {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+    })
+    .then(response => response.json())
+    .then(response => {console.dir(response); dispatch(addChatResponse(response))})
+    .catch(error => dispatch(chatResponseFailed(error.message)));
+}
+
+
+export const resetChatResponse = () => ({
+	type: ActionTypes.RESET_CHAT_RESPONSE
+})
+
+export const chatResponseLoading = () => ({
+	type: ActionTypes.CHAT_RESPONSE_LOADING
+})
+
+export const addChatResponse = (response) => ({
+    type: ActionTypes.ADD_CHAT_RESPONSE,
+    payload: response
+})
+
+export const chatResponseFailed = (errmess) => ({
+    type: ActionTypes.CHAT_RESPONSE_FAILED,
+    payload: errmess
+})
+
 //USER
 export const requestLogin = (creds) => {
     return {

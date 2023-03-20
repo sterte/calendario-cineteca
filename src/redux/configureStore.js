@@ -7,6 +7,7 @@ import { Auth } from './auth'
 import { Favourites } from './favourites'
 import { Tracks } from './tracks'
 import { TrackDetail } from './trackDetail'
+import { ChatResponses } from './chatResponses.js';
 
 export const ConfigureStore = () => {
 	const store = createStore(
@@ -16,7 +17,8 @@ export const ConfigureStore = () => {
 			auth: Auth,
 			favourites: Favourites,
 			tracks: Tracks,
-			trackDetail: TrackDetail
+			trackDetail: TrackDetail,
+			chatResponses: ChatResponses
 		}),
 
 		applyMiddleware(thunk, logger)
