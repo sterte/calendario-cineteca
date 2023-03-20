@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { fetchChatResponse, resetChatResponse } from '../redux/ActionCreators'
 import { connect } from 'react-redux';
-import {
-    Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
-    Button, Modal, ModalHeader, ModalBody,
-    Form, FormGroup, Label, Input
-} from 'reactstrap';
-import { getRoles } from '@testing-library/react';
+import { Button, FormGroup, Input } from 'reactstrap';
 
 const mapStateToProps = (state) => {
     return {
@@ -30,14 +25,12 @@ class ChatAI extends Component {
 
 
     render() {
-        var prompt = '';
-
         return (
             <div className='container white-back'>
                 <div className='row row-content d-flex justify-content-center'>
                     <div className='col-12 hide-scrollbar' style={{ display: 'flex', flexDirection: 'column-reverse', height: '400px', overflowY: 'scroll' }}>
                         <div className='row'>
-                            {this.props.messages.messages.map(el => <div style={'user' == el.role ? { backgroundColor: 'gray', borderRadius: '10px', marginLeft: 'auto', marginRight: '0px', maxWidth: '60%' } : { backgroundColor: 'orange', borderRadius: '10px', marginLeft: '0px', marginRight: 'auto', maxWidth: '60%' }} className={el.role === 'user' ? 'col-12 mt-3 p-3 mr-3' : 'col-12 mt-3 p-3 ml-3'}>{el.content}</div>)}
+                            {this.props.messages.messages.map(el => <div style={'user' === el.role ? { backgroundColor: 'gray', borderRadius: '10px', marginLeft: 'auto', marginRight: '0px', maxWidth: '60%' } : { backgroundColor: 'orange', borderRadius: '10px', marginLeft: '0px', marginRight: 'auto', maxWidth: '60%' }} className={el.role === 'user' ? 'col-12 mt-3 p-3 mr-3' : 'col-12 mt-3 p-3 ml-3'}>{el.content}</div>)}
                             {this.props.messages.isLoading &&
                                 <div className='col-12 mt-3 p-3'>
                                     <i class="fa fa-spinner fa-spin fa-fw"></i>
