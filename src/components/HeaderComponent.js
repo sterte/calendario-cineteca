@@ -96,14 +96,14 @@ class Header extends Component{
             <NavLink className="nav-link" to="/tracks">
             <span className="fa fa-film fa-lg"></span> Rassegne
             </NavLink>
-            </NavItem>    
+            </NavItem>                   
+            {this.props.auth.isAuthenticated ?
+            <>
             <NavItem>
             <NavLink className="nav-link" to="/chat-ai">
             <span className="fa fa-comment fa-lg"></span> Chat AI
             </NavLink>
-            </NavItem>                      
-            {this.props.auth.isAuthenticated ?
-            <>
+            </NavItem>   
             <NavItem>
             <NavLink className="nav-link" to="/personalarea">
             <span className="fa fa-user-o fa-lg"></span> Area Personale
