@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Stagger } from 'react-animation-components';
+import { Fade } from 'react-animation-components';
 
 export const Vo = (props) => {
     if (props.isVO) {
@@ -53,7 +53,7 @@ if(movie.extras.includes('Sold Out')){
   movieExtras = movieExtras.replace('Sold Out', '<b>Sold Out</b>');
 }
 return (
-    <Stagger in={true} className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
+    <Fade in={true} className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
             <div className='col-4 col-md-4'>
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
@@ -77,7 +77,7 @@ return (
                     <Music isMUSIC={movie.isMUSIC} />
                 </div>
             </div>
-    </Stagger>
+    </Fade>
 )}
 
 

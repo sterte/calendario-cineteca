@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody,
 	Form, FormGroup, Label, Input } from 'reactstrap';
-import { Stagger } from 'react-animation-components';
+import { Fade } from 'react-animation-components';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import { fetchFavourites, editFavourite, deleteFavourite } from '../redux/ActionCreators';
@@ -60,7 +60,7 @@ class PersonalArea extends Component {
         else{
             const favlist = this.props.favourites.favourites.map((fav) => {
                 return (
-                        <Stagger in='true'>
+                        <Fade in={true} key={fav.title}>
                             <div className='row row-content justify-content-around d-flex mt-4'>
                                 <div className='col-12 col-md-10'>
                                     <div className='row p-1 p-md-0'>
@@ -86,7 +86,7 @@ class PersonalArea extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </Stagger>                        
+                        </Fade>                        
                 );
             });
             return(

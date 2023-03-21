@@ -15,7 +15,7 @@ export const Auth = (state = {
             return {...state,
                 isLoading: true,
                 isAuthenticated: false,
-                user: action.creds
+                user: {...action.creds, password:''}
             };
         case ActionTypes.LOGIN_SUCCESS:
             return {...state,

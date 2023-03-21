@@ -218,8 +218,6 @@ export const favouritesFailed = (errmess) => ({
 
 export const fetchImdb = (title, year) => (dispatch) => {
     dispatch(imdbLoading(true));
-    console.log(title)
-    console.log(year)
     return fetch("https://imdb8.p.rapidapi.com/auto-complete?q=" + title, {
         "method": "GET",
         "headers": {
@@ -255,13 +253,9 @@ export const fetchImdb = (title, year) => (dispatch) => {
         }
         if(items.length === 0){
             items = response.d.filter(el => el.l === title || (el.y && el.y-1 === year));
-            console.log('2')
-        console.log(JSON.stringify(items))
         }
         if(items.length === 0){
             items = response.d.filter(el => el.l === title || (el.y && el.y+1 === year));
-            console.log('2')
-        console.log(JSON.stringify(items))
         }
 
         let id = items[0].id;

@@ -130,7 +130,7 @@ class Calendar extends Component {
                         </div>
                     </div>
                     <div className='row row-content d-flex justify-content-center'>
-                        <Fade in='true'>                            
+                        <Fade in={true}>                            
                             {movielist}                            
                         </Fade>
                     </div>

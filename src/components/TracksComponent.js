@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Fade, Stagger } from 'react-animation-components';
+import { Fade } from 'react-animation-components';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
@@ -40,13 +40,13 @@ class Tracks extends Component {
         else {
             
             const tracksList = this.props.tracks.tracks.length === 0 ?
-                <Stagger in='true'>                
+                <Fade in={true}>                
                     <h4 className='row mt-4 p-4 p-md-0'>Non ci sono rassegne in corso</h4>                
-                </Stagger>
+                </Fade>
             :            
             this.props.tracks.tracks.map((track) => {                
                 return (
-                    <Stagger in='true' className='row ml-1 mr-1 mb-5' key={track.id}>
+                    <Fade in={true} className='row ml-1 mr-1 mb-5' key={track.id}>
                             <div className='col-4 col-md-4'>
                                 <img src={track.image} className='img-fluid' alt={'img-' + track.id} />
                             </div>
@@ -58,14 +58,14 @@ class Tracks extends Component {
                                     <h5>{track.dateInfo}</h5>
                                 </div>
                             </div>
-                    </Stagger>
+                    </Fade>
                 );
             });
 
             return (
                 <div className='container white-back'>
                     <div className='row row-content d-flex justify-content-center'>
-                        <Fade in='true'>                            
+                        <Fade in={true}>                            
                             {tracksList}                            
                         </Fade>
                     </div>
