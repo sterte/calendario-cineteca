@@ -5,7 +5,7 @@ export const ChatResponses = (state = {isLoading: false, errMess: null, messages
 	switch(action.type) {
 		case ActionTypes.ADD_CHAT_RESPONSE:
 			var tmpMessages = state.messages;
-			tmpMessages.push({role: action.payload.role, content: action.payload.content, tokenCount: action.payload.tokenCount});
+			tmpMessages.push({role: action.payload.role, content: action.payload.content, timestamp: action.payload.timestamp, tokenCount: action.payload.tokenCount});
 
 			var tmpTotalTokenCount = action.payload.tokenCount ? state.totalTokenCount + action.payload.tokenCount : state.totalTokenCount;
 			return {...state, isLoading: false, errMess: null, messages: tmpMessages, conversationId: action.payload.conversationId, totalTokenCount: tmpTotalTokenCount}; 
@@ -17,7 +17,7 @@ export const ChatResponses = (state = {isLoading: false, errMess: null, messages
 			return {...state, isLoading: false, errMess: action.payload}; 
 
 		case ActionTypes.RESET_CHAT_RESPONSE:
-			return {...state, isLoading: false, errMess: action.payload, messages: [], conversationId: null, tokenCount: 0 }; 
+			return {...state, isLoading: false, errMess: action.payload, messages: [], conversationId: null, totalTokenCount: 0 }; 
 
 		default:
 			return state;
