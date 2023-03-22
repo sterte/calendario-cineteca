@@ -306,7 +306,7 @@ export const imdbFailed = (errmess) => ({
 
 
 export const fetchChatResponse = (conversationId, lastMessage) => (dispatch) => {
-    dispatch(addChatResponse({conversationId: conversationId, content: lastMessage, role: "user"}))
+    dispatch(addChatResponse({conversationId: conversationId, content: lastMessage, role: "user", timestamp: new Date().getTime()}))
     dispatch(chatResponseLoading(true));
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
