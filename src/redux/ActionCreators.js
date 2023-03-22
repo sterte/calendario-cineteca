@@ -312,7 +312,7 @@ export const fetchChatResponse = (conversationId, lastMessage) => (dispatch) => 
     const bearer = 'Bearer ' + localStorage.getItem('token');
     var body = {};
     body.conversationId = conversationId;
-    body.charachter = 'pornActressIT';
+    body.charachter = 'cinefilo';
     body.question = lastMessage;
     return fetch(fetchUrl + '/chat/prompt', {
         "method": "POST",
