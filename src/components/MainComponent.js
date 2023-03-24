@@ -71,7 +71,7 @@ class Main extends Component{
       <Route path="/tracks/:trackId" component={TrackDetailWithId()} />
       <Route path="/tracks" component={() => <Tracks />} />      
       <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
-      <PrivateRoute path="/chat-ai" component={() => <ChatAI />} />
+      <PrivateRoute path="/chat-ai" component={() => <ChatAI isAdmin={this.props.auth.isAdmin}/>} />
       <Redirect to="/calendar" />
       </Switch>
       </CSSTransition>

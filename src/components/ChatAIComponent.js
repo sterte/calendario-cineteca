@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { fetchChatResponse, resetChatResponse } from '../redux/ActionCreators'
 import { connect } from 'react-redux';
 import { Button, FormGroup, Input } from 'reactstrap';
+import { Link, withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => {
     return {
@@ -59,6 +60,21 @@ const downloadChat = (messages) => {
 class ChatAI extends Component {
 
     componentDidMount() {
+        if(this.props.auth.isAuthenticated && this.props.location && this.props.location.state){
+            let question = '';
+            if(this.props.location.state.requestType === 'info'){
+                question = 'Mi dai delle informazioni sul film '
+            } else if(this.props.location.state.requestType === 'similar'){
+                question = 'Mi suggeriresti dei film simili a '
+            }
+            question += this.props.location.state.title;
+            if(this.props.location.state.year && this.props.location.state.year.length > 0){
+                question += ' ti do qualche dettaglio in più: ' + this.props.location.state.year
+            }
+            question +='?';
+            this.props.resetChatResponse();
+            this.props.fetchChatResponse(this.props.messages.conversationId, question);
+        }
     }
 
 
@@ -68,14 +84,14 @@ class ChatAI extends Component {
                 <div className='row row-content d-flex justify-content-center'>
                     <div className='col-12 hide-scrollbar' style={{ display: 'flex', flexDirection: 'column-reverse', height: '400px', overflowY: 'scroll' }}>
                         <div className='row'>
-                            {this.props.messages.messages.map(el => <div key={el.timestamp} style={'user' === el.role ? { backgroundColor: 'gray', borderRadius: '10px', marginLeft: 'auto', marginRight: '0px', maxWidth: '60%' } : { backgroundColor: 'orange', borderRadius: '10px', marginLeft: '0px', marginRight: 'auto', maxWidth: '60%' }} className={el.role === 'user' ? 'col-12 mt-3 p-3 mr-3' : 'col-12 mt-3 p-3 ml-3'}>{el.content + (el.tokenCount > 0 ? ' [' + el.tokenCount + ']' : '')}</div>)}
+                            {this.props.messages.messages.map(el => <div key={el.timestamp} style={'user' === el.role ? { backgroundColor: 'gray', borderRadius: '10px', marginLeft: 'auto', marginRight: '0px', maxWidth: '60%' } : { backgroundColor: 'orange', borderRadius: '10px', marginLeft: '0px', marginRight: 'auto', maxWidth: '60%' }} className={el.role === 'user' ? 'col-12 mt-3 p-3 mr-3' : 'col-12 mt-3 p-3 ml-3'}>{el.content + (this.props.isAdmin && el.tokenCount ? ' [' + el.tokenCount + ']' : '')}</div>)}
                             {this.props.messages.isLoading &&
                                 <div className='col-12 mt-3 p-3'>
                                     <i className="fa fa-spinner fa-spin fa-fw"></i>
                                 </div>
                             }
                             {
-                                this.props.messages.totalTokenCount > 0 &&
+                                this.props.isAdmin > 0 &&
                                 <div className='col-12 mt-3 p-3'>
                                     Token count of current chat: {this.props.messages.totalTokenCount}
                                 </div>
@@ -112,19 +128,28 @@ class ChatAI extends Component {
                                     <span className="fa fa-refresh" />
                                 </Button>
                             </div>
-                            <div className='col-1'>
+                            <div className='col-1 ml-1 ml-4 ml-md-0'>
                                 <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
                                     onClick={() => { downloadChat(this.props.messages.messages) }}>
                                     <span className="fa fa-download" />
                                 </Button>
                             </div>
+                            {this.props.location.state.backUrl && this.props.location.state.backUrl.length > 0 &&
+                            <div className='col-1 ml-1 ml-4 ml-md-0'>
+                            <button type='button' className='navigation-button btn btn-primary'><Link to={this.props.location.state.backUrl} style={{color: 'white'}}><span className="fa fa-arrow-left" /></Link></button>
+                            </div>
+                            }
                         </div>
                     </div>
                 </div>
+            <div>
+                aa{JSON.stringify(this.props.location.state)}bb
+            </div>
             </div >
+
         );
 
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatAI);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatAI));

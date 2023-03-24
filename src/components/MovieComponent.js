@@ -13,6 +13,7 @@ import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
+import { Link } from 'react-router-dom';
 
 
 const mapStateToProps = (state) => {
@@ -161,6 +162,9 @@ if(year !== now.getFullYear().toString()){
       const durationString = this.props.movie.movies.duration;
       const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')')))
       const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, durationNumber));      
+      const from = this.props.movie.movies.duration.indexOf('/') + 1;
+      const to = this.props.movie.movies.duration.indexOf(')');
+      const year = this.props.movie.movies.duration.substring(this.from, this.to);
       return (
         <>
         <div className='container white-back'>
@@ -192,8 +196,8 @@ if(year !== now.getFullYear().toString()){
               </div>
             </div>            
 
-            <div className='col-12 p-0 d-flex align-items-center mt-3'>
-              Link: <a className='col-1 d-flex align-self-center' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+            <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
+              Link: <a className='col-1 d-flex align-self-center ml-3 mr-3' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
               {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
               <div>
                 <Loading />
@@ -217,6 +221,14 @@ if(year !== now.getFullYear().toString()){
               </div>
               }
             </div>
+
+            { this.props.auth.isAuthenticated &&
+            <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
+                Chiedi all'AI:
+            <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3'><Link to={{pathname:`/chat-ai`, state:{requestType: 'info', title: this.props.movie.movies.title, year: year, backUrl: window.location.pathname}}}><h4 style={{color: 'white'}}>Info</h4></Link></button>
+            <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto'><Link to={{pathname:`/chat-ai`, state:{requestType: 'similar', title: this.props.movie.movies.title, year: year, backUrl: window.location.pathname}}} state={{requestType: 'similar', title: this.props.movie.movies.title, year: year}}><h4 style={{color: 'white'}}>Simili</h4></Link></button>
+            </div>
+            }
 
             <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
               {this.composeCalendarButton(this.props.movie.movies.currentHour, durationNumber)}

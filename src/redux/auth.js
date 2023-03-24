@@ -21,6 +21,7 @@ export const Auth = (state = {
             return {...state,
                 isLoading: false,
                 isAuthenticated: true,
+                isAdmin: action.isAdmin,
                 errMess: '',
                 token: action.token
             };
@@ -33,7 +34,7 @@ export const Auth = (state = {
         case ActionTypes.LOGOUT_REQUEST:
             return {...state,
                 isLoading: true,
-                isAuthenticated: true
+                isAuthenticated: false
             };
         case ActionTypes.LOGOUT_SUCCESS:
             return {...state,
