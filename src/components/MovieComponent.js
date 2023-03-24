@@ -162,8 +162,6 @@ if(year !== now.getFullYear().toString()){
       const durationString = this.props.movie.movies.duration;
       const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')')))
       const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, durationNumber));      
-      const from = this.props.movie.movies.duration.indexOf('/') + 1;
-      const to = this.props.movie.movies.duration.indexOf(')');
       const year = this.props.movie.movies.duration.substring(this.from, this.to);
       return (
         <>
