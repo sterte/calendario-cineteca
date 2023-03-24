@@ -134,7 +134,7 @@ class ChatAI extends Component {
                                     <span className="fa fa-download" />
                                 </Button>
                             </div>
-                            {this.props.location.state.backUrl && this.props.location.state.backUrl.length > 0 &&
+                            {this.props?.location?.state?.backUrl?.lenght > 0 &&
                             <div className='col-1 ml-1 ml-4 ml-md-0'>
                             <button type='button' className='navigation-button btn btn-primary'><Link to={this.props.location.state.backUrl} style={{color: 'white'}}><span className="fa fa-arrow-left" /></Link></button>
                             </div>
@@ -142,10 +142,7 @@ class ChatAI extends Component {
                         </div>
                     </div>
                 </div>
-            <div>
-                aa{JSON.stringify(this.props.location.state)}bb
             </div>
-            </div >
 
         );
 
