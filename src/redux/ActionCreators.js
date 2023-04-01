@@ -305,15 +305,17 @@ export const imdbFailed = (errmess) => ({
 })
 
 
-export const fetchChatResponse = (conversationId, lastMessage) => (dispatch) => {
-    dispatch(addChatResponse({conversationId: conversationId, content: lastMessage, role: "user", timestamp: new Date().getTime()}))
+export const fetchChatResponse = (conversationId, title, lastMessage, charachter, temperature) => (dispatch) => {
+    dispatch(addChatResponse({conversationId: conversationId, content: lastMessage, role: "user", timestamp: new Date().getTime(), title: title}))
     dispatch(chatResponseLoading(true));
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
     var body = {};
     body.conversationId = conversationId;
-    body.charachter = 'cinefilo';
+    body.charachter = charachter ? charachter : 'cinefilo';
+    body.temperature = Number(temperature);
     body.question = lastMessage;
+    body.title = title;
     return fetch(fetchUrl + '/chat/prompt', {
         "method": "POST",
         headers: {
@@ -357,6 +359,38 @@ export const addChatResponse = (response) => ({
 
 export const chatResponseFailed = (errmess) => ({
     type: ActionTypes.CHAT_RESPONSE_FAILED,
+    payload: errmess
+})
+
+
+export const fetchCharachters = () => (dispatch) => {
+    dispatch(charachtersLoading(true))
+    const url = fetchUrl + '/chat/charachters';
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(url, {
+        "method": "GET",
+        headers: {
+            'Authorization': bearer,
+            'Content-Type':'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(charachters => dispatch(addCharachters(charachters)))
+    .catch((err) => dispatch(charachtersFailed(err.message)));
+}
+
+export const charachtersLoading = () => ({
+	type: ActionTypes.CHARACHTERS_LOADING
+})
+
+export const addCharachters = (charachters) => ({
+    type: ActionTypes.ADD_CHARACHTERS,
+    payload: charachters
+})
+
+
+export const charachtersFailed = (errmess) => ({
+    type: ActionTypes.CHARACHTERS_FAILED,
     payload: errmess
 })
 
