@@ -5,7 +5,6 @@ import { Button, FormGroup, Input, Label } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import { toHaveAttribute } from '@testing-library/jest-dom';
 
 const mapStateToProps = (state) => {
     return {
@@ -22,7 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteConversation: (conversationId) => { dispatch(deleteConversation(conversationId)) },
     fetchConversationLog: (conversationId) => { dispatch(fetchConversationLog(conversationId)) },
     fetchChatResponse: (conversationId, title, lastMessage, charachter, temperature) => { dispatch(fetchChatResponse(conversationId, title, lastMessage, charachter, temperature)) },
-    resetChatResponse: () => { dispatch(resetChatResponse()) }
+    resetChatResponse: () => { dispatch(fetchConversations()); dispatch(resetChatResponse()) }
 });
 
 const downloadChat = (messages) => {
@@ -71,16 +70,19 @@ class ChatAI extends Component {
     constructor(props){
         super(props);
         this.state = {
+            title: null,
             selectedConversation: null
         }
     }
 
     componentDidMount() {
-        if (this.props.isAdmin) {
+        if (this.props.isAdmin && !this.props.charachters.isLoading) {
             this.props.fetchCharachters();
         }
-        this.props.fetchConversations();
-        if (this.props.auth.isAuthenticated && this.props.location && this.props.location.state) {
+        if(!this.props.conversations.isLoading){
+            this.props.fetchConversations();
+        }
+        if (this.props.auth.isAuthenticated && this.props.location && this.props.location.state && !this.props.messages.isLoading) {
             let question = '';
             let conversationTitle = '';
             if (this.props.location.state.requestType === 'info') {
@@ -148,9 +150,15 @@ class ChatAI extends Component {
                             <div className='col-2 col-md-1'>
                                 <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
                                     onClick={() => {
-                                        this.props.fetchChatResponse(this.props.messages.conversationId, this.title?.value, this.prompt.value, this.charachter?.value, this.temperature?.value);
-                                        this.prompt.value = '';
-
+                                        if(!this.prompt.value?.length){
+                                            alert('Messaggio obbligatorio');
+                                        } else if((!this.title?.value?.length && !this.props.messages.messages.length)){
+                                            alert('Titolo obbligatorio');
+                                        }
+                                        else {
+                                            this.props.fetchChatResponse(this.props.messages.conversationId, this.title?.value, this.prompt.value, this.charachter?.value, this.temperature?.value);
+                                            this.prompt.value = '';
+                                        }
                                     }}>
                                     <span className="fa fa-paper-plane" />
                                 </Button>
