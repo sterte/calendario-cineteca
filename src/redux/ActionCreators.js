@@ -394,6 +394,95 @@ export const charachtersFailed = (errmess) => ({
     payload: errmess
 })
 
+export const fetchConversations = () => (dispatch) => {
+    dispatch(conversationsLoading(true))
+    const url = fetchUrl + '/chat/previousConversations';
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(url, {
+        "method": "GET",
+        headers: {
+            'Authorization': bearer,
+            'Content-Type':'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(charachters => dispatch(addConversations(charachters)))
+    .catch((err) => dispatch(conversationsFailed(err.message)));
+}
+
+export const conversationsLoading = () => ({
+	type: ActionTypes.CONVERSATIONS_LOADING
+})
+
+export const addConversations = (conversations) => ({
+    type: ActionTypes.ADD_CONVERSATIONS,
+    payload: conversations
+})
+
+
+export const conversationsFailed = (errmess) => ({
+    type: ActionTypes.CONVERSATIONS_FAILED,
+    payload: errmess
+})
+
+
+
+export const fetchConversationLog = (conversationId) => (dispatch) => {
+    dispatch(conversationLogLoading(true))
+    const url = fetchUrl + '/chat/conversationLog';
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(url, {
+        "method": "POST",
+        headers: {
+            'Authorization': bearer,
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify({conversationId: conversationId})
+    })
+    .then(res => res.json())
+    .then(conversationLog => dispatch(addConversationLog(conversationLog)))
+    .catch((err) => dispatch(conversationsFailed(err.message)));
+}
+
+export const conversationLogLoading = () => ({
+	type: ActionTypes.CONVERSATIONLOG_LOADING
+})
+
+export const addConversationLog = (conversationLog) => ({
+    type: ActionTypes.ADD_CONVERSATIONLOG,
+    payload: conversationLog
+})
+
+
+export const conversationLogFailed = (errmess) => ({
+    type: ActionTypes.CONVERSATIONLOG_FAILED,
+    payload: errmess
+})
+
+
+export const deleteConversation = (conversationId) => (dispatch) => {
+    dispatch(conversationsLoading(true))
+    const url = fetchUrl + '/chat/previousConversations';
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(url, {
+        "method": "DELETE",
+        headers: {
+            'Authorization': bearer,
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify({conversationId: conversationId})
+    })
+    .then(res => res.json())
+    .then(conversationLog => dispatch(conversationDeleted(conversationLog)))
+    .catch((err) => dispatch(conversationsFailed(err.message)));
+}
+
+export const conversationDeleted = (conversationLog) => ({
+    type: ActionTypes.CONVERSATION_DELETED,
+    payload: conversationLog
+})
+
+
 //USER
 export const requestLogin = (creds) => {
     return {

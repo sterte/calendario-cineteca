@@ -9,6 +9,7 @@ import { Tracks } from './tracks'
 import { TrackDetail } from './trackDetail'
 import { ChatResponses } from './chatResponses.js';
 import { Charachters } from './charachters.js';
+import { Conversations } from './conversations.js';
 
 export const ConfigureStore = () => {
 	const store = createStore(
@@ -20,7 +21,8 @@ export const ConfigureStore = () => {
 			tracks: Tracks,
 			trackDetail: TrackDetail,
 			chatResponses: ChatResponses,
-			charachters: Charachters
+			charachters: Charachters,
+			conversations: Conversations
 		}),
 
 		applyMiddleware(thunk, logger)

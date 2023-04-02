@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
-import { fetchCharachters, fetchChatResponse, resetChatResponse } from '../redux/ActionCreators'
+import { fetchCharachters, fetchConversations, fetchConversationLog, fetchChatResponse, resetChatResponse, deleteConversation } from '../redux/ActionCreators'
 import { connect } from 'react-redux';
 import { Button, FormGroup, Input, Label } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import { toHaveAttribute } from '@testing-library/jest-dom';
 
 const mapStateToProps = (state) => {
     return {
         charachters: state.charachters,
         messages: state.chatResponses,
+        conversations: state.conversations,
         auth: state.auth
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     fetchCharachters: () => { dispatch(fetchCharachters()) },
+    fetchConversations: () => { dispatch(fetchConversations()) },
+    deleteConversation: (conversationId) => { dispatch(deleteConversation(conversationId)) },
+    fetchConversationLog: (conversationId) => { dispatch(fetchConversationLog(conversationId)) },
     fetchChatResponse: (conversationId, title, lastMessage, charachter, temperature) => { dispatch(fetchChatResponse(conversationId, title, lastMessage, charachter, temperature)) },
     resetChatResponse: () => { dispatch(resetChatResponse()) }
 });
@@ -63,17 +68,28 @@ const downloadChat = (messages) => {
 
 class ChatAI extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            selectedConversation: null
+        }
+    }
+
     componentDidMount() {
         if (this.props.isAdmin) {
-            console.log('aaa')
             this.props.fetchCharachters();
         }
-        else if (this.props.auth.isAuthenticated && this.props.location && this.props.location.state) {
+        this.props.fetchConversations();
+        if (this.props.auth.isAuthenticated && this.props.location && this.props.location.state) {
             let question = '';
+            let conversationTitle = '';
             if (this.props.location.state.requestType === 'info') {
-                question = 'Mi dai delle informazioni sul film '
+                question = 'Mi dai delle informazioni sul film ';
+                conversationTitle = 'Info: ' + this.props.location.state.title;
+
             } else if (this.props.location.state.requestType === 'similar') {
                 question = 'Mi suggeriresti dei film simili a '
+                conversationTitle = 'Simili a: ' + this.props.location.state.title;
             }
             question += this.props.location.state.title;
             if (this.props.location.state.year && this.props.location.state.year.length > 0) {
@@ -81,7 +97,7 @@ class ChatAI extends Component {
             }
             question += '?';
             this.props.resetChatResponse();
-            this.props.fetchChatResponse(this.props.messages.conversationId, this.title?.value, question, this.charachter?.value, this.temperature?.value);
+            this.props.fetchChatResponse(this.props.messages.conversationId, conversationTitle, question, this.charachter?.value, this.temperature?.value);
         }
     }
 
@@ -95,7 +111,7 @@ class ChatAI extends Component {
                 <div className='row row-content d-flex justify-content-center'>
                     {this.props.messages.title ?
                         <div className='col-12 col-md-6'>
-                            <h2 style={{textAlign: 'center'}} >{this.props.messages.title}</h2>
+                            <h2 style={{ textAlign: 'center' }} >{this.props.messages.title}</h2>
                         </div>
                         :
                         <div className='col-12 col-md-6'>
@@ -139,9 +155,28 @@ class ChatAI extends Component {
                                     <span className="fa fa-paper-plane" />
                                 </Button>
                             </div>
+
+                            <div className='col-12 col-md-7'>
+                            <FormGroup>
+                                <Dropdown disabled={this.props.conversations.isLoading || this.props.conversations.errMess} id="selectedConversation" options={this.props.conversations.conversations}
+                                    onChange={(value) => { this.setState({selectedConversation: value })}} placeholder="Conversazioni precedenti"
+                                />
+                            </FormGroup>
                         </div>
-                        <div className='row'>
-                            <div className='col-1 ml-4'>
+                        <div className='col-1 ml-1 ml-md-0'>
+                            <Button disabled={!this.state.selectedConversation} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
+                                onClick={() => { this.props.fetchConversationLog(this.state.selectedConversation.value) }}>
+                                <span className="fa fa-upload" />
+                            </Button>
+                        </div>
+                        <div className='col-1 ml-1 ml-md-0'>
+                            <Button disabled={this.props.messages.messages.length > 0} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
+                                onClick={() => { this.props.deleteConversation(this.state.selectedConversation.value) }}>
+                                <span className="fa fa-trash" />
+                            </Button>
+                        </div>
+
+                            <div className='col-1 ml-1 ml-md-0'>
                                 <Button className='navigation-button' type="button" value="send" color="primary"
                                     onClick={() => {
                                         this.props.resetChatResponse();
@@ -151,14 +186,14 @@ class ChatAI extends Component {
                                     <span className="fa fa-refresh" />
                                 </Button>
                             </div>
-                            <div className='col-1 ml-1 ml-4 ml-md-0'>
+                            <div className='col-1 ml-1 ml-md-0'>
                                 <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
                                     onClick={() => { downloadChat(this.props.messages.messages) }}>
-                                    <span className="fa fa-download" />
+                                    <span className="fa fa-save" />
                                 </Button>
                             </div>
                             {this.props?.location?.state?.backUrl?.lenght > 0 &&
-                                <div className='col-1 ml-1 ml-4 ml-md-0'>
+                                <div className='col-1 ml-1 ml-md-0'>
                                     <button type='button' className='navigation-button btn btn-primary'><Link to={this.props.location.state.backUrl} style={{ color: 'white' }}><span className="fa fa-arrow-left" /></Link></button>
                                 </div>
                             }

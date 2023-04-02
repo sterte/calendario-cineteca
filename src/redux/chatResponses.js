@@ -12,13 +12,18 @@ export const ChatResponses = (state = {isLoading: false, errMess: null, messages
 			return {...state, isLoading: false, errMess: null, messages: tmpMessages, conversationId: action.payload.conversationId, totalTokenCount: tmpTotalTokenCount, title: tmpTitle}; 
 
 		case ActionTypes.CHAT_RESPONSE_LOADING:
+		case ActionTypes.CONVERSATIONLOG_LOADING:
 			return {...state, isLoading: true, errMess: null}; 
 
 		case ActionTypes.CHAT_RESPONSE_FAILED:
+		case ActionTypes.CONVERSATIONLOG_FAILED:
 			return {...state, isLoading: false, errMess: action.payload}; 
 
 		case ActionTypes.RESET_CHAT_RESPONSE:
 			return {...state, isLoading: false, errMess: action.payload, messages: [], conversationId: null, totalTokenCount: 0, title: null }; 
+
+		case ActionTypes.ADD_CONVERSATIONLOG:
+			return {...state, isLoading: false, errMess: null, messages: action.payload.messages, conversationId: action.payload.conversationId, totalTokenCount: 0, title: action.payload.title}; 
 
 		default:
 			return state;
