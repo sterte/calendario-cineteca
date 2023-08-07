@@ -14,6 +14,7 @@ import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 
 const mapStateToProps = (state) => {
@@ -165,6 +166,10 @@ if(year !== now.getFullYear().toString()){
       const year = this.props.movie.movies.duration.substring(this.from, this.to);
       return (
         <>
+        <Helmet>
+          <title>Cinetecalendar - {this.props.movie.movies.title}</title>
+          <meta name='description' content={'Cinetecalendar - ' + this.props.movie.movies.title} />
+        </Helmet> 
         <div className='container white-back'>
           <div className='row row-content ml-1 mr-1 p-2 p-md-5'>
             <div className='row d-flex justify-content-center mt-5'>
@@ -195,16 +200,16 @@ if(year !== now.getFullYear().toString()){
             </div>            
 
             <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-              Link: <a className='col-1 d-flex align-self-center ml-3 mr-3' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+              Link: <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
               {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
-              <div>
+              <div className='col-12'>
                 <Loading />
               </div>
               : this.props.auth.isAuthenticated && this.props.movie.imdbId &&
               <div className='col-auto d-flex align-self-center'>
                 <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
                 {this.props.movie.imdbRatingCount > -1 &&
-                <div>
+                <div className='col-6 col-md-12 p-0'>
                   <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>              
                   <StarRatings
                     rating={parseFloat(this.props.movie.imdbRating) / 2}

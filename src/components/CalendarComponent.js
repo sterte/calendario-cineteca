@@ -7,6 +7,7 @@ import Loading from './LoadingComponent';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
 import { weekDays, movieListDetail } from './MovieUtils';
+import { Helmet } from 'react-helmet-async';
 
 
 const mapStateToProps = (state) => {
@@ -91,6 +92,10 @@ class Calendar extends Component {
 
             return (
                 <div className='container white-back'>
+                    <Helmet>
+                        <title>Cinetecalendar</title>
+                        <meta name='description' content={'Cinetecalendar'} />
+                    </Helmet>
                     <div className='row row-content d-flex justify-content-center'>
                         <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    

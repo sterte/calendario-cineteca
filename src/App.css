@@ -46,7 +46,7 @@
 .react-add-to-calendar__button {
   padding: 10px;  
   border: 1px solid;
-  border-radius: 3px;
+  border-radius: 20px;
   color: #000;
   background-color: #f99e00;
   border-color: #fccd00;
@@ -71,6 +71,7 @@
     text-align: left;
     padding: 0;
     z-index: 1;
+    border-radius: 20px;
 }
 
 ul {
@@ -95,6 +96,7 @@ a:link, a:hover, a:visited {
 .navigation-button {
   background-color: #f99e00;
   border-color: #fccd00;
+  border-radius: 20px;
 }
 
 .navigation-button:disabled {
