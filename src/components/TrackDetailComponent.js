@@ -5,6 +5,7 @@ import ScrollToTopButton from './ScrollToTopButton';
 import { getTrackDetail } from '../redux/ActionCreators';
 import { movieListDetail } from './MovieUtils';
 import { Fade, Stagger } from 'react-animation-components';
+import { Helmet } from 'react-helmet-async';
 
 
 const mapStateToProps = (state) => {
@@ -48,7 +49,11 @@ class TrackDetail extends Component {
             });
 
             return (                
-                <div className='container white-back'>                                                            
+                <div className='container white-back'>       
+                    <Helmet>
+                        <title>Cinetecalendar - {this.props.trackDetail.trackDetail.title}</title>
+                        <meta name='description' content={'Cinetecalendar - ' + this.props.trackDetail.trackDetail.title} />
+                    </Helmet>                                                     
                     <div className='row row-content d-flex justify-content-center'>
                         <div className='col-12 mt-4 col-auto d-flex align-self-center'>
                             <h2>{this.props.trackDetail.trackDetail.title}</h2>

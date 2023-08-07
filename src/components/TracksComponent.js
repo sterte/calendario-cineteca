@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
 import { getTracks } from '../redux/ActionCreators';
+import { Helmet } from 'react-helmet-async';
 
 
 const mapStateToProps = (state) => {
@@ -64,6 +65,10 @@ class Tracks extends Component {
 
             return (
                 <div className='container white-back'>
+                    <Helmet>
+                        <title>Cinetecalendar - Rassegne</title>
+                        <meta name='description' content={'Cinetecalendar - Rassegne'} />
+                    </Helmet>
                     <div className='row row-content d-flex justify-content-center'>
                         <Fade in={true}>                            
                             {tracksList}                            
