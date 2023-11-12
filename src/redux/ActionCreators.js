@@ -2,12 +2,12 @@ import { fetchUrl } from '../shared/baseUrl';
 import * as ActionTypes from './ActionTypes';
 
 
-export const getDayProgram = (from, to) => (dispatch) => {
+export const getDayProgram = (day) => (dispatch) => {
     dispatch(dayLoading(true))
-    const url = fetchUrl + '/days/' + from + '/' + to;    
+    const url = fetchUrl + '/day/' + day;    
     return fetch(url)
     .then(res => res.json())
-    .then(day => dispatch(addDay(day)))
+    .then(res => dispatch(addDay(res)))
     .catch((err) => console.log(err));
 }
 
@@ -15,9 +15,9 @@ export const dayLoading = () => ({
 	type: ActionTypes.DAY_LOADING
 })
 
-export const addDay = (program) => ({
+export const addDay = (dayMovies) => ({
     type: ActionTypes.ADD_DAY,
-    payload: program
+    payload: dayMovies
 })
 
 
