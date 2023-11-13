@@ -105,7 +105,7 @@ if(year !== now.getFullYear().toString()){
         {hour.hours.map((show) => {
           let orario = show.orario;
           orario = orario.replace('H ', '');
-          let [hh, mm] = orario.split('.');
+          let [hh, mm] = orario.split(':');
       
           oraInizio.setHours(hh, mm, 0, 0);
           var isFuture = new Date() < oraInizio;

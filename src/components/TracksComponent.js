@@ -58,6 +58,10 @@ class Tracks extends Component {
                                 <div className='row'>
                                     <h5>{track.dateInfo}</h5>
                                 </div>
+
+                                <div className='row'>
+                                    <p>{track.description}</p>
+                                </div>
                             </div>
                     </Fade>
                 );
