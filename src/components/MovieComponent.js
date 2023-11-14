@@ -99,8 +99,8 @@ if(year !== now.getFullYear().toString()){
   return (
     <div className='container'>
       <Fade in='true' key={hour.day}>
-        <div className={giornoInizio > now ? 'row mt-5 mb-0 mb-md-3' : 'row mt-5 mb-0 mb-md-3 past-movie-title'}>      
-          <h5>{dateString}</h5>
+        <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>      
+          <h5 style={{marginBottom: 0}}>{dateString}</h5>
         </div>
         {hour.hours.map((show) => {
           let orario = show.orario;
@@ -114,9 +114,16 @@ if(year !== now.getFullYear().toString()){
 
           let eventDescription = window.location.href + "\n\n" + this.props.movie.movies.originalUrl + "\n\n" + imdbUrl + this.props.movie.imdbId
 
+          let address = 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia';
+          if(hour.place.toLowerCase().includes('cinema cervi')){
+            address = 'Sala Cervi, Via Riva di Reno, 72/A, 40122 Bologna, Italia';
+          }else if(hour.place.toLowerCase().includes('cinema modernissimo')){
+            address = ' Cinema Modernissimo, Piazza Re Enzo, 4, 40125 Bologna, Italia';
+          }
+
           let event = {
             title: this.props.movie.movies.title,
-            location: 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia',
+            location: address,
             startTime: oraInizio.toISOString(),
             endTime: oraFine.toISOString(),
             description: eventDescription
@@ -132,7 +139,7 @@ if(year !== now.getFullYear().toString()){
                     <img className='ml-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
                   }
                 </div>
-                <div className={'col-12 mt-0 mb-0 mb-md-2'}>                
+                <div style={{textTransform: 'capitalize'}} className={'col-12 mt-0 mb-3'}>                
                   <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
                 </div>
                 { isFuture && 

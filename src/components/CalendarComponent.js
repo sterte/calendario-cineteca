@@ -62,9 +62,9 @@ class Calendar extends Component {
         var tmpMoment = moment(tmpDate);
         return tmpMoment.format(format);
     }
-
     render() {
-        if (this.props.days.isLoading) {
+        var tmpMoment = moment(this.state.currentDate).format('YYYY-MM-DD');
+        if (!this.props.days.days.find(el => el.day === tmpMoment)) {
             return (<div className='container'>            
                 <Loading />
             </div>);
