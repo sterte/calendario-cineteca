@@ -33,7 +33,7 @@ class Calendar extends Component {
         if(!this.props.days.isLoading){
             var tmpMoment = moment(new Date());        
             for(let i = 0; i < 7; i++){ 
-                var currentDate = tmpMoment.format('YYYY-MM-DD');   
+                const currentDate = tmpMoment.format('YYYY-MM-DD');   
                 let currentMovies = this.props.days.days.find(el => el.day === currentDate)
                 if(!currentMovies){
                     this.props.getDayProgram(currentDate);
