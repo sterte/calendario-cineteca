@@ -29,7 +29,7 @@ export const isFuture = (movie, currentDate) => {
     if(currentMonth === dateMonth){
         if(currentDay === dateDay){
             let movieTime = movie.time.replace('H ', '');
-            let [hh, mm] = movieTime.split('.');                
+            let [hh, mm] = movieTime.split(':');                
             oraInizio.setHours(hh);
             oraInizio.setMinutes(mm);
             return now < oraInizio;

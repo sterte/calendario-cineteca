@@ -64,9 +64,9 @@ class Calendar extends Component {
     }
     render() {
         var tmpMoment = moment(this.state.currentDate).format('YYYY-MM-DD');
-        if (!this.props.days.days.find(el => el.day === tmpMoment)) {
+        if (this.props.days.loadingState[tmpMoment] != 1) {
             return (<div className='container'>            
-                <Loading />
+                <Loading size={5} />
             </div>);
         }
         else {
@@ -85,6 +85,13 @@ class Calendar extends Component {
                         <title>Cinetecalendar</title>
                         <meta name='description' content={'Cinetecalendar'} />
                     </Helmet>
+                    
+                    {this.props.days.isLoading > 0 &&
+                    <div style={{position: 'absolute', top: 20, right: 20}}>
+                        <Loading size={2} />
+                    </div>
+                    }
+
                     <div className='row row-content d-flex justify-content-center'>
                         <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
