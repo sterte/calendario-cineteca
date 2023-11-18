@@ -3,16 +3,17 @@ import * as ActionTypes from './ActionTypes';
 
 
 export const getDayProgram = (day) => (dispatch) => {
-    dispatch(dayLoading(true))
+    dispatch(dayLoading(day))
     const url = fetchUrl + '/day/' + day;    
     return fetch(url)
     .then(res => res.json())
     .then(res => dispatch(addDay(res)))
-    .catch((err) => console.log(err));
+    .catch((err) => {console.log(err); dispatch(dayFailed(day))});
 }
 
-export const dayLoading = () => ({
-	type: ActionTypes.DAY_LOADING
+export const dayLoading = (day) => ({
+	type: ActionTypes.DAY_LOADING,
+    payload: day
 })
 
 export const addDay = (dayMovies) => ({
@@ -20,6 +21,10 @@ export const addDay = (dayMovies) => ({
     payload: dayMovies
 })
 
+export const dayFailed = (day) => ({
+	type: ActionTypes.DAY_FAILED,
+    payload: day
+})
 
 export const getTracks = () => (dispatch) => {
     dispatch(tracksLoading(true))
