@@ -20,13 +20,17 @@ const mapDispatchToProps = (dispatch) => ({
     getDayProgram: (day) => { dispatch(getDayProgram(day)) }
 });
 
-
 class Calendar extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            currentDate: new Date()          
+            currentDate: new Date(),
+            filter: {
+                lumiere: false,
+                cervi: false,
+                modernissimo: false
+            }        
         }
     }
     componentDidMount() {        
@@ -62,9 +66,26 @@ class Calendar extends Component {
         var tmpMoment = moment(tmpDate);
         return tmpMoment.format(format);
     }
+
+    isMovieFiltered = (movie) => {
+        if(!this.state.filter.lumiere && !this.state.filter.cervi && !this.state.filter.modernissimo){
+            return true;
+        }
+        if(movie.place.includes('ervi') && this.state.filter.cervi){
+            return true;
+        }
+        if(movie.place.includes('umi') && this.state.filter.lumiere){
+            return true;
+        }
+        if(movie.place.includes('oder') && this.state.filter.modernissimo){
+            return true;
+        }
+        return false;
+    }
+
     render() {
         var tmpMoment = moment(this.state.currentDate).format('YYYY-MM-DD');
-        if (this.props.days.loadingState[tmpMoment] != 1) {
+        if (this.props.days.loadingState[tmpMoment] !== 1) {
             return (<div className='container'>            
                 <Loading size={5} />
             </div>);
@@ -75,7 +96,9 @@ class Calendar extends Component {
                     <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
             :            
-            this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies.map((movie) => {
+            this.props.days.days.filter((day) => day.day === this.formatDate(this.state.currentDate))[0].movies
+            .filter((movie) => this.isMovieFiltered(movie))
+            .map((movie) => {
                 return movieListDetail(movie);
             });
 
@@ -93,6 +116,8 @@ class Calendar extends Component {
                     }
 
                     <div className='row row-content d-flex justify-content-center'>
+                        <div className='col-12'>
+                        <div className='row d-flex justify-content-center'>
                         <div className='col-3 col-md-auto order-2 order-md-1'>
                             <Button className='navigation-button' onClick={() => this.changeCurrentDate(-7)}>                    
                                 <span className="fa fa-angle-double-left" />
@@ -128,6 +153,36 @@ class Calendar extends Component {
                                 <span className="fa fa-angle-double-right" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
+                        </div>
+                        </div>
+                        </div>
+                        <div className='col-12'>
+                        <div className='row d-flex justify-content-around mt-4'>
+                        <div>
+                            <input
+                            type='checkbox' name='lumiere' value='lumiere' 
+                            checked={this.state.filter?.lumiere}
+                            onChange={() => {;var tmpFilter = {...this.state.filter}; tmpFilter.lumiere = !tmpFilter?.lumiere; this.setState({filter: tmpFilter})}}
+                            />
+                            <label className='ml-1' htmlFor='lumiere'><h5>Lumiére</h5></label>
+                        </div>
+                        <div>
+                            <input
+                            type='checkbox' name='cervi' value='cervi' 
+                            checked={this.state.filter?.cervi}
+                            onChange={() => {;var tmpFilter = {...this.state.filter}; tmpFilter.cervi = !tmpFilter?.cervi; this.setState({filter: tmpFilter})}}
+                            />
+                            <label className='ml-1' htmlFor='cervi'><h5>Cervi</h5></label>
+                        </div>
+                        <div>
+                            <input
+                            type='checkbox' name='modernissimo' value='modernissimo' 
+                            checked={this.state.filter?.modernissimo}
+                            onChange={() => {;var tmpFilter = {...this.state.filter}; tmpFilter.modernissimo = !tmpFilter?.modernissimo; this.setState({filter: tmpFilter})}}
+                            />
+                            <label className='ml-1' htmlFor='modernissimo'><h5>Modernissimo</h5></label>
+                        </div>
+                        </div>
                         </div>
                     </div>
                     <div className='row row-content d-flex justify-content-center'>

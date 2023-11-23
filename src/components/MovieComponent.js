@@ -197,11 +197,11 @@ if(year !== now.getFullYear().toString()){
                   <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
                   </div>    
                   }
-                  {this.props.days.durate.find(el => el.title === this.props.movie.movies.title)?.durata &&
+                  {/*this.props.days.durate.find(el => el.title === this.props.movie.movies.title)?.durata &&
                   <div className='col-12 d-flex align-self-center'>
                     {this.props.days.durate.find(el => el.title === this.props.movie.movies.title).durata}
                   </div>
-                  }
+                */}
                   { this.props.movie.movies.currentHour.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
                   }
