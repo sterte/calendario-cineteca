@@ -64,7 +64,7 @@ class Calendar extends Component {
     }
     render() {
         var tmpMoment = moment(this.state.currentDate).format('YYYY-MM-DD');
-        if (this.props.days.loadingState[tmpMoment] != 1) {
+        if (this.props.days.loadingState[tmpMoment] !== 1) {
             return (<div className='container'>            
                 <Loading size={5} />
             </div>);
