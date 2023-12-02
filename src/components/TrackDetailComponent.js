@@ -39,7 +39,7 @@ class TrackDetail extends Component {
             </div>);
         }
         else {
-            const tracksList = this.props.trackDetail.trackDetail.movies.length === 0 ?
+            const tracksList = !this?.props?.trackDetail?.trackDetail?.movies?.length ?
                 <Stagger in='true'>                
                     <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>                
                 </Stagger>
@@ -56,7 +56,7 @@ class TrackDetail extends Component {
                     </Helmet>                                                     
                     <div className='row row-content d-flex justify-content-center'>
                         <div className='col-12 mt-4 col-auto d-flex align-self-center'>
-                            <h2>{this.props.trackDetail.trackDetail.title}</h2>
+                            <h2 dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.title}} />
                         </div>
                         <div className='col-12 m-4' dangerouslySetInnerHTML={{__html: this.props.trackDetail.trackDetail.description}} />
                         <div className='m-4'>

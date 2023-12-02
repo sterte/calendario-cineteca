@@ -35,15 +35,7 @@ class Calendar extends Component {
     }
     componentDidMount() {        
         if(!this.props.days.isLoading){
-            var tmpMoment = moment(new Date());        
-            for(let i = 0; i < 7; i++){ 
-                const currentDate = tmpMoment.format('YYYY-MM-DD');   
-                let currentMovies = this.props.days.days.find(el => el.day === currentDate)
-                if(!currentMovies){
-                    this.props.getDayProgram(currentDate);
-                }
-                tmpMoment.add(1, 'days');
-            }
+            this.preloadDays(new Date(), 8);
         }
     }
 
@@ -52,13 +44,27 @@ class Calendar extends Component {
         var tmpMoment = moment(origDate);
         tmpMoment.add(days, 'days');
         var newDate = tmpMoment.toDate();
-        const formattedDate = tmpMoment.format('YYYY-MM-DD');
-
-        let currentMovies = this.props.days.days.find(el => el.day === formattedDate)
-        if(!currentMovies){
-            this.props.getDayProgram(formattedDate); //TODO singoli giorni   
-        }            
+        this.preloadDays(newDate, -3)            
         this.setState({currentDate: newDate});     
+    }
+
+    preloadDays = (date, lookahead) => {
+        var tmpMoment = moment(date);  
+        let from = 0;
+        let to = lookahead;
+        if(lookahead < 0){
+            from = lookahead;
+            to = lookahead * - 1;
+            tmpMoment.add(lookahead + 1, 'days')
+        }      
+        for(let i = from; i < to; i++){ 
+            const currentDate = tmpMoment.format('YYYY-MM-DD');   
+            let currentMovies = this.props.days.days.find(el => el.day === currentDate)
+            if(!currentMovies){
+                this.props.getDayProgram(currentDate);
+            }
+            tmpMoment.add(1, 'days');
+        }
     }
 
     formatDate(date, format = 'YYYY-MM-DD'){
