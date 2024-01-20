@@ -53,14 +53,14 @@ class Tracks extends Component {
                             </div>
                             <div className='ml-3 ml-md-0 col-12 col-md-8'>
                                 <div className='row'>
-                                    <Link to={`/tracks/${track.id}`}><h4>{track.title}</h4></Link>
+                                    <Link to={`/tracks/${track.id}`}><h4 dangerouslySetInnerHTML={{__html: track.title}}></h4></Link>
                                 </div>
                                 <div className='row'>
                                     <h5>{track.dateInfo}</h5>
                                 </div>
 
                                 <div className='row'>
-                                    <p>{track.description}</p>
+                                    <p dangerouslySetInnerHTML={{__html: track.description}}></p>
                                 </div>
                             </div>
                     </Fade>
