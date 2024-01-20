@@ -49,8 +49,8 @@ export const isFuture = (movie, currentDate) => {
 
 export const movieListDetail = (movie, showDay = false) => {
 let movieExtras = movie.extras;
-if(movie.extras.includes('Sold Out')){
-  movieExtras = movieExtras.replace('Sold Out', '<b>Sold Out</b>');
+if(movie.extras.includes('Sold out')){
+  movieExtras = movieExtras.replace('Sold out', '<b>Sold out</b>');
 }
 return (
     <Fade in={true} className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
