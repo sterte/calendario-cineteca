@@ -1,5 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { thunk } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { Days } from './days.js'
 import { Movies } from './movies.js'
@@ -12,8 +11,8 @@ import { Charachters } from './charachters.js';
 import { Conversations } from './conversations.js';
 
 export const ConfigureStore = () => {
-	const store = createStore(
-		combineReducers({
+	const store = configureStore({
+		reducer: {
 			days: Days,
 			movies: Movies,
 			auth: Auth,
@@ -23,10 +22,10 @@ export const ConfigureStore = () => {
 			chatResponses: ChatResponses,
 			charachters: Charachters,
 			conversations: Conversations
-		}),
-
-		applyMiddleware(thunk, logger)
-		);
+		},
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().concat(logger)
+	});
 
 	return store;
 }
