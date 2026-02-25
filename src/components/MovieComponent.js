@@ -159,7 +159,7 @@ if(year !== now.getFullYear().toString()){
                   />
                 </div>                            
                 }
-                <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
+                <div className='d-flex col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
                 { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
                     <a className='cal-button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
                 }

@@ -99,3 +99,7 @@ a:link, a:hover, a:visited {
   padding: 20px;
   border-radius: 10px;
 }
+
+.atcb-text {
+  font-weight: 400;
+}
