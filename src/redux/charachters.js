@@ -1,18 +1,26 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const Charachters = (state = {isLoading: false, errMess: null, charachters: []}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_CHARACHTERS:
-			return {...state, isLoading: false, errMess: null, charachters: action.payload}; 
-
-		case ActionTypes.CHARACHTERS_LOADING:
-			return {...state, isLoading: true, errMess: null, charachters: []}; 
-
-		case ActionTypes.CHARACHTERS_FAILED:
-			return {...state, isLoading: false, errMess: action.payload, charachters: []}; 
-
-		default:
-			return state;
+const charachtersSlice = createSlice({
+	name: 'charachters',
+	initialState: { isLoading: false, errMess: null, charachters: [] },
+	reducers: {
+		charachtersLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+			state.charachters = [];
+		},
+		addCharachters(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.charachters = action.payload;
+		},
+		charachtersFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+			state.charachters = [];
+		}
 	}
-}
+});
+
+export const { charachtersLoading, addCharachters, charachtersFailed } = charachtersSlice.actions;
+export const Charachters = charachtersSlice.reducer;

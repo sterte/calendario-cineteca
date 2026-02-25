@@ -1,31 +1,60 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const ChatResponses = (state = {isLoading: false, errMess: null, messages: [], conversationId: null, totalTokenCount: 0, title: null}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_CHAT_RESPONSE:
-			var tmpMessages = state.messages;
-			tmpMessages.push({role: action.payload.role, content: action.payload.content, timestamp: action.payload.timestamp, tokenCount: action.payload.tokenCount});
-
-			var tmpTotalTokenCount = action.payload.tokenCount ? state.totalTokenCount + action.payload.tokenCount : state.totalTokenCount;
-			var tmpTitle = action.payload.title ? action.payload.title : state.title;
-			return {...state, isLoading: false, errMess: null, messages: tmpMessages, conversationId: action.payload.conversationId, totalTokenCount: tmpTotalTokenCount, title: tmpTitle}; 
-
-		case ActionTypes.CHAT_RESPONSE_LOADING:
-		case ActionTypes.CONVERSATIONLOG_LOADING:
-			return {...state, isLoading: true, errMess: null}; 
-
-		case ActionTypes.CHAT_RESPONSE_FAILED:
-		case ActionTypes.CONVERSATIONLOG_FAILED:
-			return {...state, isLoading: false, errMess: action.payload}; 
-
-		case ActionTypes.RESET_CHAT_RESPONSE:
-			return {...state, isLoading: false, errMess: action.payload, messages: [], conversationId: null, totalTokenCount: 0, title: null }; 
-
-		case ActionTypes.ADD_CONVERSATIONLOG:
-			return {...state, isLoading: false, errMess: null, messages: action.payload.messages, conversationId: action.payload.conversationId, totalTokenCount: 0, title: action.payload.title}; 
-
-		default:
-			return state;
+const chatResponsesSlice = createSlice({
+	name: 'chatResponses',
+	initialState: { isLoading: false, errMess: null, messages: [], conversationId: null, totalTokenCount: 0, title: null },
+	reducers: {
+		addChatResponse(state, action) {
+			state.messages.push({
+				role: action.payload.role,
+				content: action.payload.content,
+				timestamp: action.payload.timestamp,
+				tokenCount: action.payload.tokenCount
+			});
+			if (action.payload.tokenCount) {
+				state.totalTokenCount += action.payload.tokenCount;
+			}
+			if (action.payload.title) {
+				state.title = action.payload.title;
+			}
+			state.isLoading = false;
+			state.errMess = null;
+			state.conversationId = action.payload.conversationId;
+		},
+		chatResponseLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+		},
+		conversationLogLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+		},
+		chatResponseFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+		},
+		conversationLogFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+		},
+		resetChatResponse(state) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.messages = [];
+			state.conversationId = null;
+			state.totalTokenCount = 0;
+			state.title = null;
+		},
+		addConversationLog(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.messages = action.payload.messages;
+			state.conversationId = action.payload.conversationId;
+			state.totalTokenCount = 0;
+			state.title = action.payload.title;
+		}
 	}
-}
+});
+
+export const { addChatResponse, chatResponseLoading, conversationLogLoading, chatResponseFailed, conversationLogFailed, resetChatResponse, addConversationLog } = chatResponsesSlice.actions;
+export const ChatResponses = chatResponsesSlice.reducer;

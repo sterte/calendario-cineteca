@@ -1,18 +1,26 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const TrackDetail = (state = {isLoading: true, errMess: null, trackDetail: {}}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_TRACK_DETAIL:			
-			return {...state, isLoading: false, errMess: null, trackDetail: action.payload };
-
-		case ActionTypes.TRACK_DETAIL_LOADING:
-			return {...state, isLoading: true, errMess: null, trackDetail: {}};
-
-		case ActionTypes.TRACK_DETAIL_FAILED:
-			return {...state, isLoading: false, errMess: action.payload, trackDetail: {}};
-
-		default:
-			return state;
+const trackDetailSlice = createSlice({
+	name: 'trackDetail',
+	initialState: { isLoading: true, errMess: null, trackDetail: {} },
+	reducers: {
+		trackDetailLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+			state.trackDetail = {};
+		},
+		addTrackDetail(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.trackDetail = action.payload;
+		},
+		trackDetailFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+			state.trackDetail = {};
+		}
 	}
-}
+});
+
+export const { trackDetailLoading, addTrackDetail, trackDetailFailed } = trackDetailSlice.actions;
+export const TrackDetail = trackDetailSlice.reducer;

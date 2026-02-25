@@ -1,27 +1,47 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const Movies = (state = {isLoading: true, errMess: null, movies: [], isLoadingImdb: true, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_MOVIE:
-			return {...state, isLoading: false, errMess: null, movies: action.payload};
-
-		case ActionTypes.MOVIE_LOADING:
-			return {...state, isLoading: true, errMess: null, movies: []};
-
-		case ActionTypes.MOVIE_FAILED:
-			return {...state, isLoading: false, errMess: action.payload, movies: []}; 
-
-		case ActionTypes.ADD_IMDB:
-			return {...state, isLoadingImdb : false, errMessImdb: null, imdbId: action.payload.imdbId, imdbRating: action.payload.imdbRating, imdbRatingCount: action.payload.imdbRatingCount }
-
-		case ActionTypes.IMDB_LOADING:
-			return {...state, isLoadingImdb : true, errMessImdb: null, imdbId: null, imdbRating: null, imdbRatingCount: null }
-
-		case ActionTypes.IMDB_FAILED:
-			return {...state, isLoadingImdb : false, errMessImdb: action.payload, imdbId: null, imdbRating: 0, imdbRatingCount: -1 }
-
-		default:
-			return state;
+const moviesSlice = createSlice({
+	name: 'movies',
+	initialState: { isLoading: true, errMess: null, movies: [], isLoadingImdb: true, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null },
+	reducers: {
+		movieLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+			state.movies = [];
+		},
+		addMovie(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.movies = action.payload;
+		},
+		movieFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+			state.movies = [];
+		},
+		imdbLoading(state) {
+			state.isLoadingImdb = true;
+			state.errMessImdb = null;
+			state.imdbId = null;
+			state.imdbRating = null;
+			state.imdbRatingCount = null;
+		},
+		addImdb(state, action) {
+			state.isLoadingImdb = false;
+			state.errMessImdb = null;
+			state.imdbId = action.payload.imdbId;
+			state.imdbRating = action.payload.imdbRating;
+			state.imdbRatingCount = action.payload.imdbRatingCount;
+		},
+		imdbFailed(state, action) {
+			state.isLoadingImdb = false;
+			state.errMessImdb = action.payload;
+			state.imdbId = null;
+			state.imdbRating = 0;
+			state.imdbRatingCount = -1;
+		}
 	}
-}
+});
+
+export const { movieLoading, addMovie, movieFailed, imdbLoading, addImdb, imdbFailed } = moviesSlice.actions;
+export const Movies = moviesSlice.reducer;

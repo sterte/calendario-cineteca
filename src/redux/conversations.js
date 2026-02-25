@@ -1,27 +1,30 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const Conversations = (state = {isLoading: false, errMess: null, conversations: []}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_CONVERSATIONS:
-			return {...state, isLoading: false, errMess: null, conversations: action.payload}; 
-
-		case ActionTypes.CONVERSATIONS_LOADING:
-			return {...state, isLoading: true, errMess: null}; 
-
-		case ActionTypes.CONVERSATIONS_FAILED:
-			return {...state, isLoading: false, errMess: action.payload, conversations: []}; 
-
-		case ActionTypes.CONVERSATION_DELETED:
-			let tmpConversations = [];
-			for(let el of state.conversations){
-				if(el.value !== action.payload.conversationId){
-					tmpConversations.push(el);
-				}
-			}
-			return {...state, isLoading: false, errMess: null, conversations: tmpConversations}
-
-		default:
-			return state;
+const conversationsSlice = createSlice({
+	name: 'conversations',
+	initialState: { isLoading: false, errMess: null, conversations: [] },
+	reducers: {
+		conversationsLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+		},
+		addConversations(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.conversations = action.payload;
+		},
+		conversationsFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+			state.conversations = [];
+		},
+		conversationDeleted(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.conversations = state.conversations.filter(el => el.value !== action.payload.conversationId);
+		}
 	}
-}
+});
+
+export const { conversationsLoading, addConversations, conversationsFailed, conversationDeleted } = conversationsSlice.actions;
+export const Conversations = conversationsSlice.reducer;

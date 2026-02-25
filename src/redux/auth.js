@@ -1,68 +1,60 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-// The auth reducer. The starting state sets authentication
-// based on a token being in local storage. In a real app,
-// we would also want a util to check if the token is expired.
-export const Auth = (state = {
-        isLoading: false,
-        isAuthenticated: localStorage.getItem('token') ? true : false,
-        token: localStorage.getItem('token'),
-        user: localStorage.getItem('creds') ? JSON.parse(localStorage.getItem('creds')) : null,
-        errMess: null
-    }, action) => {
-    switch (action.type) {
-        case ActionTypes.LOGIN_REQUEST:
-            return {...state,
-                isLoading: true,
-                isAuthenticated: false,
-                user: {...action.creds, password:''}
-            };
-        case ActionTypes.LOGIN_SUCCESS:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: true,
-                isAdmin: action.isAdmin,
-                errMess: '',
-                token: action.token
-            };
-        case ActionTypes.LOGIN_FAILURE:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: false,
-                errMess: action.message
-            };
-        case ActionTypes.LOGOUT_REQUEST:
-            return {...state,
-                isLoading: true,
-                isAuthenticated: false
-            };
-        case ActionTypes.LOGOUT_SUCCESS:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: false,
-                token: '',
-                user: null
-            };
-        case ActionTypes.SIGNUP_REQUEST:
-            return {...state,
-                isLoading: true,
-                isAuthenticated: false,
-                user: action.creds
-            };
-        case ActionTypes.SIGNUP_SUCCESS:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: false,
-                errMess: '',
-                token: ''
-            };
-        case ActionTypes.SIGNUP_FAILURE:
-            return {...state,
-                isLoading: false,
-                isAuthenticated: false,
-                errMess: action.message
-            };
-        default:
-            return state
-    }
-}
+const authSlice = createSlice({
+	name: 'auth',
+	initialState: {
+		isLoading: false,
+		isAuthenticated: localStorage.getItem('token') ? true : false,
+		token: localStorage.getItem('token'),
+		user: localStorage.getItem('creds') ? JSON.parse(localStorage.getItem('creds')) : null,
+		errMess: null
+	},
+	reducers: {
+		requestLogin(state, action) {
+			state.isLoading = true;
+			state.isAuthenticated = false;
+			state.user = { ...action.payload, password: '' };
+		},
+		receiveLogin(state, action) {
+			state.isLoading = false;
+			state.isAuthenticated = true;
+			state.isAdmin = action.payload.isAdmin;
+			state.errMess = '';
+			state.token = action.payload.token;
+		},
+		loginError(state, action) {
+			state.isLoading = false;
+			state.isAuthenticated = false;
+			state.errMess = action.payload;
+		},
+		requestLogout(state) {
+			state.isLoading = true;
+			state.isAuthenticated = false;
+		},
+		receiveLogout(state) {
+			state.isLoading = false;
+			state.isAuthenticated = false;
+			state.token = '';
+			state.user = null;
+		},
+		requestSignup(state, action) {
+			state.isLoading = true;
+			state.isAuthenticated = false;
+			state.user = action.payload;
+		},
+		receiveSignup(state) {
+			state.isLoading = false;
+			state.isAuthenticated = false;
+			state.errMess = '';
+			state.token = '';
+		},
+		signupError(state, action) {
+			state.isLoading = false;
+			state.isAuthenticated = false;
+			state.errMess = action.payload;
+		}
+	}
+});
+
+export const { requestLogin, receiveLogin, loginError, requestLogout, receiveLogout, requestSignup, receiveSignup, signupError } = authSlice.actions;
+export const Auth = authSlice.reducer;

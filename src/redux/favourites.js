@@ -1,18 +1,26 @@
-import * as ActionTypes from './ActionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-
-export const Favourites = (state = {isLoading: true, errMess: null, days: []}, action) => {
-	switch(action.type) {
-		case ActionTypes.ADD_FAVOURITES:
-			return {...state, isLoading: false, errMess: null, favourites: action.payload}; 
-
-		case ActionTypes.FAVOURITES_LOADING:
-			return {...state, isLoading: true, errMess: null, favourites: []}; 
-
-		case ActionTypes.FAVOURITES_FAILED:
-			return {...state, isLoading: false, errMess: action.payload, favourites: []}; 
-
-		default:
-			return state;
+const favouritesSlice = createSlice({
+	name: 'favourites',
+	initialState: { isLoading: true, errMess: null, favourites: [] },
+	reducers: {
+		favouritesLoading(state) {
+			state.isLoading = true;
+			state.errMess = null;
+			state.favourites = [];
+		},
+		addFavourites(state, action) {
+			state.isLoading = false;
+			state.errMess = null;
+			state.favourites = action.payload;
+		},
+		favouritesFailed(state, action) {
+			state.isLoading = false;
+			state.errMess = action.payload;
+			state.favourites = [];
+		}
 	}
-}
+});
+
+export const { favouritesLoading, addFavourites, favouritesFailed } = favouritesSlice.actions;
+export const Favourites = favouritesSlice.reducer;
