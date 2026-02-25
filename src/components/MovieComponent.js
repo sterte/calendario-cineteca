@@ -142,7 +142,7 @@ if(year !== now.getFullYear().toString()){
                   <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
                 </div>
                 { isFuture && 
-                <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4'>
+                <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4 d-flex align-items-center'>
                   <AddToCalendarButton
                     name={this.props.movie.movies.title}
                     startDate={startDateStr}
@@ -154,6 +154,8 @@ if(year !== now.getFullYear().toString()){
                     description={eventDescription}
                     options={['Google','Apple','Outlook.com','Yahoo','iCal']}
                     label="Aggiungi al calendario"
+                    hideCheckmark
+                    styleLight="--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;"
                   />
                 </div>                            
                 }
