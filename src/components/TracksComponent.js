@@ -4,7 +4,7 @@ import { Fade } from 'react-animation-components';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
-import { getTracks } from '../redux/ActionCreators';
+import { getTracks } from '../redux/tracks';
 import { Helmet } from 'react-helmet-async';
 
 

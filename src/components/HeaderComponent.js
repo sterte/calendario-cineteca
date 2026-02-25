@@ -46,12 +46,13 @@ class Header extends Component{
     }
 
     toggleLoginModal() {
+        this.props.clearAuthError();
         this.setState({isLoginModalOpen: !this.state.isLoginModalOpen, isLoginErrorToShow: true});
     }
 
     toggleLoginErrorModal() {
-        this.props.auth.errMess = '';
-        this.setState({isLoginErrorToShow: !this.state.isLoginErrorToShow});
+        this.props.clearAuthError();
+        this.setState({isLoginErrorToShow: false});
     }
 
     handleLogin(event) {

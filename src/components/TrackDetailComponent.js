@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
-import { getTrackDetail } from '../redux/ActionCreators';
+import { getTrackDetail } from '../redux/trackDetail';
 import { movieListDetail } from './MovieUtils';
 import { Fade, Stagger } from 'react-animation-components';
 import { Helmet } from 'react-helmet-async';

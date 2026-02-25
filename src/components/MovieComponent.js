@@ -6,7 +6,8 @@ import {
 import { connect } from 'react-redux';
 import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
-import { addFavourite, getMovieDetail, fetchImdb } from '../redux/ActionCreators';
+import { getMovieDetail, fetchImdb } from '../redux/movies'
+import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
@@ -25,9 +26,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getMovieDetail: (categoryId, movieId, repeatId) => { dispatch(getMovieDetail(categoryId, movieId, repeatId)) },
+  getMovieDetail: (categoryId, movieId, repeatId) => { dispatch(getMovieDetail({ categoryId, movieId, repeatId })) },
   addFavourite: (fav) => dispatch(addFavourite(fav)),
-  fetchImdb: (title, year) => { dispatch(fetchImdb(title, year)) }
+  fetchImdb: (title, year) => { dispatch(fetchImdb({ title, year })) }
 });
 
 class Movie extends Component {

@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody,
 import { Fade } from 'react-animation-components';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
-import { fetchFavourites, editFavourite, deleteFavourite } from '../redux/ActionCreators';
+import { fetchFavourites, editFavourite, deleteFavourite } from '../redux/favourites';
 
 
 const mapStateToProps = state => {

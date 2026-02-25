@@ -1,4 +1,39 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchUrl } from '../shared/baseUrl';
+
+export const loginUser = createAsyncThunk('auth/loginUser', async (creds, { rejectWithValue }) => {
+	const response = await fetch(fetchUrl + '/users/login', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(creds)
+	});
+	if (!response.ok) {
+		return rejectWithValue('Error ' + response.status + ': ' + response.statusText);
+	}
+	const data = await response.json();
+	if (!data.success) {
+		return rejectWithValue(data.status || 'Login failed');
+	}
+	localStorage.setItem('token', data.token);
+	localStorage.setItem('creds', JSON.stringify(creds));
+	return data;
+});
+
+export const signupUser = createAsyncThunk('auth/signupUser', async (creds, { rejectWithValue }) => {
+	const response = await fetch(fetchUrl + '/users/signup', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(creds)
+	});
+	if (!response.ok) {
+		return rejectWithValue('Error ' + response.status + ': ' + response.statusText);
+	}
+	const data = await response.json();
+	if (!data.success) {
+		return rejectWithValue(data.status || 'Signup failed');
+	}
+	return data;
+});
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -10,51 +45,57 @@ const authSlice = createSlice({
 		errMess: null
 	},
 	reducers: {
-		requestLogin(state, action) {
-			state.isLoading = true;
-			state.isAuthenticated = false;
-			state.user = { ...action.payload, password: '' };
+		clearAuthError(state) {
+			state.errMess = null;
 		},
-		receiveLogin(state, action) {
-			state.isLoading = false;
-			state.isAuthenticated = true;
-			state.isAdmin = action.payload.isAdmin;
-			state.errMess = '';
-			state.token = action.payload.token;
-		},
-		loginError(state, action) {
-			state.isLoading = false;
-			state.isAuthenticated = false;
-			state.errMess = action.payload;
-		},
-		requestLogout(state) {
-			state.isLoading = true;
-			state.isAuthenticated = false;
-		},
-		receiveLogout(state) {
+		logoutUser(state) {
+			localStorage.removeItem('token');
+			localStorage.removeItem('creds');
 			state.isLoading = false;
 			state.isAuthenticated = false;
 			state.token = '';
 			state.user = null;
-		},
-		requestSignup(state, action) {
-			state.isLoading = true;
-			state.isAuthenticated = false;
-			state.user = action.payload;
-		},
-		receiveSignup(state) {
-			state.isLoading = false;
-			state.isAuthenticated = false;
-			state.errMess = '';
-			state.token = '';
-		},
-		signupError(state, action) {
-			state.isLoading = false;
-			state.isAuthenticated = false;
-			state.errMess = action.payload;
 		}
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(loginUser.pending, (state, action) => {
+				state.isLoading = true;
+				state.isAuthenticated = false;
+				state.user = { ...action.meta.arg, password: '' };
+				state.errMess = null;
+			})
+			.addCase(loginUser.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isAuthenticated = true;
+				state.isAdmin = action.payload.isAdmin;
+				state.errMess = '';
+				state.token = action.payload.token;
+			})
+			.addCase(loginUser.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isAuthenticated = false;
+				state.errMess = action.payload || action.error.message;
+			})
+			.addCase(signupUser.pending, (state, action) => {
+				state.isLoading = true;
+				state.isAuthenticated = false;
+				state.user = action.meta.arg;
+				state.errMess = null;
+			})
+			.addCase(signupUser.fulfilled, (state) => {
+				state.isLoading = false;
+				state.isAuthenticated = false;
+				state.errMess = '';
+				state.token = '';
+			})
+			.addCase(signupUser.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isAuthenticated = false;
+				state.errMess = action.payload || action.error.message;
+			});
 	}
 });
 
-export const { requestLogin, receiveLogin, loginError, requestLogout, receiveLogout, requestSignup, receiveSignup, signupError } = authSlice.actions;
+export const { logoutUser, clearAuthError } = authSlice.actions;
 export const Auth = authSlice.reducer;

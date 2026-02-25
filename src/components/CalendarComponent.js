@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import { getDayProgram } from '../redux/ActionCreators'
+import { getDayProgram } from '../redux/days'
 import { Fade, Stagger } from 'react-animation-components';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';

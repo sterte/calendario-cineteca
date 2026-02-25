@@ -10,7 +10,7 @@ import ChatAI from './ChatAIComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
-import { loginUser, logoutUser, signupUser } from '../redux/ActionCreators';
+import { loginUser, logoutUser, signupUser, clearAuthError } from '../redux/auth';
 
 
 
@@ -24,7 +24,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
-  signupUser: (creds) => dispatch(signupUser(creds))
+  signupUser: (creds) => dispatch(signupUser(creds)),
+  clearAuthError: () => dispatch(clearAuthError())
 });
 
 
@@ -59,10 +60,11 @@ class Main extends Component{
 
     return (
       <div>      
-      <Header auth={this.props.auth} 
-          loginUser={this.props.loginUser} 
+      <Header auth={this.props.auth}
+          loginUser={this.props.loginUser}
           logoutUser={this.props.logoutUser}
-          signupUser={this.props.signupUser} />
+          signupUser={this.props.signupUser}
+          clearAuthError={this.props.clearAuthError} />
       <TransitionGroup>
       <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
       <Switch location={this.props.location}>      

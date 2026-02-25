@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { fetchCharachters, fetchConversations, fetchConversationLog, fetchChatResponse, resetChatResponse, deleteConversation } from '../redux/ActionCreators'
+import { fetchCharachters } from '../redux/charachters'
+import { fetchConversations, deleteConversation } from '../redux/conversations'
+import { fetchChatResponse, fetchConversationLog, resetChatResponse } from '../redux/chatResponses'
 import { connect } from 'react-redux';
 import { Button, FormGroup, Input, Label } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
@@ -20,7 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
     fetchConversations: () => { dispatch(fetchConversations()) },
     deleteConversation: (conversationId) => { dispatch(deleteConversation(conversationId)) },
     fetchConversationLog: (conversationId) => { dispatch(fetchConversationLog(conversationId)) },
-    fetchChatResponse: (conversationId, title, lastMessage, charachter, temperature) => { dispatch(fetchChatResponse(conversationId, title, lastMessage, charachter, temperature)) },
+    fetchChatResponse: (conversationId, title, lastMessage, charachter, temperature) => { dispatch(fetchChatResponse({ conversationId, title, lastMessage, charachter, temperature })) },
     resetChatResponse: () => { dispatch(fetchConversations()); dispatch(resetChatResponse()) }
 });
 
