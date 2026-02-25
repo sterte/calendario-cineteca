@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
 import { addFavourite, getMovieDetail, fetchImdb } from '../redux/ActionCreators';
-import ReactAddToCalendar from 'react-add-to-calendar';
+import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
@@ -66,14 +66,6 @@ class Movie extends Component {
 
 
 composeCalendarButton(hour, durationNumber, showBuyButton = true){
-  let items = [
-    { google: 'Google' },
-    { apple: 'Apple' },
-    { outlook: 'Outlook' },
-    { yahoo: 'Yahoo' }
-  ];
-
-  let icon = { 'calendar-plus-o': 'left' };
   //hour.day = hour.day.replace('&igrave;', 'ì');
   const splitDate = hour.day.trim().split(/\s+/);
   const year = '20' + splitDate[3];
@@ -113,6 +105,12 @@ if(year !== now.getFullYear().toString()){
           durationNumber = isNaN(durationNumber) ? 120 : durationNumber;
           let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * durationNumber));
 
+          const pad = n => String(n).padStart(2, '0');
+          const startDateStr = `${oraInizio.getFullYear()}-${pad(oraInizio.getMonth()+1)}-${pad(oraInizio.getDate())}`;
+          const startTimeStr = `${pad(parseInt(hh))}:${pad(parseInt(mm))}`;
+          const endDateStr = `${oraFine.getFullYear()}-${pad(oraFine.getMonth()+1)}-${pad(oraFine.getDate())}`;
+          const endTimeStr = `${pad(oraFine.getHours())}:${pad(oraFine.getMinutes())}`;
+
           let eventDescription = window.location.href + "\n\n" + this.props.movie.movies.originalUrl + "\n\n" + imdbUrl + this.props.movie.imdbId
 
           let address = 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia';
@@ -145,12 +143,23 @@ if(year !== now.getFullYear().toString()){
                 </div>
                 { isFuture && 
                 <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4'>
-                  <ReactAddToCalendar listItems={items} event={event} buttonLabel="Aggiungi al calendario" buttonTemplate={icon} />
+                  <AddToCalendarButton
+                    name={this.props.movie.movies.title}
+                    startDate={startDateStr}
+                    startTime={startTimeStr}
+                    endDate={endDateStr}
+                    endTime={endTimeStr}
+                    timeZone="Europe/Rome"
+                    location={address}
+                    description={eventDescription}
+                    options={['Google','Apple','Outlook.com','Yahoo','iCal']}
+                    label="Aggiungi al calendario"
+                  />
                 </div>                            
                 }
                 <div className='col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
                 { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
-                    <a className='react-add-to-calendar__button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
+                    <a className='cal-button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
                 }
               
               </div>

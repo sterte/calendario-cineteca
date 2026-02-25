@@ -43,8 +43,8 @@
   transition: all 0ms ease-out;
 }
 
-.react-add-to-calendar__button {
-  padding: 10px;  
+.cal-button {
+  padding: 10px;
   border: 1px solid;
   border-radius: 20px;
   color: #000;
@@ -52,26 +52,8 @@
   border-color: #fccd00;
 }
 
-.react-add-to-calendar__button:hover {  
-  background-color: #fccd00;  
-}
-
-
-
-.react-add-to-calendar__dropdown {
-    position: absolute;
-    top: 32px;
-    left: 15px;
-    width: 50%;  
-    height: 500%;
-    box-shadow: 1px 3px 6px rgb(0 0 0 / 15%);
-    border: 1px solid;
-    background-color: #fccd00;
-    border-color: #f99e00;
-    text-align: left;
-    padding: 0;
-    z-index: 1;
-    border-radius: 20px;
+.cal-button:hover {
+  background-color: #fccd00;
 }
 
 ul {
