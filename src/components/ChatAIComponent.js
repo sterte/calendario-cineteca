@@ -137,7 +137,7 @@ function ChatAI({ isAdmin }) {
                     </div>
                 </div>
                 <div className='col-12 mt-4'>
-                    <div className='row ml-2'>
+                    <div className='row'>
                         <div className='col-10 col-md-11'>
                             <FormGroup>
                                 <Input type="text" id="prompt" name="prompt"
@@ -150,50 +150,39 @@ function ChatAI({ isAdmin }) {
                                     }} />
                             </FormGroup>
                         </div>
-                        <div className='col-2 col-md-1'>
-                            <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
+                        <div className='col-2 col-md-1 d-flex align-items-start justify-content-center'>
+                            <Button className='navigation-button' type="button" value="send" color="primary"
                                 onClick={handleSend}>
                                 <span className="fa fa-paper-plane" />
                             </Button>
                         </div>
 
-                        <div className='col-12 col-md-7'>
-                            <FormGroup>
+                        <div className='col-12 d-flex align-items-center justify-content-between flex-wrap mt-2' style={{gap: '6px'}}>
+                            <div className='flex-grow-1 w-100 mb-2' style={{minWidth: '180px'}}>
                                 <Dropdown disabled={conversations.isLoading || conversations.errMess} id="selectedConversation" options={conversations.conversations}
                                     onChange={(value) => { setSelectedConversation(value); }} placeholder="Conversazioni precedenti"
                                 />
-                            </FormGroup>
-                        </div>
-                        <div className='col-auto ml-1 ml-md-0'>
-                            <Button disabled={!selectedConversation} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
+                            </div>
+                            <Button disabled={!selectedConversation} className='navigation-button' type="button" color="primary"
                                 onClick={() => { dispatch(fetchConversationLog(selectedConversation.value)); }}>
                                 <span className="fa fa-upload" />
                             </Button>
-                        </div>
-                        <div className='col-auto ml-1 ml-md-0'>
-                            <Button disabled={messages.messages.length > 0} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
+                            <Button disabled={messages.messages.length > 0} className='navigation-button' type="button" color="primary"
                                 onClick={() => { dispatch(deleteConversation(selectedConversation.value)); }}>
                                 <span className="fa fa-trash" />
                             </Button>
-                        </div>
-
-                        <div className='col-auto ml-1 ml-md-0'>
-                            <Button className='navigation-button' type="button" value="send" color="primary"
+                            <Button className='navigation-button' type="button" color="primary"
                                 onClick={handleReset}>
                                 <span className="fa fa-refresh" />
                             </Button>
-                        </div>
-                        <div className='col-auto ml-1 ml-md-0'>
-                            <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
+                            <Button className='navigation-button' type="button" color="primary"
                                 onClick={() => { downloadChat(messages.messages); }}>
                                 <span className="fa fa-save" />
                             </Button>
-                        </div>
-                        {location?.state?.backUrl?.length > 0 &&
-                            <div className='col-auto ml-1 ml-md-0'>
+                            {location?.state?.backUrl?.length > 0 &&
                                 <button type='button' className='navigation-button btn btn-primary'><Link to={location.state.backUrl} style={{ color: 'white' }}><span className="fa fa-arrow-left" /></Link></button>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
