@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
+import { setProvider } from './provider';
 
-export const getDayProgram = createAsyncThunk('days/getDayProgram', async (day) => {
-	const response = await fetch(fetchUrl + '/day/' + day);
+export const getDayProgram = createAsyncThunk('days/getDayProgram', async (day, { getState }) => {
+	const provider = getState().provider.activeProvider;
+	const endpoint = provider === 'ccb' ? '/ccb-day/' + day : '/day/' + day;
+	const response = await fetch(fetchUrl + endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
 	return response.json();
 });
@@ -31,6 +34,13 @@ const daysSlice = createSlice({
 				state.loadingState[day] = -1;
 				state.isLoading -= 1;
 				state.errMess = action.error.message;
+			})
+			// Clear cache when provider switches so new data is fetched
+			.addCase(setProvider, (state) => {
+				state.days = [];
+				state.loadingState = {};
+				state.isLoading = 0;
+				state.errMess = null;
 			});
 	}
 });

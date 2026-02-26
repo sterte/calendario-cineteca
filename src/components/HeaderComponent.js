@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Label, Input } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, logoutUser, signupUser, clearAuthError } from '../redux/auth';
+import { setProvider } from '../redux/provider';
 
 function Header() {
     const auth = useSelector(state => state.auth);
+    const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -73,7 +76,10 @@ function Header() {
         <div className="container">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
         <NavbarBrand className="mr-auto" href="/">
-        <img src='/assets/images/logo-white.png' height="60" alt="Calendario Cineteca" />
+        {provider === 'ccb'
+            ? <img src='/assets/images/logo-ccb.svg' height="60" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
+            : <img src='/assets/images/logo-white.png' height="60" alt="Calendario Cineteca" />
+        }
         </NavbarBrand>
 
         <Collapse isOpen={isNavOpen} navbar>
@@ -112,20 +118,41 @@ function Header() {
         </Nav>
         </Collapse>
         {auth.isAuthenticated &&
-        <Nav className='ml-auto'>
+        <Nav className='ml-2'>
             <NavItem className='nav-link'>
                 <span style={{color: 'white'}}>Ciao {auth.user.username}</span>
             </NavItem>
         </Nav>
         }
+        <div className='d-flex align-items-center ml-2'>
+            <span className='provider-switch-label mr-1'>Cineteca</span>
+            <div className='custom-control custom-switch'>
+                <input
+                    type='checkbox'
+                    className='custom-control-input'
+                    id='providerSwitch'
+                    checked={provider === 'ccb'}
+                    onChange={() => {
+                        dispatch(setProvider(provider === 'ccb' ? 'cineteca' : 'ccb'));
+                        history.push('/calendar');
+                    }}
+                />
+                <label className='custom-control-label provider-switch-label' htmlFor='providerSwitch'>CCB</label>
+            </div>
+        </div>
         </div>
         </Navbar>
         <Jumbotron className='jumbotron'>
         <div className="container">
         <div className="row row-header">
         <div className="col-12 d-flex justify-content-center">
-        <h1><img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" />
-        Calendario Cineteca di Bologna</h1>
+        <h1>
+        {provider === 'ccb'
+            ? <img src="/assets/images/logo-ccb.svg" height="60" alt="CCB" style={{marginRight: '12px'}} />
+            : <img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" />
+        }
+        {provider === 'ccb' ? 'Calendario Circuito Cinema Bologna' : 'Calendario Cineteca di Bologna'}
+        </h1>
         </div>
         </div>
         </div>

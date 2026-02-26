@@ -20,6 +20,7 @@ import { Helmet } from 'react-helmet-async';
 function Movie({ categoryId, movieId, repeatId }) {
   const movie = useSelector(state => state.movies);
   const auth = useSelector(state => state.auth);
+  const provider = useSelector(state => state.provider.activeProvider);
   const dispatch = useDispatch();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -142,7 +143,10 @@ function Movie({ categoryId, movieId, repeatId }) {
                       options={['Google','Apple','Outlook.com','Yahoo','iCal']}
                       label="Aggiungi al calendario"
                       hideCheckmark
-                      styleLight="--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;"
+                      styleLight={provider === 'ccb'
+                        ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                        : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                      }
                     />
                   </div>
                 }
@@ -221,7 +225,7 @@ function Movie({ categoryId, movieId, repeatId }) {
                     <StarRatings
                       rating={parseFloat(movie.imdbRating) / 2}
                       numberOfStars={5}
-                      starRatedColor="#f99e00"
+                      starRatedColor={provider === 'ccb' ? '#ffabad' : '#f99e00'}
                       starEmptyColor="#a8a8a8"
                       starDimension="30px"
                       starSpacing="0px"

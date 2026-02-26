@@ -1,8 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
 
-export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId }) => {
-	const response = await fetch(fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId);
+export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId }, { getState }) => {
+	const provider = getState().provider.activeProvider;
+	const endpoint = provider === 'ccb'
+		? fetchUrl + '/ccb-movies/' + movieId
+		: fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId;
+	const response = await fetch(endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
 	return response.json();
 });

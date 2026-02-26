@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Calendar from './CalendarComponent';
@@ -25,6 +25,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 function Main() {
     const location = useLocation();
     const auth = useSelector(state => state.auth);
+    const provider = useSelector(state => state.provider.activeProvider);
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', provider);
+    }, [provider]);
 
     return (
         <div>

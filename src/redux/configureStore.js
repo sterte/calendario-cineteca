@@ -9,6 +9,7 @@ import { TrackDetail } from './trackDetail'
 import { ChatResponses } from './chatResponses.js';
 import { Charachters } from './charachters.js';
 import { Conversations } from './conversations.js';
+import { ProviderReducer } from './provider.js';
 
 export const ConfigureStore = () => {
 	const store = configureStore({
@@ -21,7 +22,8 @@ export const ConfigureStore = () => {
 			trackDetail: TrackDetail,
 			chatResponses: ChatResponses,
 			charachters: Charachters,
-			conversations: Conversations
+			conversations: Conversations,
+			provider: ProviderReducer
 		},
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware().concat(logger)

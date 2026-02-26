@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet-async';
 
 function Calendar() {
     const days = useSelector(state => state.days);
+    const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -36,7 +37,7 @@ function Calendar() {
 
     useEffect(() => {
         preloadDays(new Date(), 8);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [provider]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const changeCurrentDate = (numDays) => {
         const newDate = moment(currentDate).add(numDays, 'days').toDate();
@@ -119,6 +120,7 @@ function Calendar() {
                         </div>
                     </div>
                 </div>
+                {provider !== 'ccb' &&
                 <div className='col-12'>
                     <div className='row d-flex justify-content-around mt-4'>
                         <div>
@@ -144,6 +146,7 @@ function Calendar() {
                         </div>
                     </div>
                 </div>
+                }
             </div>
             <div className='row row-content d-flex justify-content-center'>
                 <Fade in={true}>
