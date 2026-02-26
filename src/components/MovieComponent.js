@@ -264,7 +264,7 @@ function Movie({ categoryId, movieId, repeatId }) {
               </FormGroup>
               <FormGroup>
                 <Label className='mr-2' htmlFor="rating">Voto</Label>
-                <select onChange={(evt) => { ratingRef.current = evt.target.value; }}>
+                <select className='form-control' onChange={(evt) => { ratingRef.current = evt.target.value; }}>
                   {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
                 </select>
               </FormGroup>

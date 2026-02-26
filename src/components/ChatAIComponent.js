@@ -164,33 +164,33 @@ function ChatAI({ isAdmin }) {
                                 />
                             </FormGroup>
                         </div>
-                        <div className='col-1 ml-1 ml-md-0'>
+                        <div className='col-auto ml-1 ml-md-0'>
                             <Button disabled={!selectedConversation} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
                                 onClick={() => { dispatch(fetchConversationLog(selectedConversation.value)); }}>
                                 <span className="fa fa-upload" />
                             </Button>
                         </div>
-                        <div className='col-1 ml-1 ml-md-0'>
+                        <div className='col-auto ml-1 ml-md-0'>
                             <Button disabled={messages.messages.length > 0} className='navigation-button mr-3 mr-md-0' type="button" value="loadConversation" color="primary"
                                 onClick={() => { dispatch(deleteConversation(selectedConversation.value)); }}>
                                 <span className="fa fa-trash" />
                             </Button>
                         </div>
 
-                        <div className='col-1 ml-1 ml-md-0'>
+                        <div className='col-auto ml-1 ml-md-0'>
                             <Button className='navigation-button' type="button" value="send" color="primary"
                                 onClick={handleReset}>
                                 <span className="fa fa-refresh" />
                             </Button>
                         </div>
-                        <div className='col-1 ml-1 ml-md-0'>
+                        <div className='col-auto ml-1 ml-md-0'>
                             <Button className='navigation-button mr-3 mr-md-0' type="button" value="send" color="primary"
                                 onClick={() => { downloadChat(messages.messages); }}>
                                 <span className="fa fa-save" />
                             </Button>
                         </div>
                         {location?.state?.backUrl?.length > 0 &&
-                            <div className='col-1 ml-1 ml-md-0'>
+                            <div className='col-auto ml-1 ml-md-0'>
                                 <button type='button' className='navigation-button btn btn-primary'><Link to={location.state.backUrl} style={{ color: 'white' }}><span className="fa fa-arrow-left" /></Link></button>
                             </div>
                         }

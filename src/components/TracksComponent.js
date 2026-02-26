@@ -26,10 +26,10 @@ function Tracks() {
         :
         tracks.tracks.map((track) => (
             <Fade in={true} className='row ml-1 mr-1 mb-5' key={track.id}>
-                <div className='col-4 col-md-4'>
+                <div className='col-12 col-md-4'>
                     <img src={track.image} className='img-fluid' alt={'img-' + track.id} />
                 </div>
-                <div className='ml-3 ml-md-0 col-12 col-md-8'>
+                <div className='mt-3 mt-md-0 col-12 col-md-8'>
                     <div className='row'>
                         <Link to={`/tracks/${track.id}`}><h4 dangerouslySetInnerHTML={{__html: track.title}}></h4></Link>
                     </div>

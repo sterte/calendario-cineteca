@@ -40,8 +40,8 @@ function PersonalArea() {
             <div className='row row-content justify-content-around d-flex mt-4'>
                 <div className='col-12 col-md-10'>
                     <div className='row p-1 p-md-0'>
-                        <div className='col-4 col-md-3'>{fav.title}</div>
-                        <div className='col-4 col-md-3'>{fav.rating}</div>
+                        <div className='col-4 col-md-4'>{fav.title}</div>
+                        <div className='col-4 col-md-4'>{fav.rating}</div>
                         <div className='col-4 col-md-4'>{fav.comment}</div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ function PersonalArea() {
                             </FormGroup>
                             <FormGroup>
                                 <Label className='mr-2' htmlFor="rating">Voto</Label>
-                                <select defaultValue={currentlyEdited?.rating} onChange={(evt) => { ratingRef.current = evt.target.value; }}>
+                                <select className='form-control' defaultValue={currentlyEdited?.rating} onChange={(evt) => { ratingRef.current = evt.target.value; }}>
                                     {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
                                 </select>
                             </FormGroup>

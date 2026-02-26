@@ -29,7 +29,7 @@
 .page-enter-active {
   opacity: 1.0;
   transform: translateX(0%);
-  transition: all 0ms ease-in;
+  transition: all 300ms ease-in;
 }
 
 .page-exit {
@@ -40,7 +40,15 @@
 .page-exit-active {
   opacity: 1;
   transform: translateX(0%);
-  transition: all 0ms ease-out;
+  transition: all 300ms ease-out;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .cal-button {
