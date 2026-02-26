@@ -176,7 +176,7 @@ a:hover {
   background-color: rgba(249, 158, 0, 0.50);
 }
 
-.show-row:nth-child(odd) {
+.show-row-odd {
   background-color: rgba(249, 158, 0, 0.13);
 }
 

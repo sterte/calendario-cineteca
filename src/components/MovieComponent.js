@@ -54,7 +54,7 @@ function Movie({ categoryId, movieId, repeatId }) {
     dispatch(addFavourite({ title, rating: ratingRef.current, comment: commentRef.current.value }));
   };
 
-  const composeCalendarButton = (hour, durationNumber, showBuyButton = true) => {
+  const composeCalendarButton = (hour, durationNumber, showBuyButton = true, showIndexOffset = 0) => {
     const splitDate = hour.day.trim().split(/\s+/);
     const year = '20' + splitDate[3];
     var monthString = splitDate[2];
@@ -82,7 +82,7 @@ function Movie({ categoryId, movieId, repeatId }) {
           <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>
             <h5 style={{marginBottom: 0}}>{dateString}</h5>
           </div>
-          {hour.hours.map((show) => {
+          {hour.hours.map((show, showIndex) => {
             let orario = show.orario;
             orario = orario.replace('H ', '');
             let [hh, mm] = orario.split(':');
@@ -116,7 +116,7 @@ function Movie({ categoryId, movieId, repeatId }) {
             };
 
             return (
-              <div className='row d-flex show-row' key={event.title+event.startTime}>
+              <div className={`row d-flex show-row${(showIndexOffset + showIndex) % 2 === 0 ? ' show-row-odd' : ''}`} key={event.title+event.startTime}>
                 <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
                   <span>
                     {orario} - {hour.place}
@@ -165,7 +165,12 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const durationString = movie.movies.duration;
   const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')') ));
-  const timetable = movie.movies.hours.map((hour) => composeCalendarButton(hour, durationNumber));
+  let showCounter = 0;
+  const timetable = movie.movies.hours.map((hour) => {
+    const el = composeCalendarButton(hour, durationNumber, true, showCounter);
+    showCounter += hour.hours.length;
+    return el;
+  });
   // year: original code used this.from/this.to which were undefined → substring(0, length) = full duration string
   const year = movie.movies.duration;
 
