@@ -116,7 +116,7 @@ function Movie({ categoryId, movieId, repeatId }) {
             };
 
             return (
-              <div className='row d-flex' key={event.title+event.startTime}>
+              <div className='row d-flex show-row' key={event.title+event.startTime}>
                 <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
                   <span>
                     {orario} - {hour.place}

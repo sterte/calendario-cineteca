@@ -9,6 +9,7 @@
   border: 2px solid;
   border-radius: 10px;
   border-color: #fccd00;
+  box-shadow: 0 2px 10px rgba(249, 158, 0, 0.15);
 }
 
 .footer{
@@ -19,6 +20,7 @@
 
 .navbar-dark {
   background-color: #000000;
+  border-bottom: 2px solid #f99e00;
 }
 
 .page-enter {
@@ -52,16 +54,22 @@
 }
 
 .cal-button {
+  display: inline-block;
   padding: 10px;
   border: 1px solid;
   border-radius: 20px;
   color: #000;
   background-color: #f99e00;
   border-color: #fccd00;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .cal-button:hover {
   background-color: #fccd00;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(249, 158, 0, 0.45);
+  color: #000;
+  text-decoration: none;
 }
 
 ul {
@@ -75,10 +83,22 @@ li {
   padding: 1px;
 }
 
-a:link, a:hover, a:visited {
+a:link, a:visited {
   color: black;
   text-decoration: none;
 }
+
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #f99e00;
+}
+
 .past-movie-title a {
   color: inherit;
 }
@@ -87,25 +107,77 @@ a:link, a:hover, a:visited {
   background-color: #f99e00;
   border-color: #fccd00;
   border-radius: 20px;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.navigation-button:hover {
+  background-color: #fccd00;
+  border-color: #fccd00;
+  box-shadow: 0 3px 8px rgba(249, 158, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.navigation-button:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .navigation-button:disabled {
   background-color: #999999;
   border-color: #999999;
+  transform: none;
+  box-shadow: none;
 }
 
 .past-movie-title {
   color: #a8a8a8;
+  opacity: 0.75;
 }
 
 .jumbotron {
   background-color: #f99e00;
+  padding-top: 1.2rem !important;
+  padding-bottom: 1.2rem !important;
+}
+
+.jumbotron h1 {
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .white-back {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+}
+
+.movie-card-row {
+  border-radius: 8px;
+  padding: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.movie-card-row:nth-child(odd) {
+  background-color: rgba(249, 158, 0, 0.13);
+}
+
+.movie-card-row:hover {
+  background-color: rgba(249, 158, 0, 0.50);
+}
+
+.show-row {
+  border-radius: 6px;
+  padding: 4px 2px;
+  transition: background-color 0.2s ease;
+}
+
+.show-row:hover {
+  background-color: rgba(249, 158, 0, 0.50);
+}
+
+.show-row:nth-child(odd) {
+  background-color: rgba(249, 158, 0, 0.13);
 }
 
 .atcb-text {

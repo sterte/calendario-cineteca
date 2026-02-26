@@ -53,11 +53,11 @@ if(movie.extras.includes('Sold out')){
   movieExtras = movieExtras.replace('Sold out', '<b>Sold out</b>');
 }
 return (
-    <Fade in={true} className='row ml-1 mr-1 mb-5' key={movie.repeatId}>
-            <div className='col-4 col-md-4'>
+    <Fade in={true} className='row ml-1 mr-1 p-3 p-md-3 movie-card-row' key={movie.repeatId}>
+            <div className='col-4 p-0 pr-md-3'>
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
-            <div className='ml-3 ml-md-0 col-12 col-md-8'>
+            <div className='col-12 col-md-8'>
                 <div className={isFuture(movie, new Date()) ? 'row' : 'row past-movie-title'}>
                     <Link to={`/movie/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                 </div>
