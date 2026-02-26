@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Main from './components/MainComponent';
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,20 +8,18 @@ import { HelmetProvider } from 'react-helmet-async';
 
 const store = ConfigureStore();
 
-class App extends Component{	
-	render() {
-		return (
-			<HelmetProvider>
-			<Provider store={store}>
-			<BrowserRouter>
-			<div className="App">
-			<Main />
-			</div>
-			</BrowserRouter>
-			</Provider>
-			</HelmetProvider>
-			);
-	}
+function App() {
+    return (
+        <HelmetProvider>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <div className="App">
+                        <Main />
+                    </div>
+                </BrowserRouter>
+            </Provider>
+        </HelmetProvider>
+    );
 }
 
 export default App;

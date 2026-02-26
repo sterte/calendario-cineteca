@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button, Modal, ModalHeader, ModalBody,
   Form, FormGroup, Label, Input
 } from 'reactstrap';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
-import { getMovieDetail, fetchImdb } from '../redux/movies'
+import { getMovieDetail, fetchImdb } from '../redux/movies';
 import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
@@ -17,307 +17,267 @@ import StarRatings from 'react-star-ratings';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
+function Movie({ categoryId, movieId, repeatId }) {
+  const movie = useSelector(state => state.movies);
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch();
 
-const mapStateToProps = (state) => {
-  return {
-    movie: state.movies,
-    days: state.days
-  }
-}
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const ratingRef = useRef(null);
+  const commentRef = useRef(null);
 
-const mapDispatchToProps = (dispatch) => ({
-  getMovieDetail: (categoryId, movieId, repeatId) => { dispatch(getMovieDetail({ categoryId, movieId, repeatId })) },
-  addFavourite: (fav) => dispatch(addFavourite(fav)),
-  fetchImdb: (title, year) => { dispatch(fetchImdb({ title, year })) }
-});
+  useEffect(() => {
+    dispatch(getMovieDetail({ categoryId, movieId, repeatId }));
+  }, [dispatch, categoryId, movieId, repeatId]);
 
-class Movie extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEditModalOpen: false,
-      title: ''
-    };
-    this.toggleEditModal = this.toggleEditModal.bind(this);
-    this.handleFavouriteAdd = this.handleFavouriteAdd.bind(this);
-  }
-
-  toggleEditModal = (title) => {
-    this.setState({ isEditModalOpen: !this.state.isEditModalOpen, title: title });
-  }
-
-  handleFavouriteAdd = () => {
-    this.props.addFavourite({ title: this.state.title, rating: this.rating, comment: this.comment.value });
-  }
-
-
-  componentDidMount() {
-    this.props.getMovieDetail(this.props.categoryId, this.props.movieId, this.props.repeatId)    
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.auth.isAuthenticated && prevProps.movie.isLoading && !this.props.movie.isLoading) {
-        let from = this.props.movie.movies.duration.indexOf('/') + 1;
-        let to = this.props.movie.movies.duration.indexOf(')');
-        let year = parseInt(this.props.movie.movies.duration.substring(from, to));
-        this.props.fetchImdb(this.props.movie.movies.title, year)
+  const prevIsLoadingRef = useRef(true);
+  useEffect(() => {
+    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.duration) {
+      const from = movie.movies.duration.indexOf('/') + 1;
+      const to = movie.movies.duration.indexOf(')');
+      const year = parseInt(movie.movies.duration.substring(from, to));
+      dispatch(fetchImdb({ title: movie.movies.title, year }));
     }
-}
+    prevIsLoadingRef.current = movie.isLoading;
+  });
 
+  const toggleEditModal = (t) => {
+    setIsEditModalOpen(open => !open);
+    setTitle(t || '');
+  };
 
-composeCalendarButton(hour, durationNumber, showBuyButton = true){
-  //hour.day = hour.day.replace('&igrave;', 'ì');
-  const splitDate = hour.day.trim().split(/\s+/);
-  const year = '20' + splitDate[3];
-  var monthString = splitDate[2];
-  const day = splitDate[1];
+  const handleFavouriteAdd = () => {
+    dispatch(addFavourite({ title, rating: ratingRef.current, comment: commentRef.current.value }));
+  };
 
-  const month = monthToNum(monthString);
-  
-  var now = new Date();
-  var oraInizio = new Date();
-  oraInizio.setFullYear(year);
-  oraInizio.setMonth(month);
-  oraInizio.setDate(day);
+  const composeCalendarButton = (hour, durationNumber, showBuyButton = true) => {
+    const splitDate = hour.day.trim().split(/\s+/);
+    const year = '20' + splitDate[3];
+    var monthString = splitDate[2];
+    const day = splitDate[1];
+    const month = monthToNum(monthString);
 
-  var giornoInizio = new Date(oraInizio);
-  giornoInizio.setHours(23);
-  giornoInizio.setMinutes(59);
-  
-var dateString = weekDays[giornoInizio.getDay()] + ' ' +  day + ' ' + monthToCompleteName(monthString);
-if(year !== now.getFullYear().toString()){  
-  dateString = dateString + ' ' + year;
-}
+    var now = new Date();
+    var oraInizio = new Date();
+    oraInizio.setFullYear(year);
+    oraInizio.setMonth(month);
+    oraInizio.setDate(day);
 
-  return (
-    <div className='container'>
-      <Fade in='true' key={hour.day}>
-        <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>      
-          <h5 style={{marginBottom: 0}}>{dateString}</h5>
-        </div>
-        {hour.hours.map((show) => {
-          let orario = show.orario;
-          orario = orario.replace('H ', '');
-          let [hh, mm] = orario.split(':');
-      
-          oraInizio.setHours(hh, mm, 0, 0);
-          var isFuture = new Date() < oraInizio;
-          durationNumber = isNaN(durationNumber) ? 120 : durationNumber;
-          let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * durationNumber));
+    var giornoInizio = new Date(oraInizio);
+    giornoInizio.setHours(23);
+    giornoInizio.setMinutes(59);
 
-          const pad = n => String(n).padStart(2, '0');
-          const startDateStr = `${oraInizio.getFullYear()}-${pad(oraInizio.getMonth()+1)}-${pad(oraInizio.getDate())}`;
-          const startTimeStr = `${pad(parseInt(hh))}:${pad(parseInt(mm))}`;
-          const endDateStr = `${oraFine.getFullYear()}-${pad(oraFine.getMonth()+1)}-${pad(oraFine.getDate())}`;
-          const endTimeStr = `${pad(oraFine.getHours())}:${pad(oraFine.getMinutes())}`;
+    var dateString = weekDays[giornoInizio.getDay()] + ' ' + day + ' ' + monthToCompleteName(monthString);
+    if (year !== now.getFullYear().toString()) {
+      dateString = dateString + ' ' + year;
+    }
 
-          let eventDescription = window.location.href + "\n\n" + this.props.movie.movies.originalUrl + "\n\n" + imdbUrl + this.props.movie.imdbId
+    return (
+      <div className='container'>
+        <Fade in='true' key={hour.day}>
+          <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>
+            <h5 style={{marginBottom: 0}}>{dateString}</h5>
+          </div>
+          {hour.hours.map((show) => {
+            let orario = show.orario;
+            orario = orario.replace('H ', '');
+            let [hh, mm] = orario.split(':');
 
-          let address = 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia';
-          if(hour.place.toLowerCase().includes('cinema cervi')){
-            address = 'Sala Cervi, Via Riva di Reno, 72/A, 40122 Bologna, Italia';
-          }else if(hour.place.toLowerCase().includes('cinema modernissimo')){
-            address = ' Cinema Modernissimo, Piazza Re Enzo, 4, 40125 Bologna, Italia';
-          }
+            oraInizio.setHours(hh, mm, 0, 0);
+            var isFuture = new Date() < oraInizio;
+            durationNumber = isNaN(durationNumber) ? 120 : durationNumber;
+            let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * durationNumber));
 
-          let event = {
-            title: this.props.movie.movies.title,
-            location: address,
-            startTime: oraInizio.toISOString(),
-            endTime: oraFine.toISOString(),
-            description: eventDescription
-          };
+            const pad = n => String(n).padStart(2, '0');
+            const startDateStr = `${oraInizio.getFullYear()}-${pad(oraInizio.getMonth()+1)}-${pad(oraInizio.getDate())}`;
+            const startTimeStr = `${pad(parseInt(hh))}:${pad(parseInt(mm))}`;
+            const endDateStr = `${oraFine.getFullYear()}-${pad(oraFine.getMonth()+1)}-${pad(oraFine.getDate())}`;
+            const endTimeStr = `${pad(oraFine.getHours())}:${pad(oraFine.getMinutes())}`;
 
-          return (
-            <div className='row d-flex' key={event.title+event.startTime}>            
+            let eventDescription = window.location.href + "\n\n" + movie.movies.originalUrl + "\n\n" + imdbUrl + movie.imdbId;
+
+            let address = 'Cinema Lumière, Via Azzo Gardino, 65, 40122 Bologna, Italia';
+            if (hour.place.toLowerCase().includes('cinema cervi')) {
+              address = 'Sala Cervi, Via Riva di Reno, 72/A, 40122 Bologna, Italia';
+            } else if (hour.place.toLowerCase().includes('cinema modernissimo')) {
+              address = ' Cinema Modernissimo, Piazza Re Enzo, 4, 40125 Bologna, Italia';
+            }
+
+            let event = {
+              title: movie.movies.title,
+              location: address,
+              startTime: oraInizio.toISOString(),
+              endTime: oraFine.toISOString(),
+              description: eventDescription
+            };
+
+            return (
+              <div className='row d-flex' key={event.title+event.startTime}>
                 <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
                   <span>
                     {orario} - {hour.place}
                   </span>
-                  { show.isVO > 0 &&
+                  {show.isVO > 0 &&
                     <img className='ml-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
                   }
                 </div>
-                <div style={{textTransform: 'capitalize'}} className={'col-12 mt-0 mb-3'}>                
+                <div style={{textTransform: 'capitalize'}} className={'col-12 mt-0 mb-3'}>
                   <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
                 </div>
-                { isFuture && 
-                <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4 d-flex align-items-center'>
-                  <AddToCalendarButton
-                    name={this.props.movie.movies.title}
-                    startDate={startDateStr}
-                    startTime={startTimeStr}
-                    endDate={endDateStr}
-                    endTime={endTimeStr}
-                    timeZone="Europe/Rome"
-                    location={address}
-                    description={eventDescription}
-                    options={['Google','Apple','Outlook.com','Yahoo','iCal']}
-                    label="Aggiungi al calendario"
-                    hideCheckmark
-                    styleLight="--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;"
-                  />
-                </div>                            
-                }
-                <div className='d-flex col-12 col-md-3 mt-4 mt-md-0  mb-0 mb-md-4'>
-                { showBuyButton && this.props.movie.movies.buyLink.length > 0 && isFuture &&
-                    <a className='cal-button' href={this.props.movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>          
-                }
-              
-              </div>
-            </div>
-          );
-        })}
-      </Fade>
-    </div>
-  );
-}
-
-
-  render() {
-    if (this.props.movie.isLoading) {
-      return (<div className='container'><Loading /></div>);
-    }
-    else {      
-      const durationString = this.props.movie.movies.duration;
-      const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')')))
-      const timetable = this.props.movie.movies.hours.map((hour) => this.composeCalendarButton(hour, durationNumber));      
-      const year = this.props.movie.movies.duration.substring(this.from, this.to);
-      return (
-        <>
-        <Helmet>
-          <title>Cinetecalendar - {this.props.movie.movies.title}</title>
-          <meta name='description' content={'Cinetecalendar - ' + this.props.movie.movies.title} />
-        </Helmet> 
-        <div className='container white-back'>
-          <div className='row row-content ml-1 mr-1 p-2 p-md-5'>
-            <div className='row d-flex justify-content-center mt-5'>
-              <div className='col-md-9 d-flex align-self-center'>
-                <div className='row'>
-                  <div className='col-auto d-flex align-self-center'>
-                    <h2>{this.props.movie.movies.title}</h2>
+                {isFuture &&
+                  <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4 d-flex align-items-center'>
+                    <AddToCalendarButton
+                      name={movie.movies.title}
+                      startDate={startDateStr}
+                      startTime={startTimeStr}
+                      endDate={endDateStr}
+                      endTime={endTimeStr}
+                      timeZone="Europe/Rome"
+                      location={address}
+                      description={eventDescription}
+                      options={['Google','Apple','Outlook.com','Yahoo','iCal']}
+                      label="Aggiungi al calendario"
+                      hideCheckmark
+                      styleLight="--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;"
+                    />
                   </div>
-                  {this.props.auth.isAuthenticated && this.props.movie.movies.duration &&
+                }
+                <div className='d-flex col-12 col-md-3 mt-4 mt-md-0 mb-0 mb-md-4'>
+                  {showBuyButton && movie.movies.buyLink.length > 0 && isFuture &&
+                    <a className='cal-button' href={movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>
+                  }
+                </div>
+              </div>
+            );
+          })}
+        </Fade>
+      </div>
+    );
+  };
+
+  if (movie.isLoading) {
+    return <div className='container'><Loading /></div>;
+  }
+
+  const durationString = movie.movies.duration;
+  const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')') ));
+  const timetable = movie.movies.hours.map((hour) => composeCalendarButton(hour, durationNumber));
+  // year: original code used this.from/this.to which were undefined → substring(0, length) = full duration string
+  const year = movie.movies.duration;
+
+  return (
+    <>
+      <Helmet>
+        <title>Cinetecalendar - {movie.movies.title}</title>
+        <meta name='description' content={'Cinetecalendar - ' + movie.movies.title} />
+      </Helmet>
+      <div className='container white-back'>
+        <div className='row row-content ml-1 mr-1 p-2 p-md-5'>
+          <div className='row d-flex justify-content-center mt-5'>
+            <div className='col-md-9 d-flex align-self-center'>
+              <div className='row'>
+                <div className='col-auto d-flex align-self-center'>
+                  <h2>{movie.movies.title}</h2>
+                </div>
+                {auth.isAuthenticated && movie.movies.duration &&
                   <div className='col-auto'>
-                    <Button className='navigation-button' onClick={() => this.toggleEditModal(this.props.movie.movies.title)}>
+                    <Button className='navigation-button' onClick={() => toggleEditModal(movie.movies.title)}>
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
-                  }
-                  {this.props.movie.movies.duration &&
-                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: this.props.movie.movies.duration}}>                    
-                  </div>    
-                  }
-                  {/*this.props.days.durate.find(el => el.title === this.props.movie.movies.title)?.durata &&
-                  <div className='col-12 d-flex align-self-center'>
-                    {this.props.days.durate.find(el => el.title === this.props.movie.movies.title).durata}
-                  </div>
-                */}
-                  { this.props.movie.movies.currentHour.isVO > 0 &&
+                }
+                {movie.movies.duration &&
+                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: movie.movies.duration}} />
+                }
+                {movie.movies.currentHour.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
-                  }
-                </div>
-              </div>
-              <div className='col-12 d-flex col-md-3 mt-3 mt-md-0'>
-                <img src={this.props.movie.movies.image} className='img-fluid' alt={'img-' + this.props.movie.movies.image} />
-              </div>
-            </div>            
-
-            <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-              Link: <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + this.props.categoryId + '/' + this.props.movieId + '/?' + this.props.repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
-              {this.props.movie.isLoadingImdb && this.props.auth.isAuthenticated ?
-              <div className='col-12'>
-                <Loading />
-              </div>
-              : this.props.auth.isAuthenticated && this.props.movie.imdbId &&
-              <div className='col-auto d-flex align-self-center'>
-                <a className='col-auto d-flex align-self-center' href={imdbUrl + this.props.movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
-                {this.props.movie.imdbRatingCount > -1 &&
-                <div className='col-6 col-md-12 p-0'>
-                  <div className='col-auto d-flex align-self-center'>{this.props.movie.imdbRating} ({this.props.movie.imdbRatingCount})</div>              
-                  <StarRatings
-                    rating={parseFloat(this.props.movie.imdbRating) / 2}
-                    numberOfStars={5}
-                    starRatedColor="#f99e00"
-                    starEmptyColor="#a8a8a8"
-                    starDimension="30px"
-                    starSpacing="0px"
-                  />
-                </div>
                 }
               </div>
-              }
             </div>
+            <div className='col-12 d-flex col-md-3 mt-3 mt-md-0'>
+              <img src={movie.movies.image} className='img-fluid' alt={'img-' + movie.movies.image} />
+            </div>
+          </div>
 
-            { this.props.auth.isAuthenticated &&
+          <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
+            Link: <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+            {movie.isLoadingImdb && auth.isAuthenticated ?
+              <div className='col-12'><Loading /></div>
+              : auth.isAuthenticated && movie.imdbId &&
+              <div className='col-auto d-flex align-self-center'>
+                <a className='col-auto d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+                {movie.imdbRatingCount > -1 &&
+                  <div className='col-6 col-md-12 p-0'>
+                    <div className='col-auto d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
+                    <StarRatings
+                      rating={parseFloat(movie.imdbRating) / 2}
+                      numberOfStars={5}
+                      starRatedColor="#f99e00"
+                      starEmptyColor="#a8a8a8"
+                      starDimension="30px"
+                      starSpacing="0px"
+                    />
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          {auth.isAuthenticated &&
             <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-                Chiedi all'AI:
-            <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3'><Link to={{pathname:`/chat-ai`, state:{requestType: 'info', title: this.props.movie.movies.title, year: year, backUrl: window.location.pathname}}}><h4 style={{color: 'white'}}>Info</h4></Link></button>
-            <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto'><Link to={{pathname:`/chat-ai`, state:{requestType: 'similar', title: this.props.movie.movies.title, year: year, backUrl: window.location.pathname}}} state={{requestType: 'similar', title: this.props.movie.movies.title, year: year}}><h4 style={{color: 'white'}}>Simili</h4></Link></button>
+              Chiedi all'AI:
+              <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3'><Link to={{pathname:`/chat-ai`, state:{requestType: 'info', title: movie.movies.title, year: year, backUrl: window.location.pathname}}}><h4 style={{color: 'white'}}>Info</h4></Link></button>
+              <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto'><Link to={{pathname:`/chat-ai`, state:{requestType: 'similar', title: movie.movies.title, year: year, backUrl: window.location.pathname}}} state={{requestType: 'similar', title: movie.movies.title, year: year}}><h4 style={{color: 'white'}}>Simili</h4></Link></button>
             </div>
-            }
+          }
 
-            <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
-              {this.composeCalendarButton(this.props.movie.movies.currentHour, durationNumber)}
-            </div>
-            
-            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.currentHour.additionalInfo }}>                
-            </div>
-            <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: this.props.movie.movies.summary }} >
-            </div>
-            {
-            this.props.movie.movies.hours.length ?               
+          <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
+            {composeCalendarButton(movie.movies.currentHour, durationNumber)}
+          </div>
+
+          <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.currentHour.additionalInfo }} />
+          <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.summary }} />
+          {movie.movies.hours.length ?
             <div className='row d-flex justify-content-center'>
-              <div className='col-12 mt-4'>                
-                <h4>Altre repliche</h4>                
-                {timetable}                
+              <div className='col-12 mt-4'>
+                <h4>Altre repliche</h4>
+                {timetable}
               </div>
             </div>
-            :<></>
-            }
-          </div>
-          <ScrollToTopButton />
-          </div>
+            : <></>
+          }
+        </div>
+        <ScrollToTopButton />
+      </div>
 
-          <Modal isOpen={this.state.isEditModalOpen} toggle={this.toggleEditModal}>
-            <ModalHeader className='navigation-button' toggle={this.toggleEditModal}>Valuta Film</ModalHeader>
-            <ModalBody>
-            <div className='white-back row-content' >
-              <Form onSubmit={this.handleFavouriteAdd}>
-                <FormGroup>
-                  <Label htmlFor="title">Film:</Label> {this.state.title}
-                </FormGroup>
-                <FormGroup>
-                  <Label className='mr-2' htmlFor="rating">Voto</Label>
-                  <select value={this.rating} onChange={(evt) => this.rating = evt.target.value}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="comment">Commento</Label>
-                  <Input type="text" id="comment" name="comment" defaultValue={this.state.currentlyEdited ? this.state.currentlyEdited.comment : ''}
-                    innerRef={(input) => this.comment = input} />
-                </FormGroup>
-                <Button className='navigation-button mr-3' type="submit" value="Edit" color="primary">Salva</Button>
-                <Button onClick={() => this.toggleEditModal()}>Annulla</Button>
-              </Form>
-              </div>
-            </ModalBody>
-          </Modal>
-        </>
-      );
-    }
-  }
+      <Modal isOpen={isEditModalOpen} toggle={() => toggleEditModal()}>
+        <ModalHeader className='navigation-button' toggle={() => toggleEditModal()}>Valuta Film</ModalHeader>
+        <ModalBody>
+          <div className='white-back row-content'>
+            <Form onSubmit={handleFavouriteAdd}>
+              <FormGroup>
+                <Label htmlFor="title">Film:</Label> {title}
+              </FormGroup>
+              <FormGroup>
+                <Label className='mr-2' htmlFor="rating">Voto</Label>
+                <select onChange={(evt) => { ratingRef.current = evt.target.value; }}>
+                  {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="comment">Commento</Label>
+                <Input type="text" id="comment" name="comment" defaultValue=''
+                  innerRef={commentRef} />
+              </FormGroup>
+              <Button className='navigation-button mr-3' type="submit" value="Edit" color="primary">Salva</Button>
+              <Button onClick={() => toggleEditModal()}>Annulla</Button>
+            </Form>
+          </div>
+        </ModalBody>
+      </Modal>
+    </>
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Movie);
+export default Movie;

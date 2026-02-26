@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Calendar from './CalendarComponent';
@@ -7,81 +7,46 @@ import Movie from './MovieComponent';
 import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
 import ChatAI from './ChatAIComponent';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { connect } from 'react-redux';
-import { loginUser, logoutUser, signupUser, clearAuthError } from '../redux/auth';
+import { useSelector } from 'react-redux';
 
-
-
-
-const mapStateToProps = state => {
-  return {    
-    auth: state.auth
-  }
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  loginUser: (creds) => dispatch(loginUser(creds)),
-  logoutUser: () => dispatch(logoutUser()),
-  signupUser: (creds) => dispatch(signupUser(creds)),
-  clearAuthError: () => dispatch(clearAuthError())
-});
-
-
-const MovieWithCategoryAndId = (auth) => ({match}) => {  
-  return(
-  <Movie auth={auth} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
-  );
-}
-
-const TrackDetailWithId = () => ({match}) => {  
-  return(
-  <TrackDetail trackId={match.params.trackId} />
-  );
-}
-
-
-class Main extends Component{
-
-
-  render() {
-
-    const PrivateRoute = ({ component: Component, ...rest }) => (
-      <Route {...rest} render={(props) => (
-        this.props.auth.isAuthenticated
-          ? <Component {...props} />
-          : <Redirect to={{
-              pathname: '/calendar',
-              state: { from: props.location }
-            }} />
-      )} />
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    const auth = useSelector(state => state.auth);
+    return (
+        <Route {...rest} render={(props) => (
+            auth.isAuthenticated
+                ? <Component {...props} />
+                : <Redirect to={{ pathname: '/calendar', state: { from: props.location } }} />
+        )} />
     );
+};
+
+function Main() {
+    const location = useLocation();
+    const auth = useSelector(state => state.auth);
 
     return (
-      <div>      
-      <Header auth={this.props.auth}
-          loginUser={this.props.loginUser}
-          logoutUser={this.props.logoutUser}
-          signupUser={this.props.signupUser}
-          clearAuthError={this.props.clearAuthError} />
-      <TransitionGroup>
-      <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
-      <Switch location={this.props.location}>      
-      <Route exact path="/movie/:categoryId/:movieId/:repeatId" component={MovieWithCategoryAndId(this.props.auth)} />
-      <Route path="/calendar" component={() => <Calendar />} />
-      <Route path="/tracks/:trackId" component={TrackDetailWithId()} />
-      <Route path="/tracks" component={() => <Tracks />} />      
-      <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
-      <PrivateRoute path="/chat-ai" component={() => <ChatAI isAdmin={this.props.auth.isAdmin}/>} />
-      <Redirect to="/calendar" />
-      </Switch>
-      </CSSTransition>
-      </TransitionGroup>
-      <Footer />
-      </div>
-      );
-  }
+        <div>
+        <Header />
+        <TransitionGroup>
+        <CSSTransition key={location.key} classNames="page" timeout={300}>
+        <Switch location={location}>
+        <Route exact path="/movie/:categoryId/:movieId/:repeatId" render={({match}) => (
+            <Movie categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
+        )} />
+        <Route path="/calendar" component={() => <Calendar />} />
+        <Route path="/tracks/:trackId" render={({match}) => <TrackDetail trackId={match.params.trackId} />} />
+        <Route path="/tracks" component={() => <Tracks />} />
+        <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
+        <PrivateRoute path="/chat-ai" component={() => <ChatAI isAdmin={auth.isAdmin} />} />
+        <Redirect to="/calendar" />
+        </Switch>
+        </CSSTransition>
+        </TransitionGroup>
+        <Footer />
+        </div>
+    );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps) (Main));
+export default Main;
