@@ -37,7 +37,10 @@ function Movie({ categoryId, movieId, repeatId }) {
       const from = movie.movies.duration.indexOf('/') + 1;
       const to = movie.movies.duration.indexOf(')');
       const year = parseInt(movie.movies.duration.substring(from, to));
-      dispatch(fetchImdb({ title: movie.movies.title, year }));
+      const div = document.createElement('div');
+      div.innerHTML = movie.movies.duration;
+      const originalTitle = div.querySelector('span')?.textContent?.trim() || movie.movies.title;
+      dispatch(fetchImdb({ title: originalTitle, year }));
     }
     prevIsLoadingRef.current = movie.isLoading;
   });

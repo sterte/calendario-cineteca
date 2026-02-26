@@ -20,7 +20,7 @@ const tracksSlice = createSlice({
 			})
 			.addCase(getTracks.fulfilled, (state, action) => {
 				state.isLoading = false;
-				state.tracks = action.payload;
+				state.tracks = Array.isArray(action.payload) ? action.payload : [];
 			})
 			.addCase(getTracks.rejected, (state, action) => {
 				state.isLoading = false;
