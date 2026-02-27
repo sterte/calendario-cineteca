@@ -57,21 +57,18 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const composeCalendarButton = (hour, durationNumber, showBuyButton = true, showIndexOffset = 0) => {
     const splitDate = hour.day.trim().split(/\s+/);
-    const year = '20' + splitDate[3];
+    const year = splitDate[3] ? '20' + splitDate[3] : String(new Date().getFullYear());
     var monthString = splitDate[2];
     const day = splitDate[1];
     const month = monthToNum(monthString);
 
     var now = new Date();
-    var oraInizio = new Date();
-    oraInizio.setFullYear(year);
-    oraInizio.setMonth(month);
-    oraInizio.setDate(day);
+    // Build date atomically to avoid month-overflow from separate setters
+    var oraInizio = new Date(parseInt(year), month, parseInt(day));
 
-    var giornoInizio = new Date(oraInizio);
-    giornoInizio.setHours(23);
-    giornoInizio.setMinutes(59);
+    var giornoInizio = new Date(parseInt(year), month, parseInt(day), 23, 59);
 
+    if (!day || !monthString) return null;
     var dateString = weekDays[giornoInizio.getDay()] + ' ' + day + ' ' + monthToCompleteName(monthString);
     if (year !== now.getFullYear().toString()) {
       dateString = dateString + ' ' + year;
@@ -121,16 +118,8 @@ function Movie({ categoryId, movieId, repeatId }) {
               else if (p.includes('medica'))  address = 'Pop Up Cinema Medica, Via Murri 19, 40138 Bologna BO';
             }
 
-            let event = {
-              title: movie.movies.title,
-              location: address,
-              startTime: oraInizio.toISOString(),
-              endTime: oraFine.toISOString(),
-              description: eventDescription
-            };
-
             return (
-              <div className={`row d-flex show-row${(showIndexOffset + showIndex) % 2 === 0 ? ' show-row-odd' : ''}`} key={event.title+event.startTime}>
+              <div className={`row d-flex show-row${(showIndexOffset + showIndex) % 2 === 0 ? ' show-row-odd' : ''}`} key={movie.movies.title + startDateStr + startTimeStr}>
                 <div className={isFuture ? 'col-12 mt-2 mb-0' : 'col-12 mt-2 mb-0 mb-md-2 past-movie-title'}>
                   <span>
                     {orario} - {hour.place}
@@ -159,7 +148,7 @@ function Movie({ categoryId, movieId, repeatId }) {
                       styleLight={provider === 'ccb'
                         ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                         : provider === 'popup'
-                        ? '--btn-background:#e8531e;--btn-hover-background:#f47c50;--btn-border:#f47c50;--btn-hover-border:#f47c50;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                        ? '--btn-background:#9f1c24;--btn-hover-background:#c2323b;--btn-border:#c2323b;--btn-hover-border:#c2323b;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                         : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                       }
                     />
@@ -180,6 +169,10 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   if (movie.isLoading) {
     return <div className='container'><Loading /></div>;
+  }
+
+  if (movie.errMess || !movie.movies?.duration) {
+    return <div className='container white-back' style={{padding: '2rem'}}><p>Errore nel caricamento del film.</p></div>;
   }
 
   const durationString = movie.movies.duration;
@@ -229,7 +222,7 @@ function Movie({ categoryId, movieId, repeatId }) {
 
           <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
             Link: {provider === 'popup'
-            ? <a className='col-auto d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><span style={{fontWeight:700, fontSize:'0.85rem'}}>Pop Up Cinema</span></a>
+            ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
             : provider === 'ccb'
             ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
             : <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
@@ -245,7 +238,7 @@ function Movie({ categoryId, movieId, repeatId }) {
                     <StarRatings
                       rating={parseFloat(movie.imdbRating) / 2}
                       numberOfStars={5}
-                      starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#e8531e' : '#f99e00'}
+                      starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
                       starEmptyColor="#a8a8a8"
                       starDimension="30px"
                       starSpacing="0px"
@@ -265,7 +258,7 @@ function Movie({ categoryId, movieId, repeatId }) {
           }
 
           <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
-            {composeCalendarButton(movie.movies.currentHour, durationNumber)}
+            {movie.movies.currentHour.day && composeCalendarButton(movie.movies.currentHour, durationNumber)}
           </div>
 
           <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.currentHour.additionalInfo }} />

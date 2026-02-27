@@ -36,12 +36,16 @@ function Calendar() {
     };
 
     useEffect(() => {
-        preloadDays(new Date(), 8);
+        preloadDays(new Date(), provider === 'popup' ? 1 : 8);
     }, [provider]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const changeCurrentDate = (numDays) => {
         const newDate = moment(currentDate).add(numDays, 'days').toDate();
-        preloadDays(newDate, -3);
+        if (provider === 'popup') {
+            preloadDays(newDate, 1);
+        } else {
+            preloadDays(newDate, -3);
+        }
         setCurrentDate(newDate);
     };
 

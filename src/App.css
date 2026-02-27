@@ -6,6 +6,8 @@
   --color-shadow-md:    rgba(249, 158, 0, 0.45);
   --color-row-odd:      rgba(249, 158, 0, 0.13);
   --color-row-hover:    rgba(249, 158, 0, 0.50);
+  --color-btn-text:     #000;
+  --color-jumbotron-text: inherit;
 }
 
 [data-theme="ccb"] {
@@ -15,6 +17,19 @@
   --color-shadow-md:    rgba(255, 171, 173, 0.45);
   --color-row-odd:      rgba(255, 171, 173, 0.13);
   --color-row-hover:    rgba(255, 171, 173, 0.50);
+  --color-btn-text:     #000;
+  --color-jumbotron-text: inherit;
+}
+
+[data-theme="popup"] {
+  --color-primary:      #9f1c24;
+  --color-light:        #c2323b;
+  --color-shadow-sm:    rgba(159, 28, 36, 0.15);
+  --color-shadow-md:    rgba(159, 28, 36, 0.45);
+  --color-row-odd:      rgba(159, 28, 36, 0.10);
+  --color-row-hover:    rgba(159, 28, 36, 0.25);
+  --color-btn-text:     #fff;
+  --color-jumbotron-text: #fff;
 }
 
 /* ── Layout ──────────────────────────────────────────────── */
@@ -81,7 +96,7 @@
   padding: 10px;
   border: 1px solid;
   border-radius: 20px;
-  color: #000;
+  color: var(--color-btn-text);
   background-color: var(--color-primary);
   border-color: var(--color-light);
   transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
@@ -91,7 +106,7 @@
   background-color: var(--color-light);
   transform: translateY(-1px);
   box-shadow: 0 3px 8px var(--color-shadow-md);
-  color: #000;
+  color: var(--color-btn-text);
   text-decoration: none;
 }
 
@@ -114,6 +129,14 @@ a:link, a:visited {
 
 a:hover {
   color: black;
+  text-decoration: none;
+}
+
+a.cal-button,
+a.cal-button:link,
+a.cal-button:visited,
+a.cal-button:hover {
+  color: var(--color-btn-text);
   text-decoration: none;
 }
 
@@ -188,6 +211,7 @@ a:hover {
 /* ── Jumbotron ───────────────────────────────────────────── */
 .jumbotron {
   background-color: var(--color-primary);
+  color: var(--color-jumbotron-text);
   padding-top: 1.2rem !important;
   padding-bottom: 1.2rem !important;
 }
