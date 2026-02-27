@@ -8,6 +8,7 @@ import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
 import ChatAI from './ChatAIComponent';
 import CircuitSelect from './CircuitSelectComponent';
+import ResetPassword from './ResetPasswordComponent';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { useSelector } from 'react-redux';
@@ -46,6 +47,7 @@ function Main() {
         <Route exact path="/movie/:categoryId/:movieId/:repeatId" render={({match}) => (
             <Movie categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
         )} />
+        <Route path="/reset-password" component={() => <ResetPassword />} />
         <Route path="/calendar" component={() => <Calendar />} />
         <Route path="/tracks/:trackId" render={({match}) => <TrackDetail trackId={match.params.trackId} />} />
         <Route path="/tracks" component={() => <Tracks />} />

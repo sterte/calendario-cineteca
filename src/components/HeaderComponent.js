@@ -5,7 +5,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, logoutUser, signupUser, clearAuthError } from '../redux/auth';
+import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, requestPasswordReset, clearResetStatus } from '../redux/auth';
 
 function Header() {
     const auth = useSelector(state => state.auth);
@@ -17,12 +17,17 @@ function Header() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isLoginErrorToShow, setIsLoginErrorToShow] = useState(true);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+    const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
+    const signupUsernameRef = useRef(null);
+    const signupPasswordRef = useRef(null);
     const firstnameRef = useRef(null);
     const lastnameRef = useRef(null);
+    const emailRef = useRef(null);
     const confirmpasswordRef = useRef(null);
+    const resetEmailRef = useRef(null);
 
     useEffect(() => {
         if (auth.isAuthenticated) {
@@ -61,13 +66,24 @@ function Header() {
     };
 
     const handleSignup = (event) => {
-        if (passwordRef.current.value === confirmpasswordRef.current.value) {
+        event.preventDefault();
+        if (signupPasswordRef.current.value === confirmpasswordRef.current.value) {
             toggleSignupModal();
-            dispatch(signupUser({ firstname: firstnameRef.current.value, lastname: lastnameRef.current.value, username: usernameRef.current.value, password: passwordRef.current.value }));
+            dispatch(signupUser({ firstname: firstnameRef.current.value, lastname: lastnameRef.current.value, email: emailRef.current.value, username: signupUsernameRef.current.value, password: signupPasswordRef.current.value }));
         } else {
             alert('Le password inserite non coincidono');
         }
+    };
+
+    const openResetModal = () => {
+        setIsLoginModalOpen(false);
+        dispatch(clearResetStatus());
+        setIsResetModalOpen(true);
+    };
+
+    const handleResetRequest = (event) => {
         event.preventDefault();
+        dispatch(requestPasswordReset(resetEmailRef.current.value));
     };
 
     return (
@@ -161,14 +177,19 @@ function Header() {
                             innerRef={lastnameRef} />
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="username">Username</Label>
-                        <Input type="text" id="username" name="username"
-                            innerRef={usernameRef} />
+                        <Label htmlFor="email">Email</Label>
+                        <Input type="email" id="email" name="email"
+                            innerRef={emailRef} required />
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="password">Password</Label>
-                        <Input type="password" id="password" name="password"
-                            innerRef={passwordRef} />
+                        <Label htmlFor="signup-username">Username</Label>
+                        <Input type="text" id="signup-username" name="username"
+                            innerRef={signupUsernameRef} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="signup-password">Password</Label>
+                        <Input type="password" id="signup-password" name="password"
+                            innerRef={signupPasswordRef} />
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="confirmpassword">Confirm Password</Label>
@@ -198,7 +219,10 @@ function Header() {
                     </FormGroup>
 
                     <Button className='navigation-button mr-4' type="submit" value="Login" color="primary">Login</Button>
-                    <Button className='navigation-button' onClick={requestSignupForm}>Signup</Button>
+                    <Button type="button" className='navigation-button' onClick={requestSignupForm}>Signup</Button>
+                    <div className='mt-2'>
+                        <span style={{cursor:'pointer', color:'#888', fontSize:'0.9rem'}} onClick={(e) => { e.preventDefault(); openResetModal(); }}>Hai dimenticato la password?</span>
+                    </div>
                 </Form>
                 </div>
             </ModalBody>
@@ -210,6 +234,40 @@ function Header() {
                 <div className='white-back row-content'>
                     {auth.errMess}
                 </div>
+            </ModalBody>
+        </Modal>
+
+        <Modal isOpen={auth.signupSuccess} toggle={() => dispatch(clearSignupSuccess())}>
+            <ModalHeader className='navigation-button' toggle={() => dispatch(clearSignupSuccess())}>Registrazione completata</ModalHeader>
+            <ModalBody>
+                <div className='white-back row-content text-center'>
+                    <p>Registrazione avvenuta con successo!</p>
+                    <p>Ora puoi effettuare il login con le tue credenziali.</p>
+                    <Button className='navigation-button' onClick={() => { dispatch(clearSignupSuccess()); toggleLoginModal(); }}>Vai al login</Button>
+                </div>
+            </ModalBody>
+        </Modal>
+
+        <Modal isOpen={isResetModalOpen} toggle={() => setIsResetModalOpen(false)}>
+            <ModalHeader className='navigation-button' toggle={() => setIsResetModalOpen(false)}>Reset password</ModalHeader>
+            <ModalBody>
+                {auth.resetStatus === 'sent'
+                    ? <div className='white-back row-content text-center'>
+                        <p>Controlla la tua email per il link di reset.</p>
+                      </div>
+                    : <div className='white-back row-content'>
+                        <Form onSubmit={handleResetRequest}>
+                            <FormGroup>
+                                <Label htmlFor="resetemail">Email</Label>
+                                <Input type="email" id="resetemail" innerRef={resetEmailRef} required />
+                            </FormGroup>
+                            {auth.resetErrMess && <p className='text-danger'>{auth.resetErrMess}</p>}
+                            <Button className='navigation-button' type="submit" disabled={auth.isLoading}>
+                                {auth.isLoading ? 'Attendi...' : 'Invia link di reset'}
+                            </Button>
+                        </Form>
+                      </div>
+                }
             </ModalBody>
         </Modal>
         </>
