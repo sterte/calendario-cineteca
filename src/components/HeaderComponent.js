@@ -113,6 +113,8 @@ function Header() {
         <NavbarBrand tag={NavLink} to="/" className="m-0 p-0">
         {provider === 'ccb'
             ? <img src='/assets/images/logo-ccb.svg' height="50" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
+            : provider === 'popup'
+            ? <span style={{color: 'white', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '1px'}}>Pop Up Cinema</span>
             : <img src='/assets/images/logo-white.png' height="50" alt="Calendario Cineteca" />
         }
         </NavbarBrand>
@@ -125,11 +127,13 @@ function Header() {
         <span className="fa fa-calendar fa-lg"></span> Calendario
         </NavLink>
         </NavItem>
+        {provider !== 'popup' &&
         <NavItem>
         <NavLink className="nav-link" to="/tracks">
         <span className="fa fa-film fa-lg"></span> Rassegne
         </NavLink>
         </NavItem>
+        }
         {auth.isAuthenticated ?
         <NavItem>
         <NavLink className="nav-link" to="/chat-ai">
@@ -152,9 +156,14 @@ function Header() {
         <h1>
         {provider === 'ccb'
             ? <img src="/assets/images/logo-ccb.svg" height="60" alt="CCB" style={{marginRight: '12px'}} />
+            : provider === 'popup'
+            ? null
             : <img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" />
         }
-        {provider === 'ccb' ? 'Calendario Circuito Cinema Bologna' : 'Calendario Cineteca di Bologna'}
+        {provider === 'ccb' ? 'Calendario Circuito Cinema Bologna'
+            : provider === 'popup' ? 'Calendario Pop Up Cinema'
+            : 'Calendario Cineteca di Bologna'
+        }
         </h1>
         </div>
         </div>

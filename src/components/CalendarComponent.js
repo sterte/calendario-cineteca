@@ -120,7 +120,7 @@ function Calendar() {
                         </div>
                     </div>
                 </div>
-                {provider !== 'ccb' &&
+                {provider !== 'ccb' && provider !== 'popup' &&
                 <div className='col-12'>
                     <div className='row d-flex justify-content-around mt-4'>
                         <div>

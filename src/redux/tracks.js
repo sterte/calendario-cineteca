@@ -3,6 +3,7 @@ import { fetchUrl } from '../shared/baseUrl';
 
 export const getTracks = createAsyncThunk('tracks/getTracks', async (_, { getState }) => {
 	const provider = getState().provider.activeProvider;
+	if (provider === 'popup') return [];
 	const endpoint = provider === 'ccb' ? fetchUrl + '/ccb-tracks' : fetchUrl + '/tracks';
 	const response = await fetch(endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);

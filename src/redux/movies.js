@@ -3,7 +3,9 @@ import { fetchUrl } from '../shared/baseUrl';
 
 export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId }, { getState }) => {
 	const provider = getState().provider.activeProvider;
-	const endpoint = provider === 'ccb'
+	const endpoint = provider === 'popup'
+		? fetchUrl + '/popup-movies/' + movieId
+		: provider === 'ccb'
 		? fetchUrl + '/ccb-movies/' + movieId
 		: fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId;
 	const response = await fetch(endpoint);

@@ -113,6 +113,12 @@ function Movie({ categoryId, movieId, repeatId }) {
               else if (p.includes('roma'))    address = 'Cinema Roma d\'essai, Via Fondazza, 4, 40100 Bologna BO';
               else if (p.includes('chaplin')) address = 'Cinema Chaplin, P.za di Porta Saragozza, 5/a, 40123 Bologna BO';
               else if (p.includes('europa'))  address = 'Cinema Europa, Via Pietralata, 55, 40100 Bologna BO';
+            } else if (provider === 'popup') {
+              const p = hour.place.toLowerCase();
+              if (p.includes('arlecchino'))   address = 'Pop Up Cinema Arlecchino, Via delle Lame 59/a, 40122 Bologna BO';
+              else if (p.includes('bristol')) address = 'Pop Up Cinema Bristol, Via Toscana 125, 40141 Bologna BO';
+              else if (p.includes('jolly'))   address = 'Pop Up Cinema Jolly, Via dello Scalo 10/b, 40131 Bologna BO';
+              else if (p.includes('medica'))  address = 'Pop Up Cinema Medica, Via Murri 19, 40138 Bologna BO';
             }
 
             let event = {
@@ -152,14 +158,16 @@ function Movie({ categoryId, movieId, repeatId }) {
                       hideCheckmark
                       styleLight={provider === 'ccb'
                         ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                        : provider === 'popup'
+                        ? '--btn-background:#e8531e;--btn-hover-background:#f47c50;--btn-border:#f47c50;--btn-hover-border:#f47c50;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                         : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                       }
                     />
                   </div>
                 }
                 <div className='d-flex col-12 col-md-3 mt-4 mt-md-0 mb-0 mb-md-4'>
-                  {showBuyButton && movie.movies.buyLink.length > 0 && isFuture &&
-                    <a className='cal-button' href={movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>
+                  {showBuyButton && (show.buyLink || movie.movies.buyLink || '').length > 0 && isFuture &&
+                    <a className='cal-button' href={show.buyLink || movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>
                   }
                 </div>
               </div>
@@ -220,7 +228,9 @@ function Movie({ categoryId, movieId, repeatId }) {
           </div>
 
           <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-            Link: {provider === 'ccb'
+            Link: {provider === 'popup'
+            ? <a className='col-auto d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><span style={{fontWeight:700, fontSize:'0.85rem'}}>Pop Up Cinema</span></a>
+            : provider === 'ccb'
             ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
             : <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
           }
@@ -235,7 +245,7 @@ function Movie({ categoryId, movieId, repeatId }) {
                     <StarRatings
                       rating={parseFloat(movie.imdbRating) / 2}
                       numberOfStars={5}
-                      starRatedColor={provider === 'ccb' ? '#ffabad' : '#f99e00'}
+                      starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#e8531e' : '#f99e00'}
                       starEmptyColor="#a8a8a8"
                       starDimension="30px"
                       starSpacing="0px"

@@ -20,6 +20,14 @@ const circuits = [
         accent: '#ffabad',
         accentLight: '#ffc7c8',
     },
+    {
+        id: 'popup',
+        name: 'Pop Up Cinema',
+        logo: '',
+        logoStyle: {},
+        accent: '#e8531e',
+        accentLight: '#f47c50',
+    },
 ];
 
 function CircuitSelect() {
@@ -78,15 +86,17 @@ function CircuitSelect() {
                             e.currentTarget.style.background = '#1a1a1a';
                         }}
                     >
-                        <img
-                            src={c.logo}
-                            alt={c.name}
-                            height="70"
-                            style={{
-                                ...c.logoStyle,
-                                filter: 'brightness(0) invert(1)',
-                            }}
-                        />
+                        {c.logo
+                            ? <img
+                                src={c.logo}
+                                alt={c.name}
+                                height="70"
+                                style={{ ...c.logoStyle, filter: 'brightness(0) invert(1)' }}
+                            />
+                            : <span style={{ color: c.accent, fontWeight: 800, fontSize: '1.4rem', letterSpacing: '1px' }}>
+                                {c.name}
+                            </span>
+                        }
                         <span style={{ color: 'white', fontWeight: 600, fontSize: '1rem', textAlign: 'center' }}>
                             {c.name}
                         </span>
