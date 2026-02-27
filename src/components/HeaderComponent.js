@@ -114,7 +114,7 @@ function Header() {
         {provider === 'ccb'
             ? <img src='/assets/images/logo-ccb.svg' height="50" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
             : provider === 'popup'
-            ? <span style={{color: 'white', fontWeight: 800, fontSize: '1.1rem', letterSpacing: '1px'}}>Pop Up Cinema</span>
+            ? <img src='/assets/images/logo-popup.png' height="50" alt="Pop Up Cinema" style={{filter: 'brightness(0) invert(1)'}} />
             : <img src='/assets/images/logo-white.png' height="50" alt="Calendario Cineteca" />
         }
         </NavbarBrand>
