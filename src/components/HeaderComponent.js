@@ -162,111 +162,96 @@ function Header() {
         </Jumbotron>
 
         <Modal isOpen={isSignupModalOpen} toggle={toggleSignupModal}>
-            <ModalHeader className='navigation-button' toggle={toggleSignupModal}>Signup</ModalHeader>
-            <ModalBody>
-            <div className='white-back row-content'>
-            <Form onSubmit={handleSignup}>
+            <ModalHeader className='modal-header-branded' toggle={toggleSignupModal}>Registrazione</ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4'>
+                <Form onSubmit={handleSignup}>
                     <FormGroup>
-                        <Label htmlFor="firstname">First Name</Label>
-                        <Input type="text" id="firstname" name="firstname"
-                            innerRef={firstnameRef} />
+                        <Label htmlFor="firstname">Nome</Label>
+                        <Input type="text" id="firstname" name="firstname" innerRef={firstnameRef} />
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="lastname">Last Name</Label>
-                        <Input type="text" id="lastname" name="lastname"
-                            innerRef={lastnameRef} />
+                        <Label htmlFor="lastname">Cognome</Label>
+                        <Input type="text" id="lastname" name="lastname" innerRef={lastnameRef} />
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="email">Email</Label>
-                        <Input type="email" id="email" name="email"
-                            innerRef={emailRef} required />
+                        <Input type="email" id="email" name="email" innerRef={emailRef} required />
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="signup-username">Username</Label>
-                        <Input type="text" id="signup-username" name="username"
-                            innerRef={signupUsernameRef} />
+                        <Input type="text" id="signup-username" name="username" innerRef={signupUsernameRef} />
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="signup-password">Password</Label>
-                        <Input type="password" id="signup-password" name="password"
-                            innerRef={signupPasswordRef} />
+                        <Input type="password" id="signup-password" name="password" innerRef={signupPasswordRef} />
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="confirmpassword">Confirm Password</Label>
-                        <Input type="password" id="confirmpassword" name="confirmpassword"
-                            innerRef={confirmpasswordRef} />
+                        <Label htmlFor="confirmpassword">Conferma password</Label>
+                        <Input type="password" id="confirmpassword" name="confirmpassword" innerRef={confirmpasswordRef} />
                     </FormGroup>
-                    <Button className='navigation-button' type="submit" value="Signup" color="primary">Signup</Button>
+                    <div className='mt-3'>
+                        <Button className='navigation-button' type="submit">Registrati</Button>
+                    </div>
                 </Form>
-                </div>
             </ModalBody>
         </Modal>
 
         <Modal isOpen={isLoginModalOpen} toggle={toggleLoginModal}>
-            <ModalHeader className='navigation-button' toggle={toggleLoginModal}>Login</ModalHeader>
-            <ModalBody>
-            <div className='white-back row-content'>
+            <ModalHeader className='modal-header-branded' toggle={toggleLoginModal}>Login</ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4'>
                 <Form onSubmit={handleLogin}>
                     <FormGroup>
-                        <Label htmlFor="username">Username</Label>
-                        <Input type="text" id="username" name="username"
-                            innerRef={usernameRef} />
+                        <Label htmlFor="username">Username o Email</Label>
+                        <Input type="text" id="username" name="username" innerRef={usernameRef} />
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="password">Password</Label>
-                        <Input type="password" id="password" name="password"
-                            innerRef={passwordRef} />
+                        <Input type="password" id="password" name="password" innerRef={passwordRef} />
                     </FormGroup>
-
-                    <Button className='navigation-button mr-4' type="submit" value="Login" color="primary">Login</Button>
-                    <Button type="button" className='navigation-button' onClick={requestSignupForm}>Signup</Button>
+                    <div className='d-flex align-items-center mt-3'>
+                        <Button className='navigation-button mr-3' type="submit">Login</Button>
+                        <Button type="button" className='navigation-button' onClick={requestSignupForm}>Registrati</Button>
+                    </div>
                     <div className='mt-2'>
                         <span style={{cursor:'pointer', color:'#888', fontSize:'0.9rem'}} onClick={(e) => { e.preventDefault(); openResetModal(); }}>Hai dimenticato la password?</span>
                     </div>
                 </Form>
-                </div>
             </ModalBody>
         </Modal>
 
         <Modal isOpen={isLoginErrorToShow && !auth.isAuthenticated && auth.errMess} toggle={toggleLoginErrorModal}>
-        <ModalHeader className='navigation-button' toggle={toggleLoginErrorModal}>Login errato</ModalHeader>
-            <ModalBody>
-                <div className='white-back row-content'>
-                    {auth.errMess}
-                </div>
+            <ModalHeader className='modal-header-branded' toggle={toggleLoginErrorModal}>Errore di accesso</ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4'>
+                <p className='mb-0'>{auth.errMess}</p>
             </ModalBody>
         </Modal>
 
         <Modal isOpen={auth.signupSuccess} toggle={() => dispatch(clearSignupSuccess())}>
-            <ModalHeader className='navigation-button' toggle={() => dispatch(clearSignupSuccess())}>Registrazione completata</ModalHeader>
-            <ModalBody>
-                <div className='white-back row-content text-center'>
-                    <p>Registrazione avvenuta con successo!</p>
-                    <p>Ora puoi effettuare il login con le tue credenziali.</p>
-                    <Button className='navigation-button' onClick={() => { dispatch(clearSignupSuccess()); toggleLoginModal(); }}>Vai al login</Button>
-                </div>
+            <ModalHeader className='modal-header-branded' toggle={() => dispatch(clearSignupSuccess())}>Registrazione completata</ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4 text-center'>
+                <p>Registrazione avvenuta con successo!</p>
+                <p>Ora puoi effettuare il login con le tue credenziali.</p>
+                <Button className='navigation-button' onClick={() => { dispatch(clearSignupSuccess()); toggleLoginModal(); }}>Vai al login</Button>
             </ModalBody>
         </Modal>
 
         <Modal isOpen={isResetModalOpen} toggle={() => setIsResetModalOpen(false)}>
-            <ModalHeader className='navigation-button' toggle={() => setIsResetModalOpen(false)}>Reset password</ModalHeader>
-            <ModalBody>
+            <ModalHeader className='modal-header-branded' toggle={() => setIsResetModalOpen(false)}>Reset password</ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4'>
                 {auth.resetStatus === 'sent'
-                    ? <div className='white-back row-content text-center'>
-                        <p>Controlla la tua email per il link di reset.</p>
-                      </div>
-                    : <div className='white-back row-content'>
-                        <Form onSubmit={handleResetRequest}>
-                            <FormGroup>
-                                <Label htmlFor="resetemail">Email</Label>
-                                <Input type="email" id="resetemail" innerRef={resetEmailRef} required />
-                            </FormGroup>
-                            {auth.resetErrMess && <p className='text-danger'>{auth.resetErrMess}</p>}
+                    ? <p className='mb-0 text-center'>Controlla la tua email per il link di reset.</p>
+                    : <Form onSubmit={handleResetRequest}>
+                        <FormGroup>
+                            <Label htmlFor="resetemail">Email</Label>
+                            <Input type="email" id="resetemail" innerRef={resetEmailRef} required />
+                        </FormGroup>
+                        {auth.resetErrMess && <p className='text-danger'>{auth.resetErrMess}</p>}
+                        <div className='mt-3'>
                             <Button className='navigation-button' type="submit" disabled={auth.isLoading}>
                                 {auth.isLoading ? 'Attendi...' : 'Invia link di reset'}
                             </Button>
-                        </Form>
-                      </div>
+                        </div>
+                    </Form>
                 }
             </ModalBody>
         </Modal>

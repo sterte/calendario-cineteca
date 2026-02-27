@@ -154,6 +154,31 @@ a:hover {
   box-shadow: none;
 }
 
+/* ── Modal header ────────────────────────────────────────── */
+.modal-header-branded {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-bottom: 2px solid var(--color-light);
+  border-radius: 0;
+}
+
+.modal-header-branded .modal-title {
+  font-weight: 600;
+}
+
+.modal-header-branded button.close,
+.modal-header-branded button[aria-label="Close"] {
+  color: #fff;
+  text-shadow: none;
+  opacity: 0.75;
+}
+
+.modal-header-branded button.close:hover,
+.modal-header-branded button[aria-label="Close"]:hover {
+  opacity: 1;
+  color: #fff;
+}
+
 /* ── Past movies ─────────────────────────────────────────── */
 .past-movie-title {
   color: #a8a8a8;
