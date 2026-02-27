@@ -109,6 +109,7 @@ const authSlice = createSlice({
 				state.isAdmin = action.payload.isAdmin;
 				state.errMess = '';
 				state.token = action.payload.token;
+				state.user = action.meta.arg;
 			})
 			.addCase(loginUser.rejected, (state, action) => {
 				state.isLoading = false;
