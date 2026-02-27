@@ -23,10 +23,10 @@ const circuits = [
     {
         id: 'popup',
         name: 'Pop Up Cinema',
-        logo: '',
+        logo: '/assets/images/logo-popup.png',
         logoStyle: {},
-        accent: '#e8531e',
-        accentLight: '#f47c50',
+        accent: '#9f1c24',
+        accentLight: '#c2323b',
     },
 ];
 
