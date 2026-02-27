@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
-    Form, FormGroup, Label, Input } from 'reactstrap';
-import { NavLink, useHistory } from 'react-router-dom';
+    Form, FormGroup, Label, Input,
+    Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, logoutUser, signupUser, clearAuthError } from '../redux/auth';
-import { setProvider } from '../redux/provider';
 
 function Header() {
     const auth = useSelector(state => state.auth);
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isLoginErrorToShow, setIsLoginErrorToShow] = useState(true);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -75,15 +75,35 @@ function Header() {
         <Navbar dark expand="md">
         <div className="container">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
-        <NavbarBrand className="mr-auto" href="/">
+
+        <div className="ml-auto order-md-last d-flex align-items-center">
+        {auth.isAuthenticated &&
+        <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="mr-1">
+            <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="nav-link">
+                <span className="fa fa-user-circle" />
+            </DropdownToggle>
+            <DropdownMenu right>
+                <DropdownItem header>Ciao {auth.user.username}</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem tag={NavLink} to="/personalarea">
+                    <span className="fa fa-user-o mr-2" />Area Personale
+                </DropdownItem>
+                <DropdownItem onClick={handleLogout}>
+                    <span className="fa fa-sign-out mr-2" />Logout
+                </DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
+        }
+        <NavbarBrand tag={NavLink} to="/" className="m-0 p-0">
         {provider === 'ccb'
-            ? <img src='/assets/images/logo-ccb.svg' height="60" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
-            : <img src='/assets/images/logo-white.png' height="60" alt="Calendario Cineteca" />
+            ? <img src='/assets/images/logo-ccb.svg' height="50" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
+            : <img src='/assets/images/logo-white.png' height="50" alt="Calendario Cineteca" />
         }
         </NavbarBrand>
+        </div>
 
         <Collapse isOpen={isNavOpen} navbar>
-        <Nav navbar>
+        <Nav navbar className="mr-auto">
         <NavItem>
         <NavLink className="nav-link" to="/home">
         <span className="fa fa-calendar fa-lg"></span> Calendario
@@ -95,21 +115,11 @@ function Header() {
         </NavLink>
         </NavItem>
         {auth.isAuthenticated ?
-        <>
         <NavItem>
         <NavLink className="nav-link" to="/chat-ai">
         <span className="fa fa-comment fa-lg"></span> Chat AI
         </NavLink>
         </NavItem>
-        <NavItem>
-        <NavLink className="nav-link" to="/personalarea">
-        <span className="fa fa-user-o fa-lg"></span> Area Personale
-        </NavLink>
-        </NavItem>
-        <NavItem className="nav-link" onClick={handleLogout}>
-        <span className="fa fa-sign-out fa-lg"></span> Logout
-        </NavItem>
-        </>
         :
         <NavItem className="nav-link" onClick={toggleLoginModal}>
         <span className="fa fa-sign-in fa-lg"></span> Login
@@ -117,29 +127,6 @@ function Header() {
         }
         </Nav>
         </Collapse>
-        {auth.isAuthenticated &&
-        <Nav className='ml-2'>
-            <NavItem className='nav-link'>
-                <span style={{color: 'white'}}>Ciao {auth.user.username}</span>
-            </NavItem>
-        </Nav>
-        }
-        <div className='d-flex align-items-center ml-2'>
-            <span className='provider-switch-label mr-1'>Cineteca</span>
-            <div className='custom-control custom-switch'>
-                <input
-                    type='checkbox'
-                    className='custom-control-input'
-                    id='providerSwitch'
-                    checked={provider === 'ccb'}
-                    onChange={() => {
-                        dispatch(setProvider(provider === 'ccb' ? 'cineteca' : 'ccb'));
-                        history.push('/calendar');
-                    }}
-                />
-                <label className='custom-control-label provider-switch-label' htmlFor='providerSwitch'>CCB</label>
-            </div>
-        </div>
         </div>
         </Navbar>
         <Jumbotron className='jumbotron'>

@@ -106,6 +106,13 @@ function Movie({ categoryId, movieId, repeatId }) {
               address = 'Sala Cervi, Via Riva di Reno, 72/A, 40122 Bologna, Italia';
             } else if (hour.place.toLowerCase().includes('cinema modernissimo')) {
               address = ' Cinema Modernissimo, Piazza Re Enzo, 4, 40125 Bologna, Italia';
+            } else if (provider === 'ccb') {
+              const p = hour.place.toLowerCase();
+              if (p.includes('odeon'))        address = 'Cinema Odeon, Via Mascarella, 3, 40126 Bologna BO';
+              else if (p.includes('rialto'))  address = 'Cinema Rialto, Via Rialto, 19, 40126 Bologna BO';
+              else if (p.includes('roma'))    address = 'Cinema Roma d\'essai, Via Fondazza, 4, 40100 Bologna BO';
+              else if (p.includes('chaplin')) address = 'Cinema Chaplin, P.za di Porta Saragozza, 5/a, 40123 Bologna BO';
+              else if (p.includes('europa'))  address = 'Cinema Europa, Via Pietralata, 55, 40100 Bologna BO';
             }
 
             let event = {

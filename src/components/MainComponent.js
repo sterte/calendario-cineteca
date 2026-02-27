@@ -7,6 +7,7 @@ import Movie from './MovieComponent';
 import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
 import ChatAI from './ChatAIComponent';
+import CircuitSelect from './CircuitSelectComponent';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { useSelector } from 'react-redux';
@@ -31,6 +32,11 @@ function Main() {
         document.documentElement.setAttribute('data-theme', provider);
     }, [provider]);
 
+    // Circuit selector is full-screen, no header/footer
+    if (location.pathname === '/') {
+        return <CircuitSelect />;
+    }
+
     return (
         <div>
         <Header />
@@ -45,7 +51,7 @@ function Main() {
         <Route path="/tracks" component={() => <Tracks />} />
         <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
         <PrivateRoute path="/chat-ai" component={() => <ChatAI isAdmin={auth.isAdmin} />} />
-        <Redirect to="/calendar" />
+        <Redirect to="/" />
         </Switch>
         </CSSTransition>
         </TransitionGroup>
