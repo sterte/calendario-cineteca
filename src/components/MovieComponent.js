@@ -34,7 +34,7 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const prevIsLoadingRef = useRef(true);
   useEffect(() => {
-    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.duration) {
+    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.duration && !movie.isLoadingImdb && !movie.imdbId) {
       const from = movie.movies.duration.indexOf('/') + 1;
       const to = movie.movies.duration.indexOf(')');
       const year = parseInt(movie.movies.duration.substring(from, to));

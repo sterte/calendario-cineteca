@@ -52,6 +52,11 @@ const moviesSlice = createSlice({
 				state.isLoading = true;
 				state.errMess = null;
 				state.movies = [];
+				state.isLoadingImdb = false;
+				state.imdbId = null;
+				state.imdbRating = null;
+				state.imdbRatingCount = null;
+				state.errMessImdb = null;
 			})
 			.addCase(getMovieDetail.fulfilled, (state, action) => {
 				state.isLoading = false;
