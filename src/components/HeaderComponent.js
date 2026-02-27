@@ -121,7 +121,7 @@ function Header() {
         <Collapse isOpen={isNavOpen} navbar>
         <Nav navbar className="mr-auto">
         <NavItem>
-        <NavLink className="nav-link" to="/home">
+        <NavLink className="nav-link" to="/calendar">
         <span className="fa fa-calendar fa-lg"></span> Calendario
         </NavLink>
         </NavItem>

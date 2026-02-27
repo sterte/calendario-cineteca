@@ -1,8 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
 
-export const getTrackDetail = createAsyncThunk('trackDetail/getTrackDetail', async (trackId) => {
-	const response = await fetch(fetchUrl + '/tracks/' + trackId);
+export const getTrackDetail = createAsyncThunk('trackDetail/getTrackDetail', async (trackId, { getState }) => {
+	const provider = getState().provider.activeProvider;
+	const endpoint = provider === 'ccb'
+		? fetchUrl + '/ccb-tracks/' + trackId
+		: fetchUrl + '/tracks/' + trackId;
+	const response = await fetch(endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
 	return response.json();
 });

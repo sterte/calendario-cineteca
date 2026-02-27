@@ -220,7 +220,10 @@ function Movie({ categoryId, movieId, repeatId }) {
           </div>
 
           <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-            Link: <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+            Link: {provider === 'ccb'
+            ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
+            : <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+          }
             {movie.isLoadingImdb && auth.isAuthenticated ?
               <div className='col-12'><Loading /></div>
               : auth.isAuthenticated && movie.imdbId &&
