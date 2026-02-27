@@ -68,24 +68,25 @@ function ChatAI({ isAdmin }) {
         if (!conversations.isLoading) {
             dispatch(fetchConversations());
         }
-        if (auth.isAuthenticated && location?.state && !messages.isLoading) {
-            let question = '';
-            let conversationTitle = '';
-            if (location.state.requestType === 'info') {
-                question = 'Mi dai delle informazioni sul film ';
-                conversationTitle = 'Info: ' + location.state.title;
-            } else if (location.state.requestType === 'similar') {
-                question = 'Mi suggeriresti dei film simili a ';
-                conversationTitle = 'Simili a: ' + location.state.title;
-            }
-            question += location.state.title;
-            if (location.state.year && location.state.year.length > 0) {
-                question += ' ti do qualche dettaglio in più: ' + location.state.year;
-            }
-            question += '?';
+        if (auth.isAuthenticated && location?.state?.requestType) {
+            const { requestType, title: movieTitle, year } = location.state;
+            const conversationTitle = requestType === 'info'
+                ? 'Info: ' + movieTitle
+                : 'Simili a: ' + movieTitle;
+            const displayMessage = requestType === 'info'
+                ? 'Informazioni su: ' + movieTitle
+                : 'Film simili a: ' + movieTitle;
             dispatch(fetchConversations());
             dispatch(resetChatResponse());
-            dispatch(fetchChatResponse({ conversationId: messages.conversationId, title: conversationTitle, lastMessage: question, charachter: charachterRef.current?.value, temperature: temperatureRef.current?.value }));
+            dispatch(fetchChatResponse({
+                conversationId: null,
+                title: conversationTitle,
+                lastMessage: displayMessage,
+                requestType,
+                movieTitle,
+                year,
+                temperature: temperatureRef.current?.value
+            }));
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
