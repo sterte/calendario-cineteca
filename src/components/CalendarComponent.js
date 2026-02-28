@@ -15,7 +15,27 @@ function Calendar() {
     const dispatch = useDispatch();
 
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [filter, setFilter] = useState({ lumiere: false, cervi: false, modernissimo: false });
+    const [filter, setFilter] = useState({});
+
+    const locationFilters = {
+        cineteca: [
+            { key: 'cervi',        label: 'Cervi',        match: 'ervi' },
+            { key: 'lumiere',      label: 'Lumiére',      match: 'umi' },
+            { key: 'modernissimo', label: 'Modernissimo', match: 'oder' },
+        ],
+        ccb: [
+            { key: 'europa', label: 'Europa', match: 'Europa' },
+            { key: 'odeon',  label: 'Odeon',  match: 'Odeon' },
+            { key: 'rialto', label: 'Rialto', match: 'Rialto' },
+            { key: 'roma',   label: 'Roma',   match: 'Roma' },
+        ],
+        popup: [
+            { key: 'arlecchino', label: 'Arlecchino', match: 'rlecchino' },
+            { key: 'bristol',    label: 'Bristol',     match: 'ristol' },
+            { key: 'jolly',      label: 'Jolly',       match: 'olly' },
+            { key: 'medica',     label: 'Medica',      match: 'edica' },
+        ],
+    };
 
     const preloadDays = (date, lookahead) => {
         let tmpMoment = moment(date);
@@ -36,6 +56,7 @@ function Calendar() {
     };
 
     useEffect(() => {
+        setFilter({});
         preloadDays(new Date(), provider === 'popup' ? 1 : 8);
     }, [provider]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -52,11 +73,10 @@ function Calendar() {
     const formatDate = (date, format = 'YYYY-MM-DD') => moment(new Date(date)).format(format);
 
     const isMovieFiltered = (movie) => {
-        if (!filter.lumiere && !filter.cervi && !filter.modernissimo) return true;
-        if (movie.place.includes('ervi') && filter.cervi) return true;
-        if (movie.place.includes('umi') && filter.lumiere) return true;
-        if (movie.place.includes('oder') && filter.modernissimo) return true;
-        return false;
+        const locations = locationFilters[provider] || [];
+        const active = locations.filter(loc => filter[loc.key]);
+        if (active.length === 0) return true;
+        return active.some(loc => movie.place.includes(loc.match));
     };
 
     const tmpMoment = moment(currentDate).format('YYYY-MM-DD');
@@ -80,12 +100,6 @@ function Calendar() {
                 <title>Cinetecalendar</title>
                 <meta name='description' content={'Cinetecalendar'} />
             </Helmet>
-
-            {days.isLoading > 0 &&
-                <div style={{position: 'absolute', top: 20, right: 20}}>
-                    <Loading size={2} />
-                </div>
-            }
 
             <div className='row row-content d-flex justify-content-center'>
                 <div className='col-12'>
@@ -124,30 +138,18 @@ function Calendar() {
                         </div>
                     </div>
                 </div>
-                {provider !== 'ccb' && provider !== 'popup' &&
+                {(locationFilters[provider] || []).length > 0 &&
                 <div className='col-12'>
                     <div className='row d-flex justify-content-around mt-4'>
-                        <div>
-                            <input type='checkbox' name='lumiere' value='lumiere'
-                                checked={filter.lumiere}
-                                onChange={() => setFilter(f => ({...f, lumiere: !f.lumiere}))}
-                            />
-                            <label className='ml-1' htmlFor='lumiere'><h5>Lumiére</h5></label>
-                        </div>
-                        <div>
-                            <input type='checkbox' name='cervi' value='cervi'
-                                checked={filter.cervi}
-                                onChange={() => setFilter(f => ({...f, cervi: !f.cervi}))}
-                            />
-                            <label className='ml-1' htmlFor='cervi'><h5>Cervi</h5></label>
-                        </div>
-                        <div>
-                            <input type='checkbox' name='modernissimo' value='modernissimo'
-                                checked={filter.modernissimo}
-                                onChange={() => setFilter(f => ({...f, modernissimo: !f.modernissimo}))}
-                            />
-                            <label className='ml-1' htmlFor='modernissimo'><h5>Modernissimo</h5></label>
-                        </div>
+                        {(locationFilters[provider] || []).map(loc => (
+                            <div key={loc.key}>
+                                <input type='checkbox' name={loc.key} value={loc.key}
+                                    checked={!!filter[loc.key]}
+                                    onChange={() => setFilter(f => ({...f, [loc.key]: !f[loc.key]}))}
+                                />
+                                <label className='ml-1' htmlFor={loc.key}><h5>{loc.label}</h5></label>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 }

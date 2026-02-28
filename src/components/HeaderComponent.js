@@ -10,6 +10,7 @@ import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, 
 function Header() {
     const auth = useSelector(state => state.auth);
     const provider = useSelector(state => state.provider.activeProvider);
+    const days = useSelector(state => state.days);
     const dispatch = useDispatch();
 
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -93,6 +94,9 @@ function Header() {
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 
         <div className="ml-auto order-md-last d-flex align-items-center">
+        {days.isLoading > 0 &&
+        <span className="fa fa-spinner fa-pulse fa-lg fa-fw mr-2" style={{color: 'rgba(255,255,255,0.75)'}} />
+        }
         {auth.isAuthenticated &&
         <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="mr-1">
             <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="nav-link">
