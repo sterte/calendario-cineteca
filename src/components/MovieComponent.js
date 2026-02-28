@@ -34,13 +34,9 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const prevIsLoadingRef = useRef(true);
   useEffect(() => {
-    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.duration && !movie.isLoadingImdb && !movie.imdbId) {
-      const from = movie.movies.duration.indexOf('/') + 1;
-      const to = movie.movies.duration.indexOf(')');
-      const year = parseInt(movie.movies.duration.substring(from, to));
-      const div = document.createElement('div');
-      div.innerHTML = movie.movies.duration;
-      const originalTitle = div.querySelector('span')?.textContent?.trim() || movie.movies.title;
+    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.title && !movie.isLoadingImdb && !movie.imdbId) {
+      const year = parseInt(movie.movies.year) || 0;
+      const originalTitle = movie.movies.originalTitle || movie.movies.title;
       dispatch(fetchImdb({ title: originalTitle, year }));
     }
     prevIsLoadingRef.current = movie.isLoading;
@@ -171,20 +167,26 @@ function Movie({ categoryId, movieId, repeatId }) {
     return <div className='container'><Loading /></div>;
   }
 
-  if (movie.errMess || !movie.movies?.duration) {
+  if (movie.errMess || !movie.movies?.title) {
     return <div className='container white-back' style={{padding: '2rem'}}><p>Errore nel caricamento del film.</p></div>;
   }
 
-  const durationString = movie.movies.duration;
-  const durationNumber = parseInt(durationString.substring(durationString.lastIndexOf('(') + 1, durationString.lastIndexOf('\')') ));
+  const durationNumber = movie.movies.durationMinutes || 0;
   let showCounter = 0;
   const timetable = movie.movies.hours.map((hour) => {
     const el = composeCalendarButton(hour, durationNumber, true, showCounter);
     showCounter += hour.hours.length;
     return el;
   });
-  // year: original code used this.from/this.to which were undefined → substring(0, length) = full duration string
-  const year = movie.movies.duration;
+  const year = movie.movies.year || '';
+  const { originalTitle, country, director, durationMinutes } = movie.movies;
+  const countryYear = [country, year].filter(Boolean).join('/');
+  const infoParts = [];
+  if (originalTitle) infoParts.push(originalTitle);
+  if (countryYear) infoParts.push(`(${countryYear})`);
+  if (director) infoParts.push(director);
+  if (durationMinutes > 0) infoParts.push(`(${durationMinutes}')`);
+  const infoLine = infoParts.join(' ');
 
   return (
     <>
@@ -200,15 +202,15 @@ function Movie({ categoryId, movieId, repeatId }) {
                 <div className='col-auto d-flex align-self-center'>
                   <h2>{movie.movies.title}</h2>
                 </div>
-                {auth.isAuthenticated && movie.movies.duration &&
+                {auth.isAuthenticated &&
                   <div className='col-auto'>
                     <Button className='navigation-button' onClick={() => toggleEditModal(movie.movies.title)}>
                       <span className="fa fa-eye" />
                     </Button>
                   </div>
                 }
-                {movie.movies.duration &&
-                  <div className='col-12 d-flex align-self-center' dangerouslySetInnerHTML={{__html: movie.movies.duration}} />
+                {infoLine &&
+                  <div className='col-12 d-flex align-self-center'>{infoLine}</div>
                 }
                 {movie.movies.currentHour.isVO > 0 &&
                   <div><img className='col-12 d-flex align-self-center' src='/assets/images/subtitles.gif' alt='subtitles' /></div>
