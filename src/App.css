@@ -1,6 +1,8 @@
 /* ── Theme variables ─────────────────────────────────────── */
 :root {
   --color-primary:      #f99e00;
+  --color-primary-dark: #7a4e00;
+  --color-primary-light: #fdd060;
   --color-light:        #fccd00;
   --color-shadow-sm:    rgba(249, 158, 0, 0.15);
   --color-shadow-md:    rgba(249, 158, 0, 0.45);
@@ -12,6 +14,8 @@
 
 [data-theme="ccb"] {
   --color-primary:      #ffabad;
+  --color-primary-dark: #a84558;
+  --color-primary-light: #ffdcdd;
   --color-light:        #ffc7c8;
   --color-shadow-sm:    rgba(255, 171, 173, 0.15);
   --color-shadow-md:    rgba(255, 171, 173, 0.45);
@@ -23,6 +27,8 @@
 
 [data-theme="popup"] {
   --color-primary:      #9f1c24;
+  --color-primary-dark: #3d0a0e;
+  --color-primary-light: #b82830;
   --color-light:        #c2323b;
   --color-shadow-sm:    rgba(159, 28, 36, 0.15);
   --color-shadow-md:    rgba(159, 28, 36, 0.45);
@@ -210,11 +216,44 @@ a.cal-button:hover {
 
 /* ── Jumbotron ───────────────────────────────────────────── */
 .jumbotron {
-  background-color: var(--color-primary);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(155deg, var(--color-primary-light) 0%, var(--color-primary) 70%, var(--color-primary-dark) 100%);
   color: var(--color-jumbotron-text);
   padding-top: 1.2rem !important;
   padding-bottom: 1.2rem !important;
 }
+
+.jumbotron::before,
+.jumbotron::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background:
+    /* top/bottom margins of the strip keep holes inset from edges */
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.4)  0,
+      rgba(0,0,0,0.4)  3px,
+      transparent      3px,
+      transparent      calc(100% - 3px),
+      rgba(0,0,0,0.4)  calc(100% - 3px)
+    ),
+    /* hole pattern: 7px dark | 14px hole | 7px dark = 28px pitch */
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.4)  0px,
+      rgba(0,0,0,0.4)  7px,
+      transparent      7px,
+      transparent      21px,
+      rgba(0,0,0,0.4)  21px,
+      rgba(0,0,0,0.4)  28px
+    );
+}
+.jumbotron::before { top: 0; }
+.jumbotron::after  { bottom: 0; }
 
 .jumbotron h1 {
   font-weight: 700;
