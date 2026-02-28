@@ -3,7 +3,7 @@ import { fetchUrl } from '../shared/baseUrl';
 
 export const fetchChatResponse = createAsyncThunk(
 	'chatResponses/fetchChatResponse',
-	async ({ conversationId, title, lastMessage, charachter, temperature, requestType, movieTitle, year }, { dispatch, getState }) => {
+	async ({ conversationId, title, lastMessage, charachter, temperature, requestType, movieTitle, year, spoiler }, { dispatch, getState }) => {
 		// Optimistic update: add user message immediately
 		dispatch(addChatResponse({
 			conversationId,
@@ -21,7 +21,8 @@ export const fetchChatResponse = createAsyncThunk(
 			title,
 			requestType,
 			movieTitle,
-			year
+			year,
+			spoiler: spoiler === true
 		};
 		const response = await fetch(fetchUrl + '/chat/prompt', {
 			method: 'POST',

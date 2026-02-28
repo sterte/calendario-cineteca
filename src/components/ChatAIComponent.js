@@ -69,7 +69,7 @@ function ChatAI({ isAdmin }) {
             dispatch(fetchConversations());
         }
         if (auth.isAuthenticated && location?.state?.requestType) {
-            const { requestType, title: movieTitle, year } = location.state;
+            const { requestType, title: movieTitle, year, spoiler } = location.state;
             const conversationTitle = requestType === 'info'
                 ? 'Info: ' + movieTitle
                 : 'Simili a: ' + movieTitle;
@@ -85,6 +85,7 @@ function ChatAI({ isAdmin }) {
                 requestType,
                 movieTitle,
                 year,
+                spoiler: spoiler === true,
                 temperature: temperatureRef.current?.value
             }));
         }

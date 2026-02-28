@@ -12,9 +12,8 @@ import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
-import { cinetecaUrl, imdbUrl } from '../shared/baseUrl';
+import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 function Movie({ categoryId, movieId, repeatId }) {
@@ -25,6 +24,7 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [title, setTitle] = useState('');
+  const [aiModal, setAiModal] = useState({ open: false, title: '', content: '', isLoading: false, error: null });
   const ratingRef = useRef(null);
   const commentRef = useRef(null);
 
@@ -49,6 +49,36 @@ function Movie({ categoryId, movieId, repeatId }) {
 
   const handleFavouriteAdd = () => {
     dispatch(addFavourite({ title, rating: ratingRef.current, comment: commentRef.current.value }));
+  };
+
+  const handleAiRequest = async (requestType) => {
+    const movieTitle = movie.movies.originalTitle || movie.movies.title;
+    const movieYear = movie.movies.year || '';
+    const modalTitle = requestType === 'info' ? 'Info: ' + movieTitle : 'Film simili a: ' + movieTitle;
+    setAiModal({ open: true, title: modalTitle, content: '', isLoading: true, error: null });
+    try {
+      const bearer = 'Bearer ' + localStorage.getItem('token');
+      const response = await fetch(fetchUrl + '/chat/prompt', {
+        method: 'POST',
+        headers: { 'Authorization': bearer, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: null,
+          title: modalTitle,
+          question: requestType === 'info' ? 'Informazioni su: ' + movieTitle : 'Film simili a: ' + movieTitle,
+          requestType,
+          movieTitle,
+          year: movieYear,
+          spoiler: false,
+          charachter: 'cinefilo',
+          temperature: 0
+        })
+      });
+      if (!response.ok) throw new Error('Errore ' + response.status + ': ' + response.statusText);
+      const data = await response.json();
+      setAiModal(prev => ({ ...prev, isLoading: false, content: data.content }));
+    } catch (err) {
+      setAiModal(prev => ({ ...prev, isLoading: false, error: err.message }));
+    }
   };
 
   const composeCalendarButton = (hour, durationNumber, showBuyButton = true, showIndexOffset = 0) => {
@@ -254,8 +284,8 @@ function Movie({ categoryId, movieId, repeatId }) {
           {auth.isAuthenticated &&
             <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
               Chiedi all'AI:
-              <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3'><Link to={{pathname:`/chat-ai`, state:{requestType: 'info', title: movie.movies.title, year: year, backUrl: window.location.pathname}}}><h4 style={{color: 'white'}}>Info</h4></Link></button>
-              <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto'><Link to={{pathname:`/chat-ai`, state:{requestType: 'similar', title: movie.movies.title, year: year, backUrl: window.location.pathname}}} state={{requestType: 'similar', title: movie.movies.title, year: year}}><h4 style={{color: 'white'}}>Simili</h4></Link></button>
+              <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3' onClick={() => handleAiRequest('info')}><h4 style={{color: 'white'}}>Info</h4></button>
+              <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto' onClick={() => handleAiRequest('similar')}><h4 style={{color: 'white'}}>Simili</h4></button>
             </div>
           }
 
@@ -301,6 +331,23 @@ function Movie({ categoryId, movieId, repeatId }) {
               <Button onClick={() => toggleEditModal()}>Annulla</Button>
             </Form>
           </div>
+        </ModalBody>
+      </Modal>
+
+      <Modal isOpen={aiModal.open} toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
+        style={{maxWidth: '95vw', width: '95vw', margin: '2vh auto'}}>
+        <ModalHeader
+          toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
+          style={{
+            backgroundColor: provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00',
+            color: provider === 'ccb' ? '#000' : '#fff'
+          }}>
+          {aiModal.title}
+        </ModalHeader>
+        <ModalBody style={{overflowY: 'auto', maxHeight: '85vh'}}>
+          {aiModal.isLoading && <div className='text-center'><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>}
+          {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
+          {aiModal.content && <div dangerouslySetInnerHTML={{__html: aiModal.content}} />}
         </ModalBody>
       </Modal>
     </>
