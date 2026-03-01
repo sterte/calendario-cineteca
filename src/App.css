@@ -1,3 +1,9 @@
+/* ── Mobile modal scroll lock (Bootstrap 4 + iOS fix) ───── */
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
 /* ── Theme variables ─────────────────────────────────────── */
 :root {
   --color-primary:      #f99e00;

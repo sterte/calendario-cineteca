@@ -7,12 +7,19 @@ import Loading from './LoadingComponent';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
 import { weekDays, movieListDetail } from './MovieUtils';
+import { setProvider } from '../redux/provider';
 import { Helmet } from 'react-helmet-async';
 
-function Calendar() {
+function Calendar({ provider: providerParam }) {
     const days = useSelector(state => state.days);
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (providerParam && providerParam !== provider) {
+            dispatch(setProvider(providerParam));
+        }
+    }, [providerParam]);
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [filter, setFilter] = useState({});
@@ -92,7 +99,7 @@ function Calendar() {
         days.days
             .filter(day => day.day === formatDate(currentDate))[0].movies
             .filter(movie => isMovieFiltered(movie))
-            .map(movie => movieListDetail(movie));
+            .map(movie => movieListDetail(movie, false, provider));
 
     return (
         <div className='container white-back'>

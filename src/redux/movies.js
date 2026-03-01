@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
 
-export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId }, { getState }) => {
-	const provider = getState().provider.activeProvider;
+export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId, provider: providerParam }, { getState }) => {
+	const provider = providerParam || getState().provider.activeProvider;
 	const endpoint = provider === 'popup'
 		? fetchUrl + '/popup-movies/' + movieId
 		: provider === 'ccb'

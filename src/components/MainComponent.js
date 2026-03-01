@@ -19,7 +19,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         <Route {...rest} render={(props) => (
             auth.isAuthenticated
                 ? <Component {...props} />
-                : <Redirect to={{ pathname: '/calendar', state: { from: props.location } }} />
+                : <Redirect to={{ pathname: '/calendar/cineteca', state: { from: props.location } }} />
         )} />
     );
 };
@@ -44,11 +44,12 @@ function Main() {
         <TransitionGroup>
         <CSSTransition key={location.key} classNames="page" timeout={300}>
         <Switch location={location}>
-        <Route exact path="/movie/:categoryId/:movieId/:repeatId" render={({match}) => (
-            <Movie categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
+        <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({match}) => (
+            <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
         )} />
         <Route path="/reset-password" component={() => <ResetPassword />} />
-        <Route path="/calendar" component={() => <Calendar />} />
+        <Route path="/calendar/:provider" render={({match}) => <Calendar provider={match.params.provider} />} />
+        <Redirect from="/calendar" to="/calendar/cineteca" />
         <Route path="/tracks/:trackId" render={({match}) => <TrackDetail trackId={match.params.trackId} />} />
         <Route path="/tracks" component={() => <Tracks />} />
         <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />

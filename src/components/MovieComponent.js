@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Fade } from 'react-animation-components';
 import Loading from './LoadingComponent';
 import { getMovieDetail, fetchImdb } from '../redux/movies';
+import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
@@ -16,7 +17,7 @@ import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
 import { Helmet } from 'react-helmet-async';
 
-function Movie({ categoryId, movieId, repeatId }) {
+function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const movie = useSelector(state => state.movies);
   const auth = useSelector(state => state.auth);
   const provider = useSelector(state => state.provider.activeProvider);
@@ -29,8 +30,11 @@ function Movie({ categoryId, movieId, repeatId }) {
   const commentRef = useRef(null);
 
   useEffect(() => {
-    dispatch(getMovieDetail({ categoryId, movieId, repeatId }));
-  }, [dispatch, categoryId, movieId, repeatId]);
+    if (providerParam && providerParam !== provider) {
+      dispatch(setProvider(providerParam));
+    }
+    dispatch(getMovieDetail({ categoryId, movieId, repeatId, provider: providerParam }));
+  }, [dispatch, categoryId, movieId, repeatId, providerParam]);
 
   const prevIsLoadingRef = useRef(true);
   useEffect(() => {
@@ -335,7 +339,7 @@ function Movie({ categoryId, movieId, repeatId }) {
       </Modal>
 
       <Modal isOpen={aiModal.open} toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
-        style={{maxWidth: '95vw', width: '95vw', margin: '2vh auto'}}>
+        style={{maxWidth: 'calc(100vw - 1rem)', margin: '2vh auto'}}>
         <ModalHeader
           toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
           style={{
