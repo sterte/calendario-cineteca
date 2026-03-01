@@ -6,7 +6,6 @@ import PersonalArea from './PersonalAreaComponent';
 import Movie from './MovieComponent';
 import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
-import ChatAI from './ChatAIComponent';
 import CircuitSelect from './CircuitSelectComponent';
 import ResetPassword from './ResetPasswordComponent';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
@@ -53,7 +52,6 @@ function Main() {
         <Route path="/tracks/:trackId" render={({match}) => <TrackDetail trackId={match.params.trackId} />} />
         <Route path="/tracks" component={() => <Tracks />} />
         <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
-        <PrivateRoute path="/chat-ai" component={() => <ChatAI isAdmin={auth.isAdmin} />} />
         <Redirect to="/" />
         </Switch>
         </CSSTransition>

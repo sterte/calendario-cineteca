@@ -138,17 +138,6 @@ function Header() {
         </NavLink>
         </NavItem>
         }
-        {auth.isAuthenticated ?
-        <NavItem>
-        <NavLink className="nav-link" to="/chat-ai">
-        <span className="fa fa-comment fa-lg"></span> Chat AI
-        </NavLink>
-        </NavItem>
-        :
-        <NavItem className="nav-link" onClick={toggleLoginModal}>
-        <span className="fa fa-sign-in fa-lg"></span> Login
-        </NavItem>
-        }
         </Nav>
         </Collapse>
         </div>
