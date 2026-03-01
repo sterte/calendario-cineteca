@@ -3,7 +3,7 @@ import { fetchUrl } from '../shared/baseUrl';
 
 export const fetchChatResponse = createAsyncThunk(
 	'chatResponses/fetchChatResponse',
-	async ({ conversationId, title, lastMessage, charachter, temperature, requestType, movieTitle, year, spoiler }, { dispatch, getState }) => {
+	async ({ conversationId, title, lastMessage, temperature, requestType, movieTitle, year, spoiler }, { dispatch, getState }) => {
 		// Optimistic update: add user message immediately
 		dispatch(addChatResponse({
 			conversationId,
@@ -15,7 +15,6 @@ export const fetchChatResponse = createAsyncThunk(
 		const bearer = 'Bearer ' + localStorage.getItem('token');
 		const body = {
 			conversationId,
-			charachter: charachter || 'cinefilo',
 			temperature: Number(temperature),
 			question: lastMessage,
 			title,

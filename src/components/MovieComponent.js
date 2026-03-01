@@ -73,7 +73,6 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           movieTitle,
           year: movieYear,
           spoiler: false,
-          charachter: 'cinefilo',
           temperature: 0
         })
       });
