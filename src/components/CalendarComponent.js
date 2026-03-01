@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { getDayProgram } from '../redux/days';
 import { Fade, Stagger } from 'react-animation-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -23,6 +23,7 @@ function Calendar({ provider: providerParam }) {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [filter, setFilter] = useState({});
+    const [filterOpen, setFilterOpen] = useState(false);
 
     const locationFilters = {
         cineteca: [
@@ -111,13 +112,13 @@ function Calendar({ provider: providerParam }) {
             <div className='row row-content d-flex justify-content-center'>
                 <div className='col-12'>
                     <div className='row d-flex justify-content-center'>
-                        <div className='col-3 col-md-auto order-2 order-md-1'>
+                        <div className='col-3 col-md-auto order-2 order-md-1 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-7)}>
                                 <span className="fa fa-angle-double-left" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
-                        <div className='col-3 col-md-auto order-3 order-md-2'>
+                        <div className='col-3 col-md-auto order-3 order-md-2 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-1)}>
                                 <span className="fa fa-angle-left" />
                                 <span className="d-none d-md-block">Giorno</span>
@@ -131,35 +132,50 @@ function Calendar({ provider: providerParam }) {
                                 <h4>{formatDate(currentDate, 'DD/MM/YYYY')}</h4>
                             </div>
                         </div>
-                        <div className='col-3 col-md-auto order-4'>
+                        <div className='col-3 col-md-auto order-4 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(1)}>
                                 <span className="fa fa-angle-right" />
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-3 col-md-auto order-5'>
+                        <div className='col-3 col-md-auto order-5 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(7)}>
                                 <span className="fa fa-angle-double-right" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
+                        {(locationFilters[provider] || []).length > 0 &&
+                        <div className='col-3 col-md-auto order-6 d-flex align-items-center justify-content-center'>
+                            <Dropdown isOpen={filterOpen} toggle={() => setFilterOpen(o => !o)}>
+                                <DropdownToggle className='navigation-button btn btn-secondary' tag='button'>
+                                    <span className="fa fa-photo-film" />
+                                    {Object.values(filter).filter(Boolean).length > 0 &&
+                                        <span className='badge badge-light ml-1'>
+                                            {Object.values(filter).filter(Boolean).length}
+                                        </span>
+                                    }
+                                </DropdownToggle>
+                                <DropdownMenu right>
+                                    {Object.values(filter).some(Boolean) && <>
+                                        <DropdownItem onClick={() => setFilter({})}>
+                                            <span className='fa fa-times mr-2' />
+                                            Rimuovi filtri
+                                        </DropdownItem>
+                                        <DropdownItem divider />
+                                    </>}
+                                    {(locationFilters[provider] || []).map(loc => (
+                                        <DropdownItem key={loc.key} toggle={false}
+                                            onClick={() => setFilter(f => ({...f, [loc.key]: !f[loc.key]}))}>
+                                            <span className={`fa mr-2 ${filter[loc.key] ? 'fa-check-square' : 'fa-square-o'}`} />
+                                            {loc.label}
+                                        </DropdownItem>
+                                    ))}
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
+                        }
                     </div>
                 </div>
-                {(locationFilters[provider] || []).length > 0 &&
-                <div className='col-12'>
-                    <div className='row d-flex justify-content-around mt-4'>
-                        {(locationFilters[provider] || []).map(loc => (
-                            <div key={loc.key}>
-                                <input type='checkbox' name={loc.key} value={loc.key}
-                                    checked={!!filter[loc.key]}
-                                    onChange={() => setFilter(f => ({...f, [loc.key]: !f[loc.key]}))}
-                                />
-                                <label className='ml-1' htmlFor={loc.key}><h5>{loc.label}</h5></label>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                }
             </div>
             <div className='row row-content d-flex justify-content-center'>
                 <Fade in={true}>
