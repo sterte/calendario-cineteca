@@ -186,7 +186,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                 }
                 <div className='d-flex col-12 col-md-3 mt-4 mt-md-0 mb-0 mb-md-4'>
                   {showBuyButton && (show.buyLink || movie.movies.buyLink || '').length > 0 && isFuture &&
-                    <a className='cal-button' href={show.buyLink || movie.movies.buyLink} target="_blank" rel='noopener noreferrer'>Acquista</a>
+                    <a className='cal-button' href={show.buyLink || movie.movies.buyLink} target="_blank" rel='noopener noreferrer'><span className="fa fa-ticket mr-2" />Acquista</a>
                   }
                 </div>
               </div>

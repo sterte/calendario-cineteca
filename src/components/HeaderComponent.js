@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Label, Input,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, requestPasswordReset, clearResetStatus } from '../redux/auth';
 
@@ -12,9 +12,11 @@ function Header() {
     const provider = useSelector(state => state.provider.activeProvider);
     const days = useSelector(state => state.days);
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isLoginErrorToShow, setIsLoginErrorToShow] = useState(true);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -97,6 +99,7 @@ function Header() {
         {days.isLoading > 0 &&
         <span className="fa fa-spinner fa-spin fa-lg fa-fw" style={{color: 'rgba(255,255,255,0.75)'}} />
         }
+        <span className="fa fa-question-circle fa-lg nav-link" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
         {auth.isAuthenticated &&
         <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="mr-1">
             <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="nav-link">
@@ -237,6 +240,18 @@ function Header() {
             </ModalBody>
         </Modal>
 
+        <Modal isOpen={isHelpOpen} toggle={() => setIsHelpOpen(false)}>
+            <ModalHeader className='modal-header-branded' toggle={() => setIsHelpOpen(false)}>
+                {location.pathname.startsWith('/movie') ? 'Come usare la scheda film' : 'Come usare il calendario'}
+            </ModalHeader>
+            <ModalBody className='pt-3 pb-4 px-4'>
+                {location.pathname.startsWith('/movie')
+                    ? <HelpMovie />
+                    : <HelpCalendar />
+                }
+            </ModalBody>
+        </Modal>
+
         <Modal isOpen={isResetModalOpen} toggle={() => setIsResetModalOpen(false)}>
             <ModalHeader className='modal-header-branded' toggle={() => setIsResetModalOpen(false)}>Reset password</ModalHeader>
             <ModalBody className='pt-3 pb-4 px-4'>
@@ -257,6 +272,44 @@ function Header() {
                 }
             </ModalBody>
         </Modal>
+        </>
+    );
+}
+
+function HelpCalendar() {
+    return (
+        <>
+            <p>Il <strong>calendario</strong> mostra le proiezioni in programma giorno per giorno.</p>
+            <ul className="pl-3">
+                <li className="mb-2"><span className="fa fa-chevron-left mr-1" /><span className="fa fa-chevron-right mr-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
+                <li className="mb-2"><span className="fa fa-photo-film mr-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
+                <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
+            </ul>
+        </>
+    );
+}
+
+function HelpMovie() {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    return (
+        <>
+            <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma.</p>
+            <ul className="pl-3">
+                <li className="mb-2">Nella sezione <strong>Proiezioni</strong> trovi tutti gli orari disponibili.</li>
+                <li className="mb-2"><span className="fa fa-calendar mr-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale (Google, Apple, Outlook…).</li>
+                <li className="mb-2"><span className="fa fa-ticket mr-2" />Il pulsante <strong>Acquista</strong> apre la pagina di acquisto del biglietto sul sito della Cineteca.</li>
+                {isAuthenticated && (<>
+                    <li className="mb-2"><span className="fa fa-eye mr-2" />Segna il film come visto con l'icona occhio.</li>
+                    <li className="mb-2">Il voto e il link <strong>IMDb</strong> permettono di consultare la valutazione e la scheda del film su IMDb.</li>
+                    <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
+                </>)}
+            </ul>
+            {!isAuthenticated && (
+                <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
+                    <span className="fa fa-user-circle mr-2" />
+                    <strong>Registrandoti</strong> avrai accesso anche al check-in dei film visti, al voto e link IMDb e al supporto dell'intelligenza artificiale.
+                </p>
+            )}
         </>
     );
 }
