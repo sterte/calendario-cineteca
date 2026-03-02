@@ -112,36 +112,36 @@ function Calendar({ provider: providerParam }) {
             <div className='row row-content d-flex justify-content-center'>
                 <div className='col-12'>
                     <div className='row d-flex justify-content-center'>
-                        <div className='col-auto order-md-1 d-flex align-items-center justify-content-center'>
+                        <div className='col-2 order-md-1 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-7)}>
                                 <span className="fa fa-angle-double-left" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
-                        <div className='col-auto order-md-2 d-flex align-items-center justify-content-center'>
+                        <div className='col-2 order-md-2 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-1)}>
                                 <span className="fa fa-angle-left" />
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-auto order-md-3 d-flex align-items-center justify-content-center flex-column'>
+                        <div className='col-4 col-md-2 order-md-3 d-flex align-items-center justify-content-center flex-column'>
                             <h5 className='mb-0'>{weekDays[currentDate.getDay()]}</h5>
                             <h4 className='mb-0'>{formatDate(currentDate, 'DD/MM/YYYY')}</h4>
                         </div>
-                        <div className='col-auto order-4 d-flex align-items-center justify-content-center'>
+                        <div className='col-2 order-4 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(1)}>
                                 <span className="fa fa-angle-right" />
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-auto order-5 d-flex align-items-center justify-content-center'>
+                        <div className='col-2 order-5 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(7)}>
                                 <span className="fa fa-angle-double-right" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
                         {(locationFilters[provider] || []).length > 0 &&
-                        <div className='col-auto order-last d-flex align-items-center justify-content-center'>
+                        <div className='col-auto col-md-2 order-last d-flex align-items-center justify-content-center'>
                             <Dropdown isOpen={filterOpen} toggle={() => setFilterOpen(o => !o)}>
                                 <DropdownToggle className='navigation-button btn btn-secondary' tag='button'>
                                     <span className="fa fa-photo-film" />
