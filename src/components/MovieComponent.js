@@ -275,14 +275,16 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                   {movie.imdbRatingCount > -1 &&
                     <div className='p-0 ms-2'>
                       <div className='d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
-                      <StarRatings
-                        rating={parseFloat(movie.imdbRating) / 2}
-                        numberOfStars={5}
-                        starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
-                        starEmptyColor="#a8a8a8"
-                        starDimension="30px"
-                        starSpacing="0px"
-                      />
+                      <div className='d-none d-md-block'>
+                        <StarRatings
+                          rating={parseFloat(movie.imdbRating) / 2}
+                          numberOfStars={5}
+                          starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
+                          starEmptyColor="#a8a8a8"
+                          starDimension="30px"
+                          starSpacing="0px"
+                        />
+                      </div>
                     </div>
                   }
                 </div>
@@ -297,7 +299,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                 <button type='button' className='navigation-button btn btn-secondary align-self-center' onClick={() => handleAiRequest('info')}><h4 className='mb-0'>Info</h4></button>
               </div>
               <div className='col-6 d-flex justify-content-center'>
-                <button type='button' className='col-6 navigation-button btn btn-secondary align-self-center' onClick={() => handleAiRequest('similar')}><h4 className='mb-0'>Simili</h4></button>
+                <button type='button' className='navigation-button btn btn-secondary align-self-center' onClick={() => handleAiRequest('similar')}><h4 className='mb-0'>Simili</h4></button>
               </div>
             </div>
           }

@@ -67,7 +67,7 @@ return (
                 </div>
                 }
                 <div className='d-flex align-items-baseline gap-1'>
-                    <h5 className='mb-0'>{movie.time}</h5><span>- {movie.place.replace(/Cinema Lumi.re/, 'Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
+                    <h5 className='mb-0'>{movie.time.replace('H ', '')}</h5><span>{movie.place.replace(/Cinema Lumi.re/, 'Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: movieExtras }} />
                 <div className='d-flex mt-1'>
