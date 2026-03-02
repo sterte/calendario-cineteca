@@ -58,21 +58,19 @@ return (
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
             <div className='col-12 col-md-8 ps-0'>
-                <div className={isFuture(movie, new Date()) ? 'row' : 'row past-movie-title'}>
+                <div className={isFuture(movie, new Date()) ? '' : 'past-movie-title'}>
                     <Link to={`/movie/${provider}/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                 </div>
                 {showDay &&
-                <div className='row'>
+                <div>
                     <h5>{movie.date}</h5>
                 </div>
                 }
                 <div className='d-flex align-items-baseline gap-1'>
                     <h5 className='mb-0'>{movie.time}</h5><span>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
-                </div>                
-                <div className='row' dangerouslySetInnerHTML={{ __html: movieExtras }}>
-
                 </div>
-                <div className='row mt-1'>
+                <div dangerouslySetInnerHTML={{ __html: movieExtras }} />
+                <div className='d-flex mt-1'>
                     <Vo isVO={movie.isVO} />
                     <Music isMUSIC={movie.isMUSIC} />
                 </div>
