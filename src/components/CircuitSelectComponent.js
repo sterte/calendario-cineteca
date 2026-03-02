@@ -36,7 +36,7 @@ function CircuitSelect() {
 
     const choose = (id) => {
         dispatch(setProvider(id));
-        history.push('/calendar');
+        history.push('/calendar/' + id);
     };
 
     return (

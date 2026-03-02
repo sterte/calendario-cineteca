@@ -33,7 +33,7 @@ function Main() {
     }, [provider]);
 
     // Circuit selector is full-screen, no header/footer
-    if (location.pathname === '/') {
+    if (location.pathname === '/' || location.pathname === '/circuits') {
         return <CircuitSelect />;
     }
 
@@ -49,8 +49,9 @@ function Main() {
         <Route path="/reset-password" component={() => <ResetPassword />} />
         <Route path="/calendar/:provider" render={({match}) => <Calendar provider={match.params.provider} />} />
         <Redirect from="/calendar" to="/calendar/cineteca" />
-        <Route path="/tracks/:trackId" render={({match}) => <TrackDetail trackId={match.params.trackId} />} />
-        <Route path="/tracks" component={() => <Tracks />} />
+        <Route path="/tracks/:provider/:trackId" render={({match}) => <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
+        <Route path="/tracks/:provider" render={({match}) => <Tracks provider={match.params.provider} />} />
+        <Redirect from="/tracks" to={`/tracks/${provider}`} />
         <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
         <Redirect to="/" />
         </Switch>

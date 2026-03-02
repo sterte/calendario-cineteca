@@ -3,17 +3,22 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
 import { getTrackDetail } from '../redux/trackDetail';
+import { setProvider } from '../redux/provider';
 import { movieListDetail } from './MovieUtils';
 import { Fade, Stagger } from 'react-animation-components';
 import { Helmet } from 'react-helmet-async';
 
-function TrackDetail({ trackId }) {
+function TrackDetail({ provider: providerParam, trackId }) {
     const trackDetail = useSelector(state => state.trackDetail);
+    const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (providerParam && providerParam !== provider) {
+            dispatch(setProvider(providerParam));
+        }
         dispatch(getTrackDetail(trackId));
-    }, [dispatch, trackId]);
+    }, [dispatch, providerParam, trackId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (trackDetail.isLoading) {
         return <div className='container'><Loading /></div>;

@@ -1,7 +1,10 @@
 /* ── Mobile modal scroll lock (Bootstrap 4 + iOS fix) ───── */
 body.modal-open {
   overflow: hidden !important;
-  touch-action: none;
+}
+
+body.modal-open .modal {
+  overscroll-behavior: none;
 }
 
 /* ── Theme variables ─────────────────────────────────────── */

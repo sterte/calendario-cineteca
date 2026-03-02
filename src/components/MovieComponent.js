@@ -339,7 +339,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
       </Modal>
 
       <Modal isOpen={aiModal.open} toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
-        style={{maxWidth: 'calc(100vw - 1rem)', margin: '2vh auto'}}>
+        style={{width: 'calc(100% - 1rem)', maxWidth: '720px', margin: '1rem auto'}}>
         <ModalHeader
           toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
           style={{
@@ -348,7 +348,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           }}>
           {aiModal.title}
         </ModalHeader>
-        <ModalBody style={{overflowY: 'auto', maxHeight: '85vh'}}>
+        <ModalBody style={{overflowY: 'auto', maxHeight: '80vh', overscrollBehavior: 'contain'}}>
           {aiModal.isLoading && <div className='d-flex justify-content-center'><WittyLoader /></div>}
           {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
           {aiModal.content && <div dangerouslySetInnerHTML={{__html: aiModal.content}} />}

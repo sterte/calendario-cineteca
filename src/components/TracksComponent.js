@@ -5,15 +5,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from './LoadingComponent';
 import ScrollToTopButton from './ScrollToTopButton';
 import { getTracks } from '../redux/tracks';
+import { setProvider } from '../redux/provider';
 import { Helmet } from 'react-helmet-async';
 
-function Tracks() {
+function Tracks({ provider: providerParam }) {
     const tracks = useSelector(state => state.tracks);
+    const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (providerParam && providerParam !== provider) {
+            dispatch(setProvider(providerParam));
+        }
         dispatch(getTracks());
-    }, [dispatch]);
+    }, [dispatch, providerParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (tracks.isLoading) {
         return <div className='container'><Loading /></div>;
@@ -31,7 +36,7 @@ function Tracks() {
                 </div>
                 <div className='mt-3 mt-md-0 col-12 col-md-8'>
                     <div className='row'>
-                        <Link to={`/tracks/${track.id}`}><h4 dangerouslySetInnerHTML={{__html: track.title}}></h4></Link>
+                        <Link to={`/tracks/${provider}/${track.id}`}><h4 dangerouslySetInnerHTML={{__html: track.title}}></h4></Link>
                     </div>
                     <div className='row'>
                         <h5>{track.dateInfo}</h5>

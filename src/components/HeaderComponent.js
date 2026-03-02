@@ -136,13 +136,13 @@ function Header() {
         </NavItem>
         {provider !== 'popup' &&
         <NavItem>
-        <NavLink className="nav-link" to="/tracks">
+        <NavLink className="nav-link" to={`/tracks/${provider}`}>
         <span className="fa fa-film fa-lg"></span> Rassegne
         </NavLink>
         </NavItem>
         }
         <NavItem>
-        <NavLink exact className="nav-link" to="/">
+        <NavLink className="nav-link" to="/circuits">
         <span className="fa fa-rotate fa-lg"></span> Cambia circuito
         </NavLink>
         </NavItem>
