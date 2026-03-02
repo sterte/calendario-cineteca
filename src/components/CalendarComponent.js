@@ -154,6 +154,7 @@ function Calendar({ provider: providerParam }) {
                                             {Object.values(filter).filter(Boolean).length}
                                         </span>
                                     }
+                                    <span className="d-none d-md-block">Sale</span>
                                 </DropdownToggle>
                                 <DropdownMenu right>
                                     {Object.values(filter).some(Boolean) && <>

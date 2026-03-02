@@ -27,16 +27,21 @@ const ScrollToTopButton = () =>{
   window.addEventListener('scroll', toggleVisible);
   
   return (
-    <Button className='navigation-button' onClick={scrollToTop} 
-     style={{position: 'fixed',         
-        left: '75%',
-        bottom: '40px',             
+    <Button className='navigation-button' onClick={scrollToTop}
+     style={{position: 'fixed',
+        right: '88px',
+        bottom: '18px',
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
         cursor: 'pointer',
         color: 'white',
-        zIndex : 1,
-        display: visible ? 'inline' : 'none'}}>
-        <span className="fa fa-arrow-up" />
-    </Button>    
+        zIndex: 1,
+        display: visible ? 'flex' : 'none',
+        alignItems: 'center',
+        justifyContent: 'center'}}>
+        <span className="fa fa-arrow-up" style={{fontSize: '1.5rem'}} />
+    </Button>
   );
 }
   

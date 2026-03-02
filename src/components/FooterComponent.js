@@ -6,6 +6,12 @@ function Footer(props) {
 		<div className="container">		
 		<div className="row justify-content-center">             
 		<div className="col-12 text-center" style={{color: 'white'}}>
+			<p className="mb-2">
+				<a href="https://buymeacoffee.com/cinetecalendar" target="_blank" rel="noopener noreferrer">
+					<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+						alt="Buy Me A Coffee" style={{height: '40px', verticalAlign: 'middle'}} />
+				</a>
+			</p>
 			<p className="mb-1">
 				<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener noreferrer">
 					<img alt="Creative Commons BY-NC-SA 4.0" style={{borderWidth: 0, verticalAlign: 'middle'}}
