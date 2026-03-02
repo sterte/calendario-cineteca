@@ -117,7 +117,7 @@ function Header() {
             </DropdownMenu>
         </Dropdown>
         }
-        <NavbarBrand tag={NavLink} to="/" className="m-0 p-0">
+        <NavbarBrand className="m-0 p-0">
         {provider === 'ccb'
             ? <img src='/assets/images/logo-ccb.svg' height="50" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
             : provider === 'popup'
@@ -139,6 +139,18 @@ function Header() {
         <NavLink className="nav-link" to="/tracks">
         <span className="fa fa-film fa-lg"></span> Rassegne
         </NavLink>
+        </NavItem>
+        }
+        <NavItem>
+        <NavLink exact className="nav-link" to="/">
+        <span className="fa fa-rotate fa-lg"></span> Cambia circuito
+        </NavLink>
+        </NavItem>
+        {!auth.isAuthenticated &&
+        <NavItem>
+        <span className="nav-link" style={{cursor: 'pointer'}} onClick={toggleLoginModal}>
+        <span className="fa fa-sign-in fa-lg"></span> Login
+        </span>
         </NavItem>
         }
         </Nav>
@@ -242,11 +254,15 @@ function Header() {
 
         <Modal isOpen={isHelpOpen} toggle={() => setIsHelpOpen(false)}>
             <ModalHeader className='modal-header-branded' toggle={() => setIsHelpOpen(false)}>
-                {location.pathname.startsWith('/movie') ? 'Come usare la scheda film' : 'Come usare il calendario'}
+                {location.pathname.startsWith('/movie') ? 'Come usare la scheda film'
+                    : location.pathname.startsWith('/tracks') ? 'Come usare le Rassegne'
+                    : location.pathname.startsWith('/personalarea') ? 'La tua Area Personale'
+                    : 'Come usare il calendario'}
             </ModalHeader>
             <ModalBody className='pt-3 pb-4 px-4'>
-                {location.pathname.startsWith('/movie')
-                    ? <HelpMovie />
+                {location.pathname.startsWith('/movie') ? <HelpMovie />
+                    : location.pathname.startsWith('/tracks') ? <HelpTracks />
+                    : location.pathname.startsWith('/personalarea') ? <HelpPersonalArea />
                     : <HelpCalendar />
                 }
             </ModalBody>
@@ -277,6 +293,8 @@ function Header() {
 }
 
 function HelpCalendar() {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
             <p>Il <strong>calendario</strong> mostra le proiezioni in programma giorno per giorno.</p>
@@ -284,6 +302,10 @@ function HelpCalendar() {
                 <li className="mb-2"><span className="fa fa-chevron-left mr-1" /><span className="fa fa-chevron-right mr-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
                 <li className="mb-2"><span className="fa fa-photo-film mr-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
                 <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
+                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto trovi{provider !== 'popup' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
+                {isAuthenticated && (
+                    <li className="mb-2"><span className="fa fa-user-circle mr-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                )}
             </ul>
         </>
     );
@@ -291,6 +313,7 @@ function HelpCalendar() {
 
 function HelpMovie() {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
             <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma.</p>
@@ -303,6 +326,10 @@ function HelpMovie() {
                     <li className="mb-2">Il voto e il link <strong>IMDb</strong> permettono di consultare la valutazione e la scheda del film su IMDb.</li>
                     <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
                 </>)}
+                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                {isAuthenticated && (
+                    <li className="mb-2"><span className="fa fa-user-circle mr-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                )}
             </ul>
             {!isAuthenticated && (
                 <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
@@ -310,6 +337,35 @@ function HelpMovie() {
                     <strong>Registrandoti</strong> avrai accesso anche al check-in dei film visti, al voto e link IMDb e al supporto dell'intelligenza artificiale.
                 </p>
             )}
+        </>
+    );
+}
+
+function HelpTracks() {
+    const provider = useSelector(state => state.provider.activeProvider);
+    return (
+        <>
+            <p>Le <strong>Rassegne</strong> raccolgono cicli tematici di film programmati dalla Cineteca.</p>
+            <ul className="pl-3">
+                <li className="mb-2">Nella pagina principale trovi l'elenco delle rassegne attive, ognuna con immagine, titolo, date e descrizione.</li>
+                <li className="mb-2">Clicca sul titolo di una rassegna per vedere tutti i film che la compongono.</li>
+                <li className="mb-2">Dalla lista dei film puoi accedere alla scheda dettaglio di ciascun titolo.</li>
+                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
+            </ul>
+        </>
+    );
+}
+
+function HelpPersonalArea() {
+    return (
+        <>
+            <p>L'<strong>Area Personale</strong> raccoglie tutti i film che hai segnato come visti.</p>
+            <ul className="pl-3">
+                <li className="mb-2">Per ogni film trovi il titolo, il voto e il commento che hai inserito.</li>
+                <li className="mb-2"><span className="fa fa-edit mr-2" />Modifica voto e commento di un film con il pulsante matita.</li>
+                <li className="mb-2"><span className="fa fa-trash mr-2" />Rimuovi un film dalla lista con il pulsante cestino.</li>
+                <li className="mb-2">Per aggiungere un film, vai alla sua scheda dettaglio e clicca sull'icona occhio <span className="fa fa-eye ml-1" />.</li>
+            </ul>
         </>
     );
 }
