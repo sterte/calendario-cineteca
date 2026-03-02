@@ -11,6 +11,7 @@ import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
+import WittyLoader from './WittyLoaderComponent';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
@@ -348,7 +349,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           {aiModal.title}
         </ModalHeader>
         <ModalBody style={{overflowY: 'auto', maxHeight: '85vh'}}>
-          {aiModal.isLoading && <div className='text-center'><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>}
+          {aiModal.isLoading && <div className='d-flex justify-content-center'><WittyLoader /></div>}
           {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
           {aiModal.content && <div dangerouslySetInnerHTML={{__html: aiModal.content}} />}
         </ModalBody>

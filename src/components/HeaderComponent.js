@@ -95,7 +95,7 @@ function Header() {
 
         <div className="ml-auto order-md-last d-flex align-items-center">
         {days.isLoading > 0 &&
-        <span className="fa fa-spinner fa-pulse fa-lg fa-fw mr-2" style={{color: 'rgba(255,255,255,0.75)'}} />
+        <span className="fa fa-spinner fa-spin fa-lg fa-fw" style={{color: 'rgba(255,255,255,0.75)'}} />
         }
         {auth.isAuthenticated &&
         <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="mr-1">

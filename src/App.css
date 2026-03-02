@@ -189,6 +189,24 @@ a.cal-button:hover {
   box-shadow: none;
 }
 
+/* ── AI Loader ───────────────────────────────────────────── */
+.witty-loader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.witty-loader-spinner {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.witty-loader-phrase {
+  font-style: italic;
+  transition: opacity 0.2s ease;
+}
+
 /* ── Modal header ────────────────────────────────────────── */
 .modal-header-branded {
   background-color: var(--color-primary);
