@@ -5,7 +5,7 @@ import ScrollToTopButton from './ScrollToTopButton';
 import { getTrackDetail } from '../redux/trackDetail';
 import { setProvider } from '../redux/provider';
 import { movieListDetail } from './MovieUtils';
-import { Fade, Stagger } from 'react-animation-components';
+import { Fade, Stagger } from './Animations';
 import { Helmet } from 'react-helmet-async';
 
 function TrackDetail({ provider: providerParam, trackId }) {

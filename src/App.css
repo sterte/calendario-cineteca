@@ -1,3 +1,12 @@
+/* ── Fade-in animation (replaces react-animation-components) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.anim-fadein {
+  animation: fadeIn 0.4s ease-in;
+}
+
 /* ── Mobile modal scroll lock (Bootstrap 4 + iOS fix) ───── */
 body.modal-open {
   overflow: hidden !important;
@@ -71,38 +80,6 @@ body.modal-open .modal {
 .navbar-dark {
   background-color: #000000;
   border-bottom: 2px solid var(--color-primary);
-}
-
-/* ── Page transitions ────────────────────────────────────── */
-.page-enter {
-  opacity: 1;
-  transform: translateX(0%);
-}
-
-.page-enter-active {
-  opacity: 1.0;
-  transform: translateX(0%);
-  transition: all 300ms ease-in;
-}
-
-.page-exit {
-  opacity: 1.0;
-  transform: translateX(0%);
-}
-
-.page-exit-active {
-  opacity: 1;
-  transform: translateX(0%);
-  transition: all 300ms ease-out;
-}
-
-/* ── Scrollbar ───────────────────────────────────────────── */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
@@ -348,13 +325,12 @@ a.cal-button:hover {
   background-color: var(--color-row-odd);
 }
 
-/* ── Provider toggle switch ──────────────────────────────── */
-.provider-switch-label {
-  color: rgba(255,255,255,0.85);
-  font-size: 0.82rem;
-  white-space: nowrap;
-}
-
 .atcb-text {
   font-weight: 400;
+}
+
+/* ── Buy Me a Coffee widget ──────────────────────────────── */
+#bmc-wbtn {
+  transform: scale(0.72) !important;
+  transform-origin: bottom right !important;
 }

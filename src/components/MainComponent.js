@@ -9,7 +9,6 @@ import TrackDetail from './TrackDetailComponent';
 import CircuitSelect from './CircuitSelectComponent';
 import ResetPassword from './ResetPasswordComponent';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { useSelector } from 'react-redux';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -40,8 +39,6 @@ function Main() {
     return (
         <div>
         <Header />
-        <TransitionGroup>
-        <CSSTransition key={location.key} classNames="page" timeout={300}>
         <Switch location={location}>
         <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({match}) => (
             <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
@@ -55,8 +52,6 @@ function Main() {
         <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
         <Redirect to="/" />
         </Switch>
-        </CSSTransition>
-        </TransitionGroup>
         <Footer />
         </div>
     );

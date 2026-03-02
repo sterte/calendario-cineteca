@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Fade } from 'react-animation-components';
+import { Fade } from './Animations';
 
 export const Vo = (props) => {
     if (props.isVO) {
-        return (<img className='me-3' src='/assets/images/subtitles.gif' alt='subtitles' style={{height: '1.25rem', width: 'auto'}} />);
+        return (<img className='me-3' src='/assets/images/subtitles.gif' alt='subtitles' style={{height: '1rem', width: 'auto'}} />);
     } else {
         return (<></>);
     }
@@ -12,7 +12,7 @@ export const Vo = (props) => {
 
 export const Music = (props) => {
     if (props.isMUSIC) {
-        return (<img className='me-3' src='/assets/images/nota.gif' alt='music' style={{height: '1.25rem', width: 'auto'}} />);
+        return (<img className='me-3' src='/assets/images/nota.gif' alt='music' style={{height: '1rem', width: 'auto'}} />);
     } else {
         return (<></>);
     }

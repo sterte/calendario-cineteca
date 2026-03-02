@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { getDayProgram } from '../redux/days';
-import { Fade, Stagger } from 'react-animation-components';
+import { Fade, Stagger } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from './LoadingComponent';
 import moment from 'moment';

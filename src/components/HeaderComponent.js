@@ -95,14 +95,14 @@ function Header() {
         <div className="container-fluid">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 
-        <div className="ms-auto order-md-last d-flex align-items-center">
+        <div className="ms-auto order-md-last d-flex align-items-center gap-3 pe-2">
         {days.isLoading > 0 &&
         <span className="fa fa-spinner fa-spin fa-lg fa-fw" style={{color: 'rgba(255,255,255,0.75)'}} />
         }
-        <span className="fa fa-question-circle fa-lg px-3" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
+        <span className="fa fa-question-circle fa-lg" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
         {auth.isAuthenticated &&
-        <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="me-1">
-            <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="px-3">
+        <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)}>
+            <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}}>
                 <span className="fa fa-user-circle" />
             </DropdownToggle>
             <DropdownMenu end>

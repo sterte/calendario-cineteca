@@ -4,7 +4,7 @@ import {
   Form, FormGroup, Label, Input
 } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { Fade } from 'react-animation-components';
+import { Fade } from './Animations';
 import Loading from './LoadingComponent';
 import { getMovieDetail, fetchImdb } from '../redux/movies';
 import { setProvider } from '../redux/provider';
@@ -105,8 +105,8 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
     }
 
     return (
-      <div className='container'>
-        <Fade in='true' key={hour.day}>
+      <div className='container' key={hour.day}>
+        <Fade in='true'>
           <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>
             <h5 style={{ marginBottom: 0 }}>{dateString}</h5>
           </div>

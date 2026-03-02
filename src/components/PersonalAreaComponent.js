@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Modal, ModalHeader, ModalBody,
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
     Form, FormGroup, Label, Input } from 'reactstrap';
-import { Fade } from 'react-animation-components';
+import { Fade } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from './LoadingComponent';
 import { fetchFavourites, editFavourite, deleteFavourite } from '../redux/favourites';
@@ -12,6 +12,7 @@ function PersonalArea() {
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentlyEdited, setCurrentlyEdited] = useState(null);
+    const [deleteTarget, setDeleteTarget] = useState(null);
     const ratingRef = useRef(null);
     const commentRef = useRef(null);
 
@@ -50,7 +51,7 @@ function PersonalArea() {
                         <Button className='navigation-button' onClick={() => toggleEditModal(fav)}>
                             <span className="fa fa-edit" />
                         </Button>
-                        <Button className='navigation-button' onClick={() => dispatch(deleteFavourite(fav._id))}>
+                        <Button className='navigation-button' onClick={() => setDeleteTarget(fav)}>
                             <span className="fa fa-trash" />
                         </Button>
                     </div>
@@ -64,6 +65,17 @@ function PersonalArea() {
             <div className='container white-back'>
                 {favlist}
             </div>
+            <Modal isOpen={deleteTarget !== null} toggle={() => setDeleteTarget(null)}>
+                <ModalHeader className='modal-header-branded' toggle={() => setDeleteTarget(null)}>Elimina film</ModalHeader>
+                <ModalBody className='pt-3 pb-2 px-4'>
+                    Eliminare <strong>{deleteTarget?.title}</strong> dai preferiti?
+                </ModalBody>
+                <ModalFooter>
+                    <Button className='navigation-button me-2' onClick={() => { dispatch(deleteFavourite(deleteTarget._id)); setDeleteTarget(null); }}>Elimina</Button>
+                    <Button className='navigation-button' onClick={() => setDeleteTarget(null)}>Annulla</Button>
+                </ModalFooter>
+            </Modal>
+
             <Modal isOpen={isEditModalOpen} toggle={() => toggleEditModal()}>
                 <ModalHeader className='modal-header-branded' toggle={() => toggleEditModal()}>Valuta film</ModalHeader>
                 <ModalBody className='pt-3 pb-4 px-4'>
