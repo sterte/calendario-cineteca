@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Label, Input,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -91,28 +91,28 @@ function Header() {
 
     return (
         <>
-        <Navbar dark expand="md">
-        <div className="container">
+        <Navbar dark expand="md" container={false}>
+        <div className="container-fluid">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 
-        <div className="ml-auto order-md-last d-flex align-items-center">
+        <div className="ms-auto order-md-last d-flex align-items-center">
         {days.isLoading > 0 &&
         <span className="fa fa-spinner fa-spin fa-lg fa-fw" style={{color: 'rgba(255,255,255,0.75)'}} />
         }
-        <span className="fa fa-question-circle fa-lg nav-link" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
+        <span className="fa fa-question-circle fa-lg px-3" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
         {auth.isAuthenticated &&
-        <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="mr-1">
-            <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="nav-link">
+        <Dropdown isOpen={isUserMenuOpen} toggle={() => setIsUserMenuOpen(o => !o)} className="me-1">
+            <DropdownToggle tag="span" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} className="px-3">
                 <span className="fa fa-user-circle" />
             </DropdownToggle>
-            <DropdownMenu right>
+            <DropdownMenu end>
                 <DropdownItem header>Ciao {auth.user.username}</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem tag={NavLink} to="/personalarea">
-                    <span className="fa fa-user-o mr-2" />Area Personale
+                    <span className="fa fa-user-o me-2" />Area Personale
                 </DropdownItem>
                 <DropdownItem onClick={handleLogout}>
-                    <span className="fa fa-sign-out mr-2" />Logout
+                    <span className="fa fa-sign-out me-2" />Logout
                 </DropdownItem>
             </DropdownMenu>
         </Dropdown>
@@ -128,7 +128,7 @@ function Header() {
         </div>
 
         <Collapse isOpen={isNavOpen} navbar>
-        <Nav navbar className="mr-auto">
+        <Nav navbar className="me-auto">
         <NavItem>
         <NavLink className="nav-link" to={`/calendar/${provider}`}>
         <span className="fa fa-calendar fa-lg"></span> Calendario
@@ -157,7 +157,7 @@ function Header() {
         </Collapse>
         </div>
         </Navbar>
-        <Jumbotron className='jumbotron'>
+        <div className='jumbotron mb-3'>
         <div className="container">
         <div className="row row-header">
         <div className="col-12 d-flex justify-content-center">
@@ -176,7 +176,7 @@ function Header() {
         </div>
         </div>
         </div>
-        </Jumbotron>
+        </div>
 
         <Modal isOpen={isSignupModalOpen} toggle={toggleSignupModal}>
             <ModalHeader className='modal-header-branded' toggle={toggleSignupModal}>Registrazione</ModalHeader>
@@ -226,7 +226,7 @@ function Header() {
                         <Input type="password" id="password" name="password" innerRef={passwordRef} />
                     </FormGroup>
                     <div className='d-flex align-items-center mt-3'>
-                        <Button className='navigation-button mr-3' type="submit">Login</Button>
+                        <Button className='navigation-button me-3' type="submit">Login</Button>
                         <Button type="button" className='navigation-button' onClick={requestSignupForm}>Registrati</Button>
                     </div>
                     <div className='mt-2'>
@@ -298,13 +298,13 @@ function HelpCalendar() {
     return (
         <>
             <p>Il <strong>calendario</strong> mostra le proiezioni in programma giorno per giorno.</p>
-            <ul className="pl-3">
-                <li className="mb-2"><span className="fa fa-chevron-left mr-1" /><span className="fa fa-chevron-right mr-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
-                <li className="mb-2"><span className="fa fa-photo-film mr-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
+            <ul className="ps-3">
+                <li className="mb-2"><span className="fa fa-chevron-left me-1" /><span className="fa fa-chevron-right me-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
+                <li className="mb-2"><span className="fa fa-photo-film me-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
                 <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
-                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto trovi{provider !== 'popup' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto trovi{provider !== 'popup' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
                 {isAuthenticated && (
-                    <li className="mb-2"><span className="fa fa-user-circle mr-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
             </ul>
         </>
@@ -317,23 +317,23 @@ function HelpMovie() {
     return (
         <>
             <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma.</p>
-            <ul className="pl-3">
+            <ul className="ps-3">
                 <li className="mb-2">Nella sezione <strong>Proiezioni</strong> trovi tutti gli orari disponibili.</li>
-                <li className="mb-2"><span className="fa fa-calendar mr-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale (Google, Apple, Outlook…).</li>
-                <li className="mb-2"><span className="fa fa-ticket mr-2" />Il pulsante <strong>Acquista</strong> apre la pagina di acquisto del biglietto sul sito della Cineteca.</li>
+                <li className="mb-2"><span className="fa fa-calendar me-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale (Google, Apple, Outlook…).</li>
+                <li className="mb-2"><span className="fa fa-ticket me-2" />Il pulsante <strong>Acquista</strong> apre la pagina di acquisto del biglietto sul sito della Cineteca.</li>
                 {isAuthenticated && (<>
-                    <li className="mb-2"><span className="fa fa-eye mr-2" />Segna il film come visto con l'icona occhio.</li>
+                    <li className="mb-2"><span className="fa fa-eye me-2" />Segna il film come visto con l'icona occhio.</li>
                     <li className="mb-2">Il voto e il link <strong>IMDb</strong> permettono di consultare la valutazione e la scheda del film su IMDb.</li>
                     <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
                 </>)}
-                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
                 {isAuthenticated && (
-                    <li className="mb-2"><span className="fa fa-user-circle mr-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
             </ul>
             {!isAuthenticated && (
                 <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
-                    <span className="fa fa-user-circle mr-2" />
+                    <span className="fa fa-user-circle me-2" />
                     <strong>Registrandoti</strong> avrai accesso anche al check-in dei film visti, al voto e link IMDb e al supporto dell'intelligenza artificiale.
                 </p>
             )}
@@ -346,11 +346,11 @@ function HelpTracks() {
     return (
         <>
             <p>Le <strong>Rassegne</strong> raccolgono cicli tematici di film programmati dalla Cineteca.</p>
-            <ul className="pl-3">
+            <ul className="ps-3">
                 <li className="mb-2">Nella pagina principale trovi l'elenco delle rassegne attive, ognuna con immagine, titolo, date e descrizione.</li>
                 <li className="mb-2">Clicca sul titolo di una rassegna per vedere tutti i film che la compongono.</li>
                 <li className="mb-2">Dalla lista dei film puoi accedere alla scheda dettaglio di ciascun titolo.</li>
-                <li className="mb-2"><span className="fa fa-bars mr-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
             </ul>
         </>
     );
@@ -360,11 +360,11 @@ function HelpPersonalArea() {
     return (
         <>
             <p>L'<strong>Area Personale</strong> raccoglie tutti i film che hai segnato come visti.</p>
-            <ul className="pl-3">
+            <ul className="ps-3">
                 <li className="mb-2">Per ogni film trovi il titolo, il voto e il commento che hai inserito.</li>
-                <li className="mb-2"><span className="fa fa-edit mr-2" />Modifica voto e commento di un film con il pulsante matita.</li>
-                <li className="mb-2"><span className="fa fa-trash mr-2" />Rimuovi un film dalla lista con il pulsante cestino.</li>
-                <li className="mb-2">Per aggiungere un film, vai alla sua scheda dettaglio e clicca sull'icona occhio <span className="fa fa-eye ml-1" />.</li>
+                <li className="mb-2"><span className="fa fa-edit me-2" />Modifica voto e commento di un film con il pulsante matita.</li>
+                <li className="mb-2"><span className="fa fa-trash me-2" />Rimuovi un film dalla lista con il pulsante cestino.</li>
+                <li className="mb-2">Per aggiungere un film, vai alla sua scheda dettaglio e clicca sull'icona occhio <span className="fa fa-eye ms-1" />.</li>
             </ul>
         </>
     );

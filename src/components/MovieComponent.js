@@ -108,7 +108,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
       <div className='container'>
         <Fade in='true' key={hour.day}>
           <div className={giornoInizio > now ? 'row mt-5 mb-0' : 'row mt-5 mb-0 past-movie-title'}>
-            <h5 style={{marginBottom: 0}}>{dateString}</h5>
+            <h5 style={{ marginBottom: 0 }}>{dateString}</h5>
           </div>
           {hour.hours.map((show, showIndex) => {
             let orario = show.orario;
@@ -121,9 +121,9 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
             let oraFine = new Date(oraInizio.getTime() + (1000 * 60 * durationNumber));
 
             const pad = n => String(n).padStart(2, '0');
-            const startDateStr = `${oraInizio.getFullYear()}-${pad(oraInizio.getMonth()+1)}-${pad(oraInizio.getDate())}`;
+            const startDateStr = `${oraInizio.getFullYear()}-${pad(oraInizio.getMonth() + 1)}-${pad(oraInizio.getDate())}`;
             const startTimeStr = `${pad(parseInt(hh))}:${pad(parseInt(mm))}`;
-            const endDateStr = `${oraFine.getFullYear()}-${pad(oraFine.getMonth()+1)}-${pad(oraFine.getDate())}`;
+            const endDateStr = `${oraFine.getFullYear()}-${pad(oraFine.getMonth() + 1)}-${pad(oraFine.getDate())}`;
             const endTimeStr = `${pad(oraFine.getHours())}:${pad(oraFine.getMinutes())}`;
 
             let eventDescription = window.location.href + "\n\n" + movie.movies.originalUrl + "\n\n" + imdbUrl + movie.imdbId;
@@ -135,17 +135,17 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
               address = ' Cinema Modernissimo, Piazza Re Enzo, 4, 40125 Bologna, Italia';
             } else if (provider === 'ccb') {
               const p = hour.place.toLowerCase();
-              if (p.includes('odeon'))        address = 'Cinema Odeon, Via Mascarella, 3, 40126 Bologna BO';
-              else if (p.includes('rialto'))  address = 'Cinema Rialto, Via Rialto, 19, 40126 Bologna BO';
-              else if (p.includes('roma'))    address = 'Cinema Roma d\'essai, Via Fondazza, 4, 40100 Bologna BO';
+              if (p.includes('odeon')) address = 'Cinema Odeon, Via Mascarella, 3, 40126 Bologna BO';
+              else if (p.includes('rialto')) address = 'Cinema Rialto, Via Rialto, 19, 40126 Bologna BO';
+              else if (p.includes('roma')) address = 'Cinema Roma d\'essai, Via Fondazza, 4, 40100 Bologna BO';
               else if (p.includes('chaplin')) address = 'Cinema Chaplin, P.za di Porta Saragozza, 5/a, 40123 Bologna BO';
-              else if (p.includes('europa'))  address = 'Cinema Europa, Via Pietralata, 55, 40100 Bologna BO';
+              else if (p.includes('europa')) address = 'Cinema Europa, Via Pietralata, 55, 40100 Bologna BO';
             } else if (provider === 'popup') {
               const p = hour.place.toLowerCase();
-              if (p.includes('arlecchino'))   address = 'Pop Up Cinema Arlecchino, Via delle Lame 59/a, 40122 Bologna BO';
+              if (p.includes('arlecchino')) address = 'Pop Up Cinema Arlecchino, Via delle Lame 59/a, 40122 Bologna BO';
               else if (p.includes('bristol')) address = 'Pop Up Cinema Bristol, Via Toscana 125, 40141 Bologna BO';
-              else if (p.includes('jolly'))   address = 'Pop Up Cinema Jolly, Via dello Scalo 10/b, 40131 Bologna BO';
-              else if (p.includes('medica'))  address = 'Pop Up Cinema Medica, Via Murri 19, 40138 Bologna BO';
+              else if (p.includes('jolly')) address = 'Pop Up Cinema Jolly, Via dello Scalo 10/b, 40131 Bologna BO';
+              else if (p.includes('medica')) address = 'Pop Up Cinema Medica, Via Murri 19, 40138 Bologna BO';
             }
 
             return (
@@ -155,14 +155,14 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                     {orario} - {hour.place}
                   </span>
                   {show.isVO > 0 &&
-                    <img className='ml-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
+                    <img className='ms-2 mb-1' src='/assets/images/subtitles.gif' alt='subtitles' />
                   }
                 </div>
-                <div style={{textTransform: 'capitalize'}} className={'col-12 mt-0 mb-3'}>
-                  <span dangerouslySetInnerHTML={{__html: show.additionalInfo}} />
+                <div style={{ textTransform: 'capitalize' }} className={'col-12 mt-0 mb-3'}>
+                  <span dangerouslySetInnerHTML={{ __html: show.additionalInfo }} />
                 </div>
                 {isFuture &&
-                  <div className='col-12 col-md-auto mt-2 mt-md-0 mb-0 mb-md-4 d-flex align-items-center'>
+                  <div className='col-12 col-md-auto mt-2 mb-2 d-flex align-items-center'>
                     <AddToCalendarButton
                       name={movie.movies.title}
                       startDate={startDateStr}
@@ -172,21 +172,21 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                       timeZone="Europe/Rome"
                       location={address}
                       description={eventDescription}
-                      options={['Google','Apple','Outlook.com','Yahoo','iCal']}
+                      options={['Google', 'Apple', 'Outlook.com', 'Yahoo', 'iCal']}
                       label="Aggiungi al calendario"
                       hideCheckmark
                       styleLight={provider === 'ccb'
                         ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                         : provider === 'popup'
-                        ? '--btn-background:#9f1c24;--btn-hover-background:#c2323b;--btn-border:#c2323b;--btn-hover-border:#c2323b;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                        : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                          ? '--btn-background:#9f1c24;--btn-hover-background:#c2323b;--btn-border:#c2323b;--btn-hover-border:#c2323b;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                          : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                       }
                     />
                   </div>
                 }
-                <div className='d-flex col-12 col-md-3 mt-4 mt-md-0 mb-0 mb-md-4'>
+                <div className='d-flex col-12 col-md-3 mt-2 mb-2'>
                   {showBuyButton && (show.buyLink || movie.movies.buyLink || '').length > 0 && isFuture &&
-                    <a className='cal-button' href={show.buyLink || movie.movies.buyLink} target="_blank" rel='noopener noreferrer'><span className="fa fa-ticket mr-2" />Acquista</a>
+                    <a className='cal-button' href={show.buyLink || movie.movies.buyLink} target="_blank" rel='noopener noreferrer'><span className="fa fa-ticket me-2" />Acquista</a>
                   }
                 </div>
               </div>
@@ -202,7 +202,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   }
 
   if (movie.errMess || !movie.movies?.title) {
-    return <div className='container white-back' style={{padding: '2rem'}}><p>Errore nel caricamento del film.</p></div>;
+    return <div className='container white-back' style={{ padding: '2rem' }}><p>Errore nel caricamento del film.</p></div>;
   }
 
   const durationNumber = movie.movies.durationMinutes || 0;
@@ -229,7 +229,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
         <meta name='description' content={'Cinetecalendar - ' + movie.movies.title} />
       </Helmet>
       <div className='container white-back'>
-        <div className='row row-content ml-1 mr-1 p-2 p-md-5'>
+        <div className='row row-content ms-1 me-1 p-2 p-md-5'>
           <div className='row d-flex justify-content-center mt-5'>
             <div className='col-md-9 d-flex align-self-center'>
               <div className='row'>
@@ -256,44 +256,53 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
             </div>
           </div>
 
-          <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-            Link: {provider === 'popup'
-            ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
-            : provider === 'ccb'
-            ? <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
-            : <a className='col-1 d-flex align-self-center ml-3 mr-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
-          }
-            {movie.isLoadingImdb && auth.isAuthenticated ?
-              <div className='col-12'><Loading /></div>
-              : auth.isAuthenticated && movie.imdbId &&
-              <div className='col-auto d-flex align-self-center'>
-                <a className='col-auto d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
-                {movie.imdbRatingCount > -1 &&
-                  <div className='col-6 col-md-12 p-0'>
-                    <div className='col-auto d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
-                    <StarRatings
-                      rating={parseFloat(movie.imdbRating) / 2}
-                      numberOfStars={5}
-                      starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
-                      starEmptyColor="#a8a8a8"
-                      starDimension="30px"
-                      starSpacing="0px"
-                    />
-                  </div>
-                }
-              </div>
-            }
+          <div className='section-box col-12 col-md-6 d-flex align-items-center justify-content-between mt-4'>
+            <div className='col-6'>
+              <span className='section-box-title'>Link</span>
+              {provider === 'popup'
+                ? <a className='d-flex align-self-center justify-content-center me-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
+                : provider === 'ccb'
+                  ? <a className='d-flex align-self-center justify-content-center me-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
+                  : <a className='d-flex align-self-center justify-content-center me-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+              }
+            </div>
+            <div className='col-6'>
+              {movie.isLoadingImdb && auth.isAuthenticated ?
+                <div className='col-12'><Loading /></div>
+                : auth.isAuthenticated && movie.imdbId &&
+                <div className='d-flex align-self-center justify-content-center'>
+                  <a className='d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+                  {movie.imdbRatingCount > -1 &&
+                    <div className='p-0 ms-2'>
+                      <div className='d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
+                      <StarRatings
+                        rating={parseFloat(movie.imdbRating) / 2}
+                        numberOfStars={5}
+                        starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
+                        starEmptyColor="#a8a8a8"
+                        starDimension="30px"
+                        starSpacing="0px"
+                      />
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           </div>
 
           {auth.isAuthenticated &&
-            <div className='col-12 col-md-6 p-2 d-flex align-items-center mt-3 row-content'>
-              Chiedi all'AI:
-              <button type='button' style={{height: '80%'}} className='col- d-flex navigation-button btn btn-secondary align-self-center ml-3 mr-3' onClick={() => handleAiRequest('info')}><h4 style={{color: 'white'}}>Info</h4></button>
-              <button type='button' style={{height: '80%'}} className='col-auto d-flex navigation-button btn btn-secondary align-self-center mr-auto' onClick={() => handleAiRequest('similar')}><h4 style={{color: 'white'}}>Simili</h4></button>
+            <div className='section-box col-12 col-md-6 d-flex align-items-center justify-content-between mt-4'>
+              <span className='section-box-title'>Chiedi all'AI</span>
+              <div className='col-6 d-flex justify-content-center'>
+                <button type='button' className='navigation-button btn btn-secondary align-self-center' onClick={() => handleAiRequest('info')}><h4 className='mb-0'>Info</h4></button>
+              </div>
+              <div className='col-6 d-flex justify-content-center'>
+                <button type='button' className='col-6 navigation-button btn btn-secondary align-self-center' onClick={() => handleAiRequest('similar')}><h4 className='mb-0'>Simili</h4></button>
+              </div>
             </div>
           }
 
-          <div className='col-12 col-md-6 p-0 d-flex align-self-center' style={{zIndex: 1}}>
+          <div className='col-12 p-0 d-flex align-self-center' style={{ zIndex: 1 }}>
             {movie.movies.currentHour.day && composeCalendarButton(movie.movies.currentHour, durationNumber)}
           </div>
 
@@ -313,33 +322,33 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
       </div>
 
       <Modal isOpen={isEditModalOpen} toggle={() => toggleEditModal()}>
-        <ModalHeader className='navigation-button' toggle={() => toggleEditModal()}>Valuta Film</ModalHeader>
-        <ModalBody>
-          <div className='white-back row-content'>
-            <Form onSubmit={handleFavouriteAdd}>
-              <FormGroup>
-                <Label htmlFor="title">Film:</Label> {title}
-              </FormGroup>
-              <FormGroup>
-                <Label className='mr-2' htmlFor="rating">Voto</Label>
-                <select className='form-control' onChange={(evt) => { ratingRef.current = evt.target.value; }}>
-                  {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="comment">Commento</Label>
-                <Input type="text" id="comment" name="comment" defaultValue=''
-                  innerRef={commentRef} />
-              </FormGroup>
-              <Button className='navigation-button mr-3' type="submit" value="Edit" color="primary">Salva</Button>
-              <Button onClick={() => toggleEditModal()}>Annulla</Button>
-            </Form>
-          </div>
+        <ModalHeader className='modal-header-branded' toggle={() => toggleEditModal()}>Valuta Film</ModalHeader>
+        <ModalBody className='pt-3 pb-4 px-4'>
+          <Form onSubmit={handleFavouriteAdd}>
+            <FormGroup>
+              <Label htmlFor="title">Film:</Label> {title}
+            </FormGroup>
+            <FormGroup>
+              <Label className='me-2' htmlFor="rating">Voto</Label>
+              <select className='form-control' onChange={(evt) => { ratingRef.current = evt.target.value; }}>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="comment">Commento</Label>
+              <Input type="text" id="comment" name="comment" defaultValue=''
+                innerRef={commentRef} />
+            </FormGroup>
+            <div className='d-flex align-items-center mt-3'>
+              <Button className='navigation-button me-3' type="submit">Salva</Button>
+              <Button className='navigation-button' onClick={() => toggleEditModal()}>Annulla</Button>
+            </div>
+          </Form>
         </ModalBody>
       </Modal>
 
       <Modal isOpen={aiModal.open} toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
-        style={{width: 'calc(100% - 1rem)', maxWidth: '720px', margin: '1rem auto'}}>
+        style={{ width: 'calc(100% - 1rem)', maxWidth: '720px', margin: '1rem auto' }}>
         <ModalHeader
           toggle={() => setAiModal(prev => ({ ...prev, open: false }))}
           style={{
@@ -348,10 +357,10 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           }}>
           {aiModal.title}
         </ModalHeader>
-        <ModalBody style={{overflowY: 'auto', maxHeight: '80vh', overscrollBehavior: 'contain'}}>
+        <ModalBody style={{ overflowY: 'auto', maxHeight: '80vh', overscrollBehavior: 'contain' }}>
           {aiModal.isLoading && <div className='d-flex justify-content-center'><WittyLoader /></div>}
           {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
-          {aiModal.content && <div dangerouslySetInnerHTML={{__html: aiModal.content}} />}
+          {aiModal.content && <div dangerouslySetInnerHTML={{ __html: aiModal.content }} />}
         </ModalBody>
       </Modal>
     </>

@@ -55,7 +55,7 @@ body.modal-open .modal {
 
 .row-content {
   margin:0px auto;
-  padding: 20px 0px 20px 0px;
+  padding: 8px 0px 8px 0px;
   border: 2px solid;
   border-radius: 10px;
   border-color: var(--color-light);
@@ -153,6 +153,11 @@ a.cal-button:visited,
 a.cal-button:hover {
   color: var(--color-btn-text);
   text-decoration: none;
+}
+
+/* Bootstrap 5: specificity fix — a:link would win over .nav-link without this */
+.navbar-nav .nav-link {
+  color: var(--bs-nav-link-color);
 }
 
 .nav-link:hover {
@@ -285,6 +290,26 @@ a.cal-button:hover {
 .jumbotron h1 {
   font-weight: 700;
   letter-spacing: -0.5px;
+}
+
+/* ── Section box (border with title interrupting it) ────── */
+.section-box {
+  position: relative;
+  border: 2px solid var(--color-light);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px var(--color-shadow-sm);
+  padding: 0.75rem 1rem;
+}
+
+.section-box-title {
+  position: absolute;
+  top: -0.7em;
+  left: 0.75rem;
+  background: white;
+  padding: 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
 }
 
 /* ── Cards ───────────────────────────────────────────────── */

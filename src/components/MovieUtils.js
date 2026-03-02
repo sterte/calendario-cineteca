@@ -4,7 +4,7 @@ import { Fade } from 'react-animation-components';
 
 export const Vo = (props) => {
     if (props.isVO) {
-        return (<img className='mr-3' src='/assets/images/subtitles.gif' alt='subtitles' />);
+        return (<img className='me-3' src='/assets/images/subtitles.gif' alt='subtitles' style={{height: '1.25rem', width: 'auto'}} />);
     } else {
         return (<></>);
     }
@@ -12,7 +12,7 @@ export const Vo = (props) => {
 
 export const Music = (props) => {
     if (props.isMUSIC) {
-        return (<img className='mr-3' src='/assets/images/nota.gif' alt='music' />);
+        return (<img className='me-3' src='/assets/images/nota.gif' alt='music' style={{height: '1.25rem', width: 'auto'}} />);
     } else {
         return (<></>);
     }
@@ -53,11 +53,11 @@ if(movie.extras.includes('Sold out')){
   movieExtras = movieExtras.replace('Sold out', '<b>Sold out</b>');
 }
 return (
-    <Fade in={true} className='row ml-1 mr-1 p-3 p-md-3 movie-card-row' key={movie.repeatId}>
-            <div className='col-4 p-0 pr-md-3'>
+    <Fade in={true} className='row ms-1 me-1 p-3 p-md-3 movie-card-row' key={movie.repeatId}>
+            <div className='col-4 p-0 pe-md-3'>
                 <img src={movie.image} className='img-fluid' alt={'img-' + movie.id} />
             </div>
-            <div className='col-12 col-md-8'>
+            <div className='col-12 col-md-8 ps-0'>
                 <div className={isFuture(movie, new Date()) ? 'row' : 'row past-movie-title'}>
                     <Link to={`/movie/${provider}/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
                 </div>
@@ -66,8 +66,8 @@ return (
                     <h5>{movie.date}</h5>
                 </div>
                 }
-                <div className='row'>
-                    <h5>{movie.time}</h5><span className='ml-1'>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
+                <div className='d-flex align-items-baseline gap-1'>
+                    <h5 className='mb-0'>{movie.time}</h5><span>- {movie.place.replace(/Cinema Lumi.re/, 'Cinema Lumiére')} {/*non ho trovato un modo più furbo...*/}</span>
                 </div>                
                 <div className='row' dangerouslySetInnerHTML={{ __html: movieExtras }}>
 

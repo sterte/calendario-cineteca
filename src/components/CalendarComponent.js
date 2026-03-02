@@ -112,54 +112,50 @@ function Calendar({ provider: providerParam }) {
             <div className='row row-content d-flex justify-content-center'>
                 <div className='col-12'>
                     <div className='row d-flex justify-content-center'>
-                        <div className='col-3 col-md-auto order-2 order-md-1 d-flex align-items-center justify-content-center'>
+                        <div className='col-auto order-md-1 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-7)}>
                                 <span className="fa fa-angle-double-left" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
-                        <div className='col-3 col-md-auto order-3 order-md-2 d-flex align-items-center justify-content-center'>
+                        <div className='col-auto order-md-2 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(-1)}>
                                 <span className="fa fa-angle-left" />
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-12 col-md-auto order-1 order-md-3'>
-                            <div className='row d-flex justify-content-center'>
-                                <h5>{weekDays[currentDate.getDay()]}</h5>
-                            </div>
-                            <div className='row d-flex justify-content-center'>
-                                <h4>{formatDate(currentDate, 'DD/MM/YYYY')}</h4>
-                            </div>
+                        <div className='col-auto order-md-3 d-flex align-items-center justify-content-center flex-column'>
+                            <h5 className='mb-0'>{weekDays[currentDate.getDay()]}</h5>
+                            <h4 className='mb-0'>{formatDate(currentDate, 'DD/MM/YYYY')}</h4>
                         </div>
-                        <div className='col-3 col-md-auto order-4 d-flex align-items-center justify-content-center'>
+                        <div className='col-auto order-4 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(1)}>
                                 <span className="fa fa-angle-right" />
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-3 col-md-auto order-5 d-flex align-items-center justify-content-center'>
+                        <div className='col-auto order-5 d-flex align-items-center justify-content-center'>
                             <Button className='navigation-button' onClick={() => changeCurrentDate(7)}>
                                 <span className="fa fa-angle-double-right" />
                                 <span className="d-none d-md-block">Settimana</span>
                             </Button>
                         </div>
                         {(locationFilters[provider] || []).length > 0 &&
-                        <div className='col-3 col-md-auto order-6 d-flex align-items-center justify-content-center'>
+                        <div className='col-auto order-last d-flex align-items-center justify-content-center'>
                             <Dropdown isOpen={filterOpen} toggle={() => setFilterOpen(o => !o)}>
                                 <DropdownToggle className='navigation-button btn btn-secondary' tag='button'>
                                     <span className="fa fa-photo-film" />
                                     {Object.values(filter).filter(Boolean).length > 0 &&
-                                        <span className='badge badge-light ml-1'>
+                                        <span className='badge bg-light text-dark ms-1'>
                                             {Object.values(filter).filter(Boolean).length}
                                         </span>
                                     }
                                     <span className="d-none d-md-block">Sale</span>
                                 </DropdownToggle>
-                                <DropdownMenu right>
+                                <DropdownMenu end>
                                     {Object.values(filter).some(Boolean) && <>
                                         <DropdownItem onClick={() => setFilter({})}>
-                                            <span className='fa fa-times mr-2' />
+                                            <span className='fa fa-times me-2' />
                                             Rimuovi filtri
                                         </DropdownItem>
                                         <DropdownItem divider />
@@ -167,7 +163,7 @@ function Calendar({ provider: providerParam }) {
                                     {(locationFilters[provider] || []).map(loc => (
                                         <DropdownItem key={loc.key} toggle={false}
                                             onClick={() => setFilter(f => ({...f, [loc.key]: !f[loc.key]}))}>
-                                            <span className={`fa mr-2 ${filter[loc.key] ? 'fa-check-square' : 'fa-square-o'}`} />
+                                            <span className={`fa me-2 ${filter[loc.key] ? 'fa-check-square' : 'fa-square-o'}`} />
                                             {loc.label}
                                         </DropdownItem>
                                     ))}

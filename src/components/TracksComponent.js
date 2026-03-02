@@ -30,7 +30,7 @@ function Tracks({ provider: providerParam }) {
         </Fade>
         :
         tracks.tracks.map((track) => (
-            <Fade in={true} className='row ml-1 mr-1 mb-5' key={track.id}>
+            <Fade in={true} className='row ms-1 me-1 mb-5' key={track.id}>
                 <div className='col-12 col-md-4'>
                     <img src={track.image} className='img-fluid' alt={'img-' + track.id} />
                 </div>

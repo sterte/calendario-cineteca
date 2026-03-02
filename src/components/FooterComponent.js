@@ -17,7 +17,7 @@ function Footer(props) {
 					<img alt="Creative Commons BY-NC-SA 4.0" style={{borderWidth: 0, verticalAlign: 'middle'}}
 						src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
 				</a>
-				<span className="ml-2">2020–2026 Stefano Arteconi</span>
+				<span className="ms-2">2020–2026 Stefano Arteconi</span>
 			</p>
 			<p className="mb-0" style={{fontSize: '0.8rem', opacity: 0.75}}>
 				Dati degli spettacoli di proprietà delle rispettive sale cinematografiche.
