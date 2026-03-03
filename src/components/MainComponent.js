@@ -3,6 +3,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Calendar from './CalendarComponent';
 import PersonalArea from './PersonalAreaComponent';
+import Settings from './SettingsComponent';
 import Movie from './MovieComponent';
 import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
@@ -49,7 +50,8 @@ function Main() {
         <Route path="/tracks/:provider/:trackId" render={({match}) => <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
         <Route path="/tracks/:provider" render={({match}) => <Tracks provider={match.params.provider} />} />
         <Redirect from="/tracks" to={`/tracks/${provider}`} />
-        <PrivateRoute path="/personalarea" component={() => <PersonalArea />} />
+        <PrivateRoute path="/diary" component={() => <PersonalArea />} />
+        <PrivateRoute path="/personalarea" component={() => <Settings />} />
         <Redirect to="/" />
         </Switch>
         <Footer />

@@ -109,8 +109,11 @@ function Header() {
             <DropdownMenu end>
                 <DropdownItem header>Ciao {auth.user.username}</DropdownItem>
                 <DropdownItem divider />
+                <DropdownItem tag={NavLink} to="/diary">
+                    <span className="fa fa-book me-2" />Diario
+                </DropdownItem>
                 <DropdownItem tag={NavLink} to="/personalarea">
-                    <span className="fa fa-user-o me-2" />Area Personale
+                    <span className="fa fa-cog me-2" />Area Personale
                 </DropdownItem>
                 <DropdownItem onClick={handleLogout}>
                     <span className="fa fa-sign-out me-2" />Logout
@@ -257,13 +260,14 @@ function Header() {
             <ModalHeader className='modal-header-branded' toggle={() => setIsHelpOpen(false)}>
                 {location.pathname.startsWith('/movie') ? 'Come usare la scheda film'
                     : location.pathname.startsWith('/tracks') ? 'Come usare le Rassegne'
-                    : location.pathname.startsWith('/personalarea') ? 'La tua Area Personale'
+                    : location.pathname.startsWith('/diary') ? 'Il tuo Diario'
+                    : location.pathname.startsWith('/personalarea') ? 'Area Personale'
                     : 'Come usare il calendario'}
             </ModalHeader>
             <ModalBody className='pt-3 pb-4 px-4'>
                 {location.pathname.startsWith('/movie') ? <HelpMovie />
                     : location.pathname.startsWith('/tracks') ? <HelpTracks />
-                    : location.pathname.startsWith('/personalarea') ? <HelpPersonalArea />
+                    : location.pathname.startsWith('/diary') ? <HelpPersonalArea />
                     : <HelpCalendar />
                 }
             </ModalBody>
@@ -305,7 +309,7 @@ function HelpCalendar() {
                 <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
                 <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto trovi{provider !== 'popup' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
                 {isAuthenticated && (
-                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere al tuo <strong>Diario</strong>, all'<strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
             </ul>
         </>
@@ -329,7 +333,7 @@ function HelpMovie() {
                 </>)}
                 <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
                 {isAuthenticated && (
-                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere alla tua <strong>Area Personale</strong> o di effettuare il logout.</li>
+                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere al tuo <strong>Diario</strong>, all'<strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
             </ul>
             {!isAuthenticated && (
@@ -360,7 +364,7 @@ function HelpTracks() {
 function HelpPersonalArea() {
     return (
         <>
-            <p>L'<strong>Area Personale</strong> raccoglie tutti i film che hai segnato come visti.</p>
+            <p>Il <strong>Diario</strong> raccoglie tutti i film che hai segnato come visti.</p>
             <ul className="ps-3">
                 <li className="mb-2">Per ogni film trovi il titolo, il voto e il commento che hai inserito.</li>
                 <li className="mb-2"><span className="fa fa-edit me-2" />Modifica voto e commento di un film con il pulsante matita.</li>

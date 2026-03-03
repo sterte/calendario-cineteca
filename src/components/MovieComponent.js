@@ -8,6 +8,8 @@ import { Fade } from './Animations';
 import { HonestAILoader } from 'honest-ai-loader';
 import PageLoader from './PageLoader';
 import { getMovieDetail, fetchImdb } from '../redux/movies';
+import { fetchLetterboxdFilm, fetchLetterboxdMemberId, fetchLetterboxdWatchlist } from '../redux/letterboxd';
+import { fetchUserPrefs } from '../redux/userPrefs';
 import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
@@ -22,6 +24,8 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const movie = useSelector(state => state.movies);
   const auth = useSelector(state => state.auth);
   const provider = useSelector(state => state.provider.activeProvider);
+  const letterboxd = useSelector(state => state.letterboxd);
+  const userPrefs = useSelector(state => state.userPrefs);
   const dispatch = useDispatch();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -37,14 +41,37 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
     dispatch(getMovieDetail({ categoryId, movieId, repeatId, provider: providerParam }));
   }, [dispatch, categoryId, movieId, repeatId, providerParam]);
 
-  const prevIsLoadingRef = useRef(true);
   useEffect(() => {
-    if (auth.isAuthenticated && prevIsLoadingRef.current && !movie.isLoading && movie.movies?.title && !movie.isLoadingImdb && !movie.imdbId) {
+    if (auth.isAuthenticated) dispatch(fetchUserPrefs());
+  }, [auth.isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (!auth.isAuthenticated || userPrefs.isLoading) return;
+    if (movie.isLoading || !movie.movies?.title) return;
+    if (userPrefs.prefs.imdbEnabled && !movie.isLoadingImdb && !movie.imdbId && !movie.errMessImdb) {
       const year = parseInt(movie.movies.year) || 0;
       const originalTitle = movie.movies.originalTitle || movie.movies.title;
       dispatch(fetchImdb({ title: originalTitle, year }));
     }
-    prevIsLoadingRef.current = movie.isLoading;
+    if (userPrefs.prefs.letterboxdEnabled && !letterboxd.isLoadingFilm && !letterboxd.lbSlug && letterboxd.errMess === null) {
+      const year = parseInt(movie.movies.year) || 0;
+      const originalTitle = movie.movies.originalTitle || movie.movies.title;
+      dispatch(fetchLetterboxdFilm({ title: originalTitle, year }));
+    }
+  });
+
+  useEffect(() => {
+    if (!auth.isAuthenticated || !userPrefs.prefs.letterboxdUsername) return;
+    // Step 1: resolve username → member ID (once, cached in state)
+    if (!letterboxd.memberLbId && !letterboxd.isLoadingMember &&
+        letterboxd.memberLbIdFor !== userPrefs.prefs.letterboxdUsername) {
+      dispatch(fetchLetterboxdMemberId(userPrefs.prefs.letterboxdUsername));
+    }
+    // Step 2: check watchlist once we have both the film slug and the member ID
+    if (letterboxd.lbSlug && letterboxd.memberLbId &&
+        !letterboxd.isLoadingWatchlist && !letterboxd.watchlistChecked) {
+      dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, memberId: letterboxd.memberLbId }));
+    }
   });
 
   const toggleEditModal = (t) => {
@@ -256,40 +283,73 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
             </div>
           </div>
 
-          <div className='section-box col-12 col-md-6 d-flex align-items-center justify-content-between mt-4'>
-            <div className='col-6'>
-              <span className='section-box-title'>Link</span>
+          <div className='section-box col-12 d-flex align-items-center flex-wrap gap-4 mt-4'>
+            <span className='section-box-title'>Link</span>
+            <div className='d-flex align-items-center'>
               {provider === 'popup'
-                ? <a className='d-flex align-self-center justify-content-center me-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
+                ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
                 : provider === 'ccb'
-                  ? <a className='d-flex align-self-center justify-content-center me-3 p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
-                  : <a className='d-flex align-self-center justify-content-center me-3 p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+                  ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
+                  : <a className='d-flex align-self-center p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
               }
             </div>
-            <div className='col-6'>
-              {movie.isLoadingImdb && auth.isAuthenticated ?
-                <div className='col-12 d-flex align-self-center justify-content-center'><HonestAILoader showText={false} styleOptions={{ size: 36, strokeWidth: 4, primaryColor: 'rgb(245, 197, 24)', secondaryColor: 'rgba(255,255,255,0)' }} /></div>
-                : auth.isAuthenticated && movie.imdbId &&
-                <div className='d-flex align-self-center justify-content-center'>
-                  <a className='d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
-                  {movie.imdbRatingCount > -1 &&
-                    <div className='p-0 ms-2'>
-                      <div className='d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
-                      <div className='d-none d-md-block'>
-                        <StarRatings
-                          rating={parseFloat(movie.imdbRating) / 2}
-                          numberOfStars={5}
-                          starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
-                          starEmptyColor="#a8a8a8"
-                          starDimension="30px"
-                          starSpacing="0px"
-                        />
+
+            {auth.isAuthenticated && userPrefs.prefs.imdbEnabled && (
+              <div className='d-flex align-items-center'>
+                {movie.isLoadingImdb
+                  ? <HonestAILoader showText={false} styleOptions={{ size: 36, strokeWidth: 4, primaryColor: 'rgb(245, 197, 24)', secondaryColor: 'rgba(255,255,255,0)' }} />
+                  : movie.imdbId &&
+                  <>
+                    <a className='d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
+                    {movie.imdbRatingCount > -1 &&
+                      <div className='p-0 ms-2'>
+                        <div className='d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
+                        <div className='d-none d-md-block'>
+                          <StarRatings
+                            rating={parseFloat(movie.imdbRating) / 2}
+                            numberOfStars={5}
+                            starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
+                            starEmptyColor="#a8a8a8"
+                            starDimension="30px"
+                            starSpacing="0px"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
+                    }
+                  </>
+                }
+              </div>
+            )}
+
+            {auth.isAuthenticated && userPrefs.prefs.letterboxdEnabled && (
+              <div className='d-flex align-items-center'>
+                {letterboxd.isLoadingFilm
+                  ? <HonestAILoader showText={false} styleOptions={{ size: 36, strokeWidth: 4, primaryColor: 'rgb(245, 197, 24)', secondaryColor: 'rgba(255,255,255,0)' }} />
+                  : letterboxd.lbSlug &&
+                  <>
+                    <a className='d-flex align-self-center' href={letterboxd.lbUrl} target="_blank" rel='noopener noreferrer'
+                      style={letterboxd.inWatchlist ? { outline: '3px solid red', borderRadius: '4px', padding: '2px' } : {}}>
+                      <img width='50' src='/assets/images/logo-letterboxd.png' alt='link-letterboxd' />
+                    </a>
+                    {letterboxd.lbRating &&
+                      <div className='p-0 ms-2'>
+                        <div className='d-flex align-self-center'>{letterboxd.lbRating.toFixed(1)}</div>
+                        <div className='d-none d-md-block'>
+                          <StarRatings
+                            rating={letterboxd.lbRating}
+                            numberOfStars={5}
+                            starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
+                            starEmptyColor="#a8a8a8"
+                            starDimension="30px"
+                            starSpacing="0px"
+                          />
+                        </div>
+                      </div>
+                    }
+                  </>
+                }
+              </div>
+            )}
           </div>
 
           {auth.isAuthenticated &&
