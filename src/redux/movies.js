@@ -14,34 +14,11 @@ export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({
 });
 
 export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, year }) => {
-	const autocompleteRes = await fetch('https://imdb8.p.rapidapi.com/auto-complete?q=' + title, {
-		method: 'GET',
-		headers: {
-			'x-rapidapi-host': 'imdb8.p.rapidapi.com',
-			'x-rapidapi-key': '4eac66e9b5msh32881c1535a40e0p1d8ceajsn8f74f898d71d'
-		}
+	const res = await fetch(fetchUrl + '/imdb?title=' + encodeURIComponent(title) + '&year=' + year, {
+		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
 	});
-	if (!autocompleteRes.ok) throw new Error('IMDB API error ' + autocompleteRes.status);
-	const autocompleteData = await autocompleteRes.json();
-
-	let items = autocompleteData.d.filter(el => el.l === title && (el.y && el.y === year));
-	if (items.length === 0) { items = autocompleteData.d.filter(el => el.l === title && (el.y && el.y - 1 === year)); }
-	if (items.length === 0) { items = autocompleteData.d.filter(el => el.l === title && (el.y && el.y + 1 === year)); }
-	if (items.length === 0) { items = autocompleteData.d.filter(el => el.l === title || (el.y && el.y === year)); }
-	if (items.length === 0) { items = autocompleteData.d.filter(el => el.l === title || (el.y && el.y - 1 === year)); }
-	if (items.length === 0) { items = autocompleteData.d.filter(el => el.l === title || (el.y && el.y + 1 === year)); }
-	const id = items[0].id;
-
-	const detailRes = await fetch('https://imdb8.p.rapidapi.com/title/get-overview-details?tconst=' + id + '&currentCountry=IT', {
-		method: 'GET',
-		headers: {
-			'x-rapidapi-host': 'imdb8.p.rapidapi.com',
-			'x-rapidapi-key': '4eac66e9b5msh32881c1535a40e0p1d8ceajsn8f74f898d71d'
-		}
-	});
-	if (!detailRes.ok) throw new Error('IMDB API error ' + detailRes.status);
-	const data = await detailRes.json();
-	return { imdbId: data.id, imdbRating: data.ratings.rating, imdbRatingCount: data.ratings.ratingCount };
+	if (!res.ok) throw new Error('IMDB API error ' + res.status);
+	return res.json();
 });
 
 const moviesSlice = createSlice({

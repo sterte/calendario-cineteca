@@ -8,7 +8,7 @@ import { Fade } from './Animations';
 import { HonestAILoader } from 'honest-ai-loader';
 import PageLoader from './PageLoader';
 import { getMovieDetail, fetchImdb } from '../redux/movies';
-import { fetchLetterboxdFilm, fetchLetterboxdMemberId, fetchLetterboxdWatchlist } from '../redux/letterboxd';
+import { fetchLetterboxdFilm, fetchLetterboxdWatchlist } from '../redux/letterboxd';
 import { fetchUserPrefs } from '../redux/userPrefs';
 import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
@@ -62,15 +62,8 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
 
   useEffect(() => {
     if (!auth.isAuthenticated || !userPrefs.prefs.letterboxdUsername) return;
-    // Step 1: resolve username → member ID (once, cached in state)
-    if (!letterboxd.memberLbId && !letterboxd.isLoadingMember &&
-        letterboxd.memberLbIdFor !== userPrefs.prefs.letterboxdUsername) {
-      dispatch(fetchLetterboxdMemberId(userPrefs.prefs.letterboxdUsername));
-    }
-    // Step 2: check watchlist once we have both the film slug and the member ID
-    if (letterboxd.lbSlug && letterboxd.memberLbId &&
-        !letterboxd.isLoadingWatchlist && !letterboxd.watchlistChecked) {
-      dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, memberId: letterboxd.memberLbId }));
+    if (letterboxd.lbSlug && !letterboxd.isLoadingWatchlist && !letterboxd.watchlistChecked) {
+      dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, username: userPrefs.prefs.letterboxdUsername }));
     }
   });
 
