@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
+import { logoutUser } from './auth';
 
 export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({ categoryId, movieId, repeatId, provider: providerParam }, { getState }) => {
 	const provider = providerParam || getState().provider.activeProvider;
@@ -13,10 +14,11 @@ export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({
 	return response.json();
 });
 
-export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, year }) => {
+export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, year }, { dispatch }) => {
 	const res = await fetch(fetchUrl + '/imdb?title=' + encodeURIComponent(title) + '&year=' + year, {
 		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
 	});
+	if (res.status === 401) { dispatch(logoutUser()); throw new Error('Session expired'); }
 	if (!res.ok) throw new Error('IMDB API error ' + res.status);
 	return res.json();
 });

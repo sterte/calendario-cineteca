@@ -14,11 +14,12 @@ const loadFromStorage = () => {
 
 export const fetchUserPrefs = createAsyncThunk(
     'userPrefs/fetch',
-    async () => {
+    async (_, { dispatch }) => {
         const bearer = 'Bearer ' + localStorage.getItem('token');
         const response = await fetch(fetchUrl + '/users/preferences', {
             headers: { 'Authorization': bearer }
         });
+        if (response.status === 401) { dispatch(logoutUser()); throw new Error('Session expired'); }
         if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
         const data = await response.json();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -27,13 +28,14 @@ export const fetchUserPrefs = createAsyncThunk(
     { condition: () => !localStorage.getItem(STORAGE_KEY) }
 );
 
-export const updateUserPrefs = createAsyncThunk('userPrefs/update', async (prefs, { getState }) => {
+export const updateUserPrefs = createAsyncThunk('userPrefs/update', async (prefs, { getState, dispatch }) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const response = await fetch(fetchUrl + '/users/preferences', {
         method: 'PUT',
         body: JSON.stringify(prefs),
         headers: { 'Content-Type': 'application/json', 'Authorization': bearer }
     });
+    if (response.status === 401) { dispatch(logoutUser()); throw new Error('Session expired'); }
     if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
     const updated = { ...getState().userPrefs.prefs, ...prefs };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));

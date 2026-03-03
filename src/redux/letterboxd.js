@@ -1,20 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
 import { getMovieDetail } from './movies';
+import { logoutUser } from './auth';
 
-export const fetchLetterboxdFilm = createAsyncThunk('letterboxd/fetchFilm', async ({ title, year }) => {
+export const fetchLetterboxdFilm = createAsyncThunk('letterboxd/fetchFilm', async ({ title, year }, { dispatch }) => {
     const res = await fetch(fetchUrl + '/letterboxd/film?title=' + encodeURIComponent(title) + '&year=' + year, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     });
+    if (res.status === 401) { dispatch(logoutUser()); throw new Error('Session expired'); }
     if (!res.ok) throw new Error('Letterboxd API error ' + res.status);
     return res.json();
 });
 
-export const fetchLetterboxdWatchlist = createAsyncThunk('letterboxd/fetchWatchlist', async ({ filmSlug, username }) => {
+export const fetchLetterboxdWatchlist = createAsyncThunk('letterboxd/fetchWatchlist', async ({ filmSlug, username }, { dispatch }) => {
     const res = await fetch(
         fetchUrl + '/letterboxd/watchlist?username=' + encodeURIComponent(username) + '&filmSlug=' + encodeURIComponent(filmSlug),
         { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } }
     );
+    if (res.status === 401) { dispatch(logoutUser()); throw new Error('Session expired'); }
     if (!res.ok) throw new Error('Letterboxd watchlist error ' + res.status);
     const data = await res.json();
     return data.inWatchlist;

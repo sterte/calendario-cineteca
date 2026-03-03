@@ -10,7 +10,8 @@ import TrackDetail from './TrackDetailComponent';
 import CircuitSelect from './CircuitSelectComponent';
 import ResetPassword from './ResetPasswordComponent';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { refreshToken } from '../redux/auth';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useSelector(state => state.auth);
@@ -27,10 +28,16 @@ function Main() {
     const location = useLocation();
     const auth = useSelector(state => state.auth);
     const provider = useSelector(state => state.provider.activeProvider);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', provider);
     }, [provider]);
+
+    useEffect(() => {
+        if (!auth.isAuthenticated) return;
+        dispatch(refreshToken());
+    }, [auth.isAuthenticated, dispatch]);
 
     // Circuit selector is full-screen, no header/footer
     if (location.pathname === '/' || location.pathname === '/circuits') {

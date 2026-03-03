@@ -46,6 +46,17 @@ export const requestPasswordReset = createAsyncThunk('auth/requestPasswordReset'
 	return response.json();
 });
 
+export const refreshToken = createAsyncThunk('auth/refreshToken', async (_, { dispatch, rejectWithValue }) => {
+	const res = await fetch(fetchUrl + '/users/refresh-token', {
+		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+	});
+	if (res.status === 401) { dispatch(logoutUser()); return rejectWithValue('Session expired'); }
+	if (!res.ok) return rejectWithValue('Refresh failed');
+	const data = await res.json();
+	localStorage.setItem('token', data.token);
+	return data.token;
+});
+
 export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ token, newPassword }, { rejectWithValue }) => {
 	const response = await fetch(fetchUrl + '/users/reset-password', {
 		method: 'POST',
@@ -141,6 +152,9 @@ const authSlice = createSlice({
 				state.isLoading = false;
 				state.resetStatus = null;
 				state.resetErrMess = action.payload || action.error.message;
+			})
+			.addCase(refreshToken.fulfilled, (state, action) => {
+				state.token = action.payload;
 			})
 			.addCase(resetPassword.pending, (state) => {
 				state.isLoading = true;
