@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from './LoadingComponent';
+import PageLoader from './PageLoader';
 import ScrollToTopButton from './ScrollToTopButton';
 import { getTrackDetail } from '../redux/trackDetail';
 import { setProvider } from '../redux/provider';
@@ -21,7 +21,7 @@ function TrackDetail({ provider: providerParam, trackId }) {
     }, [dispatch, providerParam, trackId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (trackDetail.isLoading) {
-        return <div className='container'><Loading /></div>;
+        return <PageLoader />;
     }
 
     const tracksList = !trackDetail?.trackDetail?.movies?.length ?

@@ -3,7 +3,7 @@ import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 're
 import { getDayProgram } from '../redux/days';
 import { Fade, Stagger } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from './LoadingComponent';
+import PageLoader from './PageLoader';
 import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
 import { weekDays, movieListDetail } from './MovieUtils';
@@ -89,7 +89,7 @@ function Calendar({ provider: providerParam }) {
 
     const tmpMoment = moment(currentDate).format('YYYY-MM-DD');
     if (days.loadingState[tmpMoment] !== 1) {
-        return <div className='container'><Loading size={5} /></div>;
+        return <PageLoader />;
     }
 
     const movielist = days.days.filter(day => day.day === formatDate(currentDate)).length === 0 ?

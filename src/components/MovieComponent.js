@@ -5,13 +5,13 @@ import {
 } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Fade } from './Animations';
-import Loading from './LoadingComponent';
+import { HonestAILoader } from 'honest-ai-loader';
+import PageLoader from './PageLoader';
 import { getMovieDetail, fetchImdb } from '../redux/movies';
 import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import ScrollToTopButton from './ScrollToTopButton';
-import WittyLoader from './WittyLoaderComponent';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
@@ -198,7 +198,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   };
 
   if (movie.isLoading) {
-    return <div className='container'><Loading /></div>;
+    return <PageLoader />;
   }
 
   if (movie.errMess || !movie.movies?.title) {
@@ -268,7 +268,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
             </div>
             <div className='col-6'>
               {movie.isLoadingImdb && auth.isAuthenticated ?
-                <div className='col-12'><Loading /></div>
+                <div className='col-12 d-flex align-self-center justify-content-center'><HonestAILoader showText={false} styleOptions={{ size: 36, strokeWidth: 4, primaryColor: 'rgb(245, 197, 24)', secondaryColor: 'rgba(255,255,255,0)' }} /></div>
                 : auth.isAuthenticated && movie.imdbId &&
                 <div className='d-flex align-self-center justify-content-center'>
                   <a className='d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
@@ -360,7 +360,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           {aiModal.title}
         </ModalHeader>
         <ModalBody style={{ overflowY: 'auto', maxHeight: '80vh', overscrollBehavior: 'contain' }}>
-          {aiModal.isLoading && <div className='d-flex justify-content-center'><WittyLoader /></div>}
+          {aiModal.isLoading && <div className='d-flex align-self-center justify-content-center'><HonestAILoader language="it" textPosition="bottom" textTransition="fade" textTime={1000} transitionTime={200} styleOptions={{ size: 90, strokeWidth: 10, primaryColor: '#555555', secondaryColor: '#00000000', textColor: '#555555', fontSize: '1.5rem', fontWeight: 800 }} /></div>}
           {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
           {aiModal.content && <div dangerouslySetInnerHTML={{ __html: aiModal.content }} />}
         </ModalBody>

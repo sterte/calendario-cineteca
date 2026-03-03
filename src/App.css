@@ -329,6 +329,13 @@ a.cal-button:hover {
   font-weight: 400;
 }
 
+/* ── HonestAILoader ──────────────────────────────────────── */
+.container:has(> [class*="_wrapper_hvge4"]) {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
 /* ── Buy Me a Coffee widget ──────────────────────────────── */
 #bmc-wbtn {
   transform: scale(0.72) !important;

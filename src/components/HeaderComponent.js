@@ -4,6 +4,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
     Form, FormGroup, Label, Input,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
+import { HonestAILoader } from 'honest-ai-loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, requestPasswordReset, clearResetStatus } from '../redux/auth';
 
@@ -97,7 +98,7 @@ function Header() {
 
         <div className="ms-auto order-md-last d-flex align-items-center gap-3 pe-2">
         {days.isLoading > 0 &&
-        <span className="fa fa-spinner fa-spin fa-lg fa-fw" style={{color: 'rgba(255,255,255,0.75)'}} />
+        <HonestAILoader showText={false} styleOptions={{ size: 24, strokeWidth: 3, primaryColor: '#555555', secondaryColor: 'rgba(255,255,255,0)' }} />
         }
         <span className="fa fa-question-circle fa-lg" style={{color: 'rgba(255,255,255,0.75)', fontSize: '1.4rem', cursor: 'pointer'}} onClick={() => setIsHelpOpen(true)} />
         {auth.isAuthenticated &&

@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
     Form, FormGroup, Label, Input } from 'reactstrap';
 import { Fade } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from './LoadingComponent';
+import PageLoader from './PageLoader';
 import { fetchFavourites, editFavourite, deleteFavourite } from '../redux/favourites';
 
 function PersonalArea() {
@@ -30,7 +30,7 @@ function PersonalArea() {
     };
 
     if (favourites.isLoading) {
-        return <div className='container'><Loading /></div>;
+        return <PageLoader />;
     }
     if (favourites.errMess != null) {
         return <div className='container'>{favourites.errMess}</div>;

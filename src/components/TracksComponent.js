@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Fade } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from './LoadingComponent';
+import PageLoader from './PageLoader';
 import ScrollToTopButton from './ScrollToTopButton';
 import { getTracks } from '../redux/tracks';
 import { setProvider } from '../redux/provider';
@@ -21,7 +21,7 @@ function Tracks({ provider: providerParam }) {
     }, [dispatch, providerParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (tracks.isLoading) {
-        return <div className='container'><Loading /></div>;
+        return <PageLoader />;
     }
 
     const tracksList = tracks.tracks.length === 0 ?
