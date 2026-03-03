@@ -360,7 +360,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           {aiModal.title}
         </ModalHeader>
         <ModalBody style={{ overflowY: 'auto', maxHeight: '80vh', overscrollBehavior: 'contain' }}>
-          {aiModal.isLoading && <div className='d-flex align-self-center justify-content-center'><HonestAILoader language="it" textPosition="bottom" textTransition="fade" textTime={1000} transitionTime={200} styleOptions={{ size: 90, strokeWidth: 10, primaryColor: '#555555', secondaryColor: '#00000000', textColor: '#555555', fontSize: '1.5rem', fontWeight: 800 }} /></div>}
+          {aiModal.isLoading && <div className='d-flex align-self-center justify-content-center'><HonestAILoader language="it" type='linear' textPosition="bottom" textTransition="fade" textTime={1000} transitionTime={200} styleOptions={{ size: 300, strokeWidth: 10, barHeight: 24, primaryColor: '#555555', secondaryColor: '#00000000', textColor: '#555555', fontSize: '1.5rem', fontWeight: 800 }} /></div>}
           {aiModal.error && <div className='text-danger'>{aiModal.error}</div>}
           {aiModal.content && <div dangerouslySetInnerHTML={{ __html: aiModal.content }} />}
         </ModalBody>
