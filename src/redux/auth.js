@@ -15,7 +15,6 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (creds, { reje
 		return rejectWithValue(data.status || 'Login failed');
 	}
 	localStorage.setItem('token', data.token);
-	localStorage.setItem('creds', JSON.stringify(creds));
 	return data;
 });
 
@@ -67,9 +66,8 @@ const authSlice = createSlice({
 	name: 'auth',
 	initialState: {
 		isLoading: false,
-		isAuthenticated: localStorage.getItem('token') ? true : false,
+		isAuthenticated: !!localStorage.getItem('token'),
 		token: localStorage.getItem('token'),
-		user: localStorage.getItem('creds') ? JSON.parse(localStorage.getItem('creds')) : null,
 		errMess: null,
 		signupSuccess: false,
 		resetStatus: null,   // null | 'sent' | 'done'
@@ -88,19 +86,17 @@ const authSlice = createSlice({
 		},
 		logoutUser(state) {
 			localStorage.removeItem('token');
-			localStorage.removeItem('creds');
+			localStorage.removeItem('userPrefs');
 			state.isLoading = false;
 			state.isAuthenticated = false;
 			state.token = '';
-			state.user = null;
 		}
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(loginUser.pending, (state, action) => {
+			.addCase(loginUser.pending, (state) => {
 				state.isLoading = true;
 				state.isAuthenticated = false;
-				state.user = { ...action.meta.arg, password: '' };
 				state.errMess = null;
 			})
 			.addCase(loginUser.fulfilled, (state, action) => {
@@ -109,17 +105,15 @@ const authSlice = createSlice({
 				state.isAdmin = action.payload.isAdmin;
 				state.errMess = '';
 				state.token = action.payload.token;
-				state.user = action.meta.arg;
 			})
 			.addCase(loginUser.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isAuthenticated = false;
 				state.errMess = action.payload || action.error.message;
 			})
-			.addCase(signupUser.pending, (state, action) => {
+			.addCase(signupUser.pending, (state) => {
 				state.isLoading = true;
 				state.isAuthenticated = false;
-				state.user = action.meta.arg;
 				state.errMess = null;
 			})
 			.addCase(signupUser.fulfilled, (state) => {

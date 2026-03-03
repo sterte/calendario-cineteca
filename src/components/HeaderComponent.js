@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
     Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Label, Input,
@@ -10,6 +10,7 @@ import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, 
 
 function Header() {
     const auth = useSelector(state => state.auth);
+    const userPrefs = useSelector(state => state.userPrefs);
     const provider = useSelector(state => state.provider.activeProvider);
     const days = useSelector(state => state.days);
     const dispatch = useDispatch();
@@ -32,12 +33,6 @@ function Header() {
     const emailRef = useRef(null);
     const confirmpasswordRef = useRef(null);
     const resetEmailRef = useRef(null);
-
-    useEffect(() => {
-        if (auth.isAuthenticated) {
-            dispatch(loginUser({ username: auth.user.username, password: auth.user.password }));
-        }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const toggleLoginModal = () => {
         dispatch(clearAuthError());
@@ -107,7 +102,7 @@ function Header() {
                 <span className="fa fa-user-circle" />
             </DropdownToggle>
             <DropdownMenu end>
-                <DropdownItem header>Ciao {auth.user.username}</DropdownItem>
+                <DropdownItem header>Ciao {userPrefs.prefs.email}</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem tag={NavLink} to="/diary">
                     <span className="fa fa-book me-2" />Diario
@@ -268,6 +263,7 @@ function Header() {
                 {location.pathname.startsWith('/movie') ? <HelpMovie />
                     : location.pathname.startsWith('/tracks') ? <HelpTracks />
                     : location.pathname.startsWith('/diary') ? <HelpPersonalArea />
+                    : location.pathname.startsWith('/personalarea') ? <HelpSettings />
                     : <HelpCalendar />
                 }
             </ModalBody>
@@ -323,23 +319,21 @@ function HelpMovie() {
         <>
             <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma.</p>
             <ul className="ps-3">
-                <li className="mb-2">Nella sezione <strong>Proiezioni</strong> trovi tutti gli orari disponibili.</li>
                 <li className="mb-2"><span className="fa fa-calendar me-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale (Google, Apple, Outlook…).</li>
                 <li className="mb-2"><span className="fa fa-ticket me-2" />Il pulsante <strong>Acquista</strong> apre la pagina di acquisto del biglietto sul sito della Cineteca.</li>
                 {isAuthenticated && (<>
-                    <li className="mb-2"><span className="fa fa-eye me-2" />Segna il film come visto con l'icona occhio.</li>
-                    <li className="mb-2">Il voto e il link <strong>IMDb</strong> permettono di consultare la valutazione e la scheda del film su IMDb.</li>
+                    <li className="mb-2"><span className="fa fa-eye me-2" />Clicca sull'icona occhio per segnare il film come visto e aggiungerlo al tuo <strong>Diario</strong>.</li>
+                    <li className="mb-2">Clicca sul <strong>logo del cinema</strong> per aprire la pagina ufficiale della proiezione sul sito del circuito.</li>
+                    <li className="mb-2"><strong>IMDb</strong> — se abilitato nell'Area Personale, mostra il voto medio della community di IMDb e il numero di votanti. Clicca sul logo per aprire la scheda ufficiale del film su IMDb.</li>
+                    <li className="mb-2"><strong>Letterboxd</strong> — se abilitato nell'Area Personale, mostra il voto medio su Letterboxd. Clicca sul logo per aprire la scheda film su Letterboxd. Se hai impostato il tuo username Letterboxd, un bordo rosso sul logo indica che il film è nella tua watchlist.</li>
                     <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
                 </>)}
                 <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
-                {isAuthenticated && (
-                    <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere al tuo <strong>Diario</strong>, all'<strong>Area Personale</strong> o di effettuare il logout.</li>
-                )}
             </ul>
             {!isAuthenticated && (
                 <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
                     <span className="fa fa-user-circle me-2" />
-                    <strong>Registrandoti</strong> avrai accesso anche al check-in dei film visti, al voto e link IMDb e al supporto dell'intelligenza artificiale.
+                    <strong>Registrandoti</strong> avrai accesso al check-in dei film visti, ai voti IMDb e Letterboxd e al supporto dell'intelligenza artificiale.
                 </p>
             )}
         </>
@@ -367,9 +361,23 @@ function HelpPersonalArea() {
             <p>Il <strong>Diario</strong> raccoglie tutti i film che hai segnato come visti.</p>
             <ul className="ps-3">
                 <li className="mb-2">Per ogni film trovi il titolo, il voto e il commento che hai inserito.</li>
-                <li className="mb-2"><span className="fa fa-edit me-2" />Modifica voto e commento di un film con il pulsante matita.</li>
-                <li className="mb-2"><span className="fa fa-trash me-2" />Rimuovi un film dalla lista con il pulsante cestino.</li>
-                <li className="mb-2">Per aggiungere un film, vai alla sua scheda dettaglio e clicca sull'icona occhio <span className="fa fa-eye ms-1" />.</li>
+                <li className="mb-2"><span className="fa fa-edit me-2" />Modifica voto e commento con il pulsante matita.</li>
+                <li className="mb-2"><span className="fa fa-trash me-2" />Rimuovi un film dalla lista con il pulsante cestino (viene chiesta conferma).</li>
+                <li className="mb-2">Per aggiungere un film al Diario, vai alla sua scheda dettaglio e clicca sull'icona occhio <span className="fa fa-eye ms-1" />.</li>
+            </ul>
+        </>
+    );
+}
+
+function HelpSettings() {
+    return (
+        <>
+            <p>L'<strong>Area Personale</strong> ti permette di personalizzare le funzioni del tuo account.</p>
+            <ul className="ps-3">
+                <li className="mb-2"><strong>IMDb</strong> — abilita o disabilita la visualizzazione del voto IMDb nella scheda film. Quando attivo, il voto medio e il numero di votanti vengono mostrati accanto al logo IMDb.</li>
+                <li className="mb-2"><strong>Letterboxd</strong> — abilita o disabilita la visualizzazione del voto Letterboxd nella scheda film.</li>
+                <li className="mb-2"><strong>Username Letterboxd</strong> — inserisci il tuo username Letterboxd per attivare il controllo della watchlist: nella scheda film, un bordo rosso sul logo Letterboxd segnala che quel film è nella tua watchlist.</li>
+                <li className="mb-2"><strong>Cambia password</strong> — invia un link di reset alla tua email per impostare una nuova password.</li>
             </ul>
         </>
     );

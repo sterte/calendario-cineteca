@@ -1,16 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUrl } from '../shared/baseUrl';
+import { logoutUser } from './auth';
 
-export const fetchUserPrefs = createAsyncThunk('userPrefs/fetch', async () => {
-    const bearer = 'Bearer ' + localStorage.getItem('token');
-    const response = await fetch(fetchUrl + '/users/preferences', {
-        headers: { 'Authorization': bearer }
-    });
-    if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
-    return response.json();
-});
+const STORAGE_KEY = 'userPrefs';
+const defaultPrefs = { imdbEnabled: true, letterboxdEnabled: true, letterboxdUsername: '', email: '' };
 
-export const updateUserPrefs = createAsyncThunk('userPrefs/update', async (prefs, { dispatch }) => {
+const loadFromStorage = () => {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+};
+
+export const fetchUserPrefs = createAsyncThunk(
+    'userPrefs/fetch',
+    async () => {
+        const bearer = 'Bearer ' + localStorage.getItem('token');
+        const response = await fetch(fetchUrl + '/users/preferences', {
+            headers: { 'Authorization': bearer }
+        });
+        if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
+        const data = await response.json();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        return data;
+    },
+    { condition: () => !localStorage.getItem(STORAGE_KEY) }
+);
+
+export const updateUserPrefs = createAsyncThunk('userPrefs/update', async (prefs, { getState }) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const response = await fetch(fetchUrl + '/users/preferences', {
         method: 'PUT',
@@ -18,15 +35,18 @@ export const updateUserPrefs = createAsyncThunk('userPrefs/update', async (prefs
         headers: { 'Content-Type': 'application/json', 'Authorization': bearer }
     });
     if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);
-    await response.json();
-    dispatch(fetchUserPrefs());
+    const updated = { ...getState().userPrefs.prefs, ...prefs };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return updated;
 });
+
+const cached = loadFromStorage();
 
 const userPrefsSlice = createSlice({
     name: 'userPrefs',
     initialState: {
-        isLoading: true,
-        prefs: { imdbEnabled: true, letterboxdEnabled: true, letterboxdUsername: '', email: '' },
+        isLoading: !cached,
+        prefs: cached || defaultPrefs,
         errMess: null
     },
     reducers: {},
@@ -44,8 +64,16 @@ const userPrefsSlice = createSlice({
                 state.isLoading = false;
                 state.errMess = action.error.message;
             })
+            .addCase(updateUserPrefs.fulfilled, (state, action) => {
+                state.prefs = action.payload;
+            })
             .addCase(updateUserPrefs.rejected, (state, action) => {
                 state.errMess = action.error.message;
+            })
+            .addCase(logoutUser, (state) => {
+                state.prefs = defaultPrefs;
+                state.isLoading = true;
+                state.errMess = null;
             });
     }
 });
