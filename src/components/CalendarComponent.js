@@ -176,8 +176,8 @@ function Calendar({ provider: providerParam }) {
                         }
                         <div className='col-auto col-md-1 order-last d-flex align-items-center justify-content-center'>
                             <Button
-                                className={`navigation-button${voFilter ? ' active' : ''}`}
-                                onClick={() => setVoFilter(v => !v)}
+                                className={`navigation-button${voFilter ? ' vo-active' : ''}`}
+                                onClick={(e) => { setVoFilter(v => !v); e.currentTarget.blur(); }}
                             >
                                 <span className="fa fa-language" />
                                 <span className="d-none d-md-block">VO</span>

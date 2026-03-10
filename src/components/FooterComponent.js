@@ -1,4 +1,5 @@
 import React from 'react';
+import { version } from '../../package.json';
 
 function Footer() {
   return(
@@ -18,6 +19,7 @@ function Footer() {
             src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
         </a>
         <span className="ms-2">2020–2026 Stefano Arteconi</span>
+        <span className="ms-3" style={{opacity: 0.5, fontSize: '0.85rem'}}>v{version}</span>
       </p>
       <p className="mb-0" style={{fontSize: '0.8rem', opacity: 0.75}}>
         Dati degli spettacoli di proprietà delle rispettive sale cinematografiche.

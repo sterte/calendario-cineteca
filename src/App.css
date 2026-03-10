@@ -167,10 +167,24 @@ a.cal-button:hover {
   box-shadow: none;
 }
 
+.navigation-button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 .navigation-button:disabled {
   background-color: #999999;
   border-color: #999999;
   transform: none;
+  box-shadow: none;
+}
+
+.navigation-button.vo-active,
+.navigation-button.vo-active:hover,
+.navigation-button.vo-active:focus {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: #fff;
   box-shadow: none;
 }
 
@@ -311,6 +325,11 @@ a.cal-button:hover {
   background-color: var(--color-row-hover);
 }
 
+.movie-card-row a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 .show-row {
   border-radius: 6px;
   padding: 4px 2px;
@@ -319,6 +338,12 @@ a.cal-button:hover {
 
 .show-row:hover {
   background-color: var(--color-row-hover);
+}
+
+.show-row a:focus:not(:focus-visible),
+.show-row button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 .show-row-odd {
