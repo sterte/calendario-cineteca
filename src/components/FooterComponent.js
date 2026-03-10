@@ -1,5 +1,6 @@
 import React from 'react';
-import { version } from '../../package.json';
+import pkg from '../../package.json';
+const { version } = pkg;
 
 function Footer() {
   return(
