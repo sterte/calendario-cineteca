@@ -21,6 +21,7 @@ function Header() {
     const [isHelpOpen, setIsHelpOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isLoginErrorToShow, setIsLoginErrorToShow] = useState(true);
+    const [lastAuthAction, setLastAuthAction] = useState('login');
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
     const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
@@ -55,6 +56,7 @@ function Header() {
     };
 
     const handleLogin = (event) => {
+        setLastAuthAction('login');
         toggleLoginModal();
         dispatch(loginUser({ username: usernameRef.current.value, password: passwordRef.current.value }));
         event.preventDefault();
@@ -67,6 +69,7 @@ function Header() {
     const handleSignup = (event) => {
         event.preventDefault();
         if (signupPasswordRef.current.value === confirmpasswordRef.current.value) {
+            setLastAuthAction('signup');
             toggleSignupModal();
             dispatch(signupUser({ firstname: firstnameRef.current.value, lastname: lastnameRef.current.value, email: emailRef.current.value, username: signupUsernameRef.current.value, password: signupPasswordRef.current.value }));
         } else {
@@ -236,7 +239,9 @@ function Header() {
         </Modal>
 
         <Modal isOpen={isLoginErrorToShow && !auth.isAuthenticated && auth.errMess} toggle={toggleLoginErrorModal}>
-            <ModalHeader className='modal-header-branded' toggle={toggleLoginErrorModal}>Errore di accesso</ModalHeader>
+            <ModalHeader className='modal-header-branded' toggle={toggleLoginErrorModal}>
+                {lastAuthAction === 'signup' ? 'Errore di registrazione' : 'Errore di accesso'}
+            </ModalHeader>
             <ModalBody className='pt-3 pb-4 px-4'>
                 <p className='mb-0'>{auth.errMess}</p>
             </ModalBody>

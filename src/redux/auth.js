@@ -7,12 +7,10 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (creds, { reje
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(creds)
 	});
-	if (!response.ok) {
-		return rejectWithValue('Error ' + response.status + ': ' + response.statusText);
-	}
-	const data = await response.json();
-	if (!data.success) {
-		return rejectWithValue(data.status || 'Login failed');
+	const data = await response.json().catch(() => null);
+	if (!response.ok || !data?.success) {
+		if (response.status === 401) return rejectWithValue('Username o password non corretti.');
+		return rejectWithValue('Errore di accesso. Riprova più tardi.');
 	}
 	localStorage.setItem('token', data.token);
 	return data;
@@ -24,12 +22,13 @@ export const signupUser = createAsyncThunk('auth/signupUser', async (creds, { re
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(creds)
 	});
-	if (!response.ok) {
-		return rejectWithValue('Error ' + response.status + ': ' + response.statusText);
-	}
-	const data = await response.json();
-	if (!data.success) {
-		return rejectWithValue(data.status || 'Signup failed');
+	const data = await response.json().catch(() => null);
+	if (!response.ok || !data?.success) {
+		const errName = data?.err?.name;
+		if (errName === 'UserExistsError') return rejectWithValue('Username già in uso.');
+		if (errName === 'MissingUsernameError') return rejectWithValue('Username obbligatorio.');
+		if (errName === 'MissingPasswordError') return rejectWithValue('Password obbligatoria.');
+		return rejectWithValue('Errore durante la registrazione. Riprova più tardi.');
 	}
 	return data;
 });
