@@ -24,6 +24,7 @@ function Calendar({ provider: providerParam }) {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [filter, setFilter] = useState({});
     const [filterOpen, setFilterOpen] = useState(false);
+    const [voFilter, setVoFilter] = useState(false);
 
     const locationFilters = {
         cineteca: [
@@ -65,6 +66,7 @@ function Calendar({ provider: providerParam }) {
 
     useEffect(() => {
         setFilter({});
+        setVoFilter(false);
         preloadDays(new Date(), provider === 'popup' ? 1 : 8);
     }, [provider]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -81,6 +83,7 @@ function Calendar({ provider: providerParam }) {
     const formatDate = (date, format = 'YYYY-MM-DD') => moment(new Date(date)).format(format);
 
     const isMovieFiltered = (movie) => {
+        if (voFilter && !movie.isVO) return false;
         const locations = locationFilters[provider] || [];
         const active = locations.filter(loc => filter[loc.key]);
         if (active.length === 0) return true;
@@ -141,7 +144,7 @@ function Calendar({ provider: providerParam }) {
                             </Button>
                         </div>
                         {(locationFilters[provider] || []).length > 0 &&
-                        <div className='col-auto col-md-2 order-last d-flex align-items-center justify-content-center'>
+                        <div className='col-auto col-md-1 order-last d-flex align-items-center justify-content-center'>
                             <Dropdown isOpen={filterOpen} toggle={() => setFilterOpen(o => !o)}>
                                 <DropdownToggle className='navigation-button btn btn-secondary' tag='button'>
                                     <span className="fa fa-photo-film" />
@@ -171,6 +174,15 @@ function Calendar({ provider: providerParam }) {
                             </Dropdown>
                         </div>
                         }
+                        <div className='col-auto col-md-1 order-last d-flex align-items-center justify-content-center'>
+                            <Button
+                                className={`navigation-button${voFilter ? ' active' : ''}`}
+                                onClick={() => setVoFilter(v => !v)}
+                            >
+                                <span className="fa fa-language" />
+                                <span className="d-none d-md-block">VO</span>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
