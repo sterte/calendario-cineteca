@@ -94,12 +94,14 @@ body.modal-open .modal {
   transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 }
 
-.cal-button:hover {
-  background-color: var(--color-light);
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px var(--color-shadow-md);
-  color: var(--color-btn-text);
-  text-decoration: none;
+@media (hover: hover) {
+  .cal-button:hover {
+    background-color: var(--color-light);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px var(--color-shadow-md);
+    color: var(--color-btn-text);
+    text-decoration: none;
+  }
 }
 
 /* ── Lists ───────────────────────────────────────────────── */
@@ -155,11 +157,13 @@ a.cal-button:hover {
   transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
-.navigation-button:hover {
-  background-color: var(--color-light);
-  border-color: var(--color-light);
-  box-shadow: 0 3px 8px var(--color-shadow-md);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .navigation-button:hover {
+    background-color: var(--color-light);
+    border-color: var(--color-light);
+    box-shadow: 0 3px 8px var(--color-shadow-md);
+    transform: translateY(-1px);
+  }
 }
 
 .navigation-button:active {
@@ -321,8 +325,10 @@ a.cal-button:hover {
   background-color: var(--color-row-odd);
 }
 
-.movie-card-row:hover {
-  background-color: var(--color-row-hover);
+@media (hover: hover) {
+  .movie-card-row:hover {
+    background-color: var(--color-row-hover);
+  }
 }
 
 .movie-card-row a:focus:not(:focus-visible) {
@@ -336,8 +342,10 @@ a.cal-button:hover {
   transition: background-color 0.2s ease;
 }
 
-.show-row:hover {
-  background-color: var(--color-row-hover);
+@media (hover: hover) {
+  .show-row:hover {
+    background-color: var(--color-row-hover);
+  }
 }
 
 .show-row a:focus:not(:focus-visible),
