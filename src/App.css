@@ -150,30 +150,25 @@ a.cal-button:hover {
 }
 
 /* ── Navigation button ───────────────────────────────────── */
-.navigation-button {
-  background-color: var(--color-primary);
-  border-color: var(--color-light);
+.btn.navigation-button,
+.btn.navigation-button:active,
+.btn.navigation-button:focus,
+.btn.navigation-button:focus-visible {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-light) !important;
   border-radius: 20px;
   transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 @media (hover: hover) {
-  .navigation-button:hover {
-    background-color: var(--color-light);
-    border-color: var(--color-light);
-    box-shadow: 0 3px 8px var(--color-shadow-md);
+  .btn.navigation-button:hover {
+    background-color: var(--color-light) !important;
+    border-color: var(--color-light) !important;
+    box-shadow: 0 3px 8px var(--color-shadow-md) !important;
     transform: translateY(-1px);
   }
-}
-
-.navigation-button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.navigation-button:focus:not(:focus-visible) {
-  outline: none;
-  box-shadow: none;
 }
 
 .navigation-button:disabled {
@@ -183,13 +178,15 @@ a.cal-button:hover {
   box-shadow: none;
 }
 
-.navigation-button.vo-active,
-.navigation-button.vo-active:hover,
-.navigation-button.vo-active:focus {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
-  color: #fff;
-  box-shadow: none;
+.btn.navigation-button.vo-active,
+.btn.navigation-button.vo-active:hover,
+.btn.navigation-button.vo-active:active,
+.btn.navigation-button.vo-active:focus,
+.btn.navigation-button.vo-active:focus-visible {
+  background-color: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: #fff !important;
+  box-shadow: none !important;
 }
 
 /* ── AI Loader ───────────────────────────────────────────── */

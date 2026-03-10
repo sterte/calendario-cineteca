@@ -146,7 +146,7 @@ function Calendar({ provider: providerParam }) {
                         {(locationFilters[provider] || []).length > 0 &&
                         <div className='col-auto col-md-1 order-last d-flex align-items-center justify-content-center'>
                             <Dropdown isOpen={filterOpen} toggle={() => setFilterOpen(o => !o)}>
-                                <DropdownToggle className='navigation-button btn btn-secondary' tag='button'>
+                                <DropdownToggle className={`navigation-button btn btn-secondary${filterOpen ? ' vo-active' : ''}`} tag='button'>
                                     <span className="fa fa-photo-film" />
                                     {Object.values(filter).filter(Boolean).length > 0 &&
                                         <span className='badge bg-light text-dark ms-1'>
