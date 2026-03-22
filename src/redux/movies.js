@@ -8,6 +8,8 @@ export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({
 		? fetchUrl + '/popup-movies/' + movieId
 		: provider === 'ccb'
 		? fetchUrl + '/ccb-movies/' + movieId
+		: provider === 'galliera'
+		? fetchUrl + '/galliera-movies/' + movieId
 		: fetchUrl + '/movies/' + categoryId + '/' + movieId + '/' + repeatId;
 	const response = await fetch(endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);

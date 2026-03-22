@@ -28,6 +28,14 @@ const circuits = [
         accent: '#9f1c24',
         accentLight: '#c2323b',
     },
+    {
+        id: 'galliera',
+        name: 'Cinema Teatro Galliera',
+        logo: '/assets/images/logo-galliera.png', // TODO: replace with actual logo
+        logoStyle: {},
+        accent: '#3a5a7c', // TODO: replace with actual brand color
+        accentLight: '#5a7a9c', // TODO: replace with actual brand color
+    },
 ];
 
 function CircuitSelect() {

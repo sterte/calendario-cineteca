@@ -124,6 +124,8 @@ function Header() {
             ? <img src='/assets/images/logo-ccb.svg' height="50" alt="CCB" style={{filter: 'brightness(0) invert(1)'}} />
             : provider === 'popup'
             ? <img src='/assets/images/logo-popup.png' height="50" alt="Pop Up Cinema" style={{filter: 'brightness(0) invert(1)'}} />
+            : provider === 'galliera'
+            ? <img src='/assets/images/logo-galliera.png' height="50" alt="Cinema Teatro Galliera" style={{filter: 'brightness(0) invert(1)'}} />
             : <img src='/assets/images/logo-white.png' height="50" alt="Calendario Cineteca" />
         }
         </NavbarBrand>
@@ -136,7 +138,7 @@ function Header() {
         <span className="fa fa-calendar fa-lg"></span> Calendario
         </NavLink>
         </NavItem>
-        {provider !== 'popup' &&
+        {provider !== 'popup' && provider !== 'galliera' &&
         <NavItem>
         <NavLink className="nav-link" to={`/tracks/${provider}`}>
         <span className="fa fa-film fa-lg"></span> Rassegne
@@ -168,10 +170,13 @@ function Header() {
             ? <img src="/assets/images/logo-ccb.svg" height="60" alt="CCB" style={{marginRight: '12px'}} />
             : provider === 'popup'
             ? null
+            : provider === 'galliera'
+            ? <img src="/assets/images/logo-galliera.png" height="60" alt="Cinema Teatro Galliera" style={{marginRight: '12px'}} />
             : <img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" />
         }
         {provider === 'ccb' ? 'Calendario Circuito Cinema Bologna'
             : provider === 'popup' ? 'Calendario Pop Up Cinema'
+            : provider === 'galliera' ? 'Calendario Cinema Teatro Galliera'
             : 'Calendario Cineteca di Bologna'
         }
         </h1>
@@ -308,7 +313,7 @@ function HelpCalendar() {
                 <li className="mb-2"><span className="fa fa-chevron-left me-1" /><span className="fa fa-chevron-right me-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
                 <li className="mb-2"><span className="fa fa-photo-film me-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
                 <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto trovi{provider !== 'popup' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto trovi{provider !== 'popup' && provider !== 'galliera' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
                 {isAuthenticated && (
                     <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere al tuo <strong>Diario</strong>, all'<strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
@@ -333,7 +338,7 @@ function HelpMovie() {
                     <li className="mb-2"><strong>Letterboxd</strong> — se abilitato nell'Area Personale, mostra il voto medio su Letterboxd. Clicca sul logo per aprire la scheda film su Letterboxd. Se hai impostato il tuo username Letterboxd, un bordo rosso sul logo indica che il film è nella tua watchlist.</li>
                     <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
                 </>)}
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && provider !== 'galliera' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
             </ul>
             {!isAuthenticated && (
                 <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
@@ -354,7 +359,7 @@ function HelpTracks() {
                 <li className="mb-2">Nella pagina principale trovi l'elenco delle rassegne attive, ognuna con immagine, titolo, date e descrizione.</li>
                 <li className="mb-2">Clicca sul titolo di una rassegna per vedere tutti i film che la compongono.</li>
                 <li className="mb-2">Dalla lista dei film puoi accedere alla scheda dettaglio di ciascun titolo.</li>
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && provider !== 'galliera' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
             </ul>
         </>
     );

@@ -4,7 +4,7 @@ const stored = localStorage.getItem('activeProvider');
 
 const providerSlice = createSlice({
     name: 'provider',
-    initialState: { activeProvider: stored === 'ccb' ? 'ccb' : stored === 'popup' ? 'popup' : 'cineteca' },
+    initialState: { activeProvider: stored === 'ccb' ? 'ccb' : stored === 'popup' ? 'popup' : stored === 'galliera' ? 'galliera' : 'cineteca' },
     reducers: {
         setProvider: (state, action) => {
             state.activeProvider = action.payload;

@@ -26,7 +26,9 @@ function Footer() {
         Dati degli spettacoli di proprietà delle rispettive sale cinematografiche.
         Fonti: <a href="https://cinetecadibologna.it" target="_blank" rel="noopener noreferrer" style={{color: '#f99e00'}}>Cineteca di Bologna</a>,{' '}
         <a href="https://circuitocinemabologna.it" target="_blank" rel="noopener noreferrer" style={{color: '#ffabad'}}>Circuito Cinema Bologna</a>,{' '}
-        <a href="https://popupcinema.18tickets.it/" target="_blank" rel="noopener noreferrer" style={{color: '#9f1c24'}}>Pop Up Cinema</a>.
+        <a href="https://popupcinema.18tickets.it/" target="_blank" rel="noopener noreferrer" style={{color: '#9f1c24'}}>Pop Up Cinema</a>,{' '}
+        {/* TODO: replace with actual Galliera URL */}
+        <a href="https://teatrogalliera.it" target="_blank" rel="noopener noreferrer" style={{color: '#3a5a7c'}}>Cinema Teatro Galliera</a>.
       </p>
     </div>
     </div>

@@ -228,7 +228,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const durationNumber = movie.movies.durationMinutes || 0;
   let showCounter = 0;
   const timetable = movie.movies.hours.map((hour) => {
-    const el = composeCalendarButton(hour, durationNumber, true, showCounter);
+    const el = composeCalendarButton(hour, durationNumber, provider !== 'galliera', showCounter);
     showCounter += hour.hours.length;
     return el;
   });
@@ -283,7 +283,9 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                 ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-popup.png' alt='link-popup' /></a>
                 : provider === 'ccb'
                   ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
-                  : <a className='d-flex align-self-center p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
+                  : provider === 'galliera'
+                    ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-galliera.png' alt='link-galliera' /></a>
+                    : <a className='d-flex align-self-center p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
               }
             </div>
 
@@ -362,7 +364,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
           }
 
           <div className='col-12 p-0 d-flex align-self-center' style={{ zIndex: 1 }}>
-            {movie.movies.currentHour.day && composeCalendarButton(movie.movies.currentHour, durationNumber)}
+            {movie.movies.currentHour.day && composeCalendarButton(movie.movies.currentHour, durationNumber, provider !== 'galliera')}
           </div>
 
           <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.currentHour.additionalInfo }} />

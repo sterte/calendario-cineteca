@@ -6,6 +6,7 @@ export const getDayProgram = createAsyncThunk('days/getDayProgram', async (day, 
 	const provider = getState().provider.activeProvider;
 	const endpoint = provider === 'ccb' ? '/ccb-day/' + day
 		: provider === 'popup' ? '/popup-day/' + day
+		: provider === 'galliera' ? '/galliera-day/' + day
 		: '/day/' + day;
 	const response = await fetch(fetchUrl + endpoint);
 	if (!response.ok) throw new Error('Error ' + response.status + ': ' + response.statusText);

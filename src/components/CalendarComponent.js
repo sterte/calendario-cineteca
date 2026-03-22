@@ -44,6 +44,7 @@ function Calendar({ provider: providerParam }) {
             { key: 'jolly',      label: 'Jolly',       match: 'olly' },
             { key: 'medica',     label: 'Medica',      match: 'edica' },
         ],
+        galliera: [], // single sala — no filter needed
     };
 
     const preloadDays = (date, lookahead) => {
