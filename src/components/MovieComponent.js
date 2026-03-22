@@ -34,6 +34,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const ratingRef = useRef(null);
   const commentRef = useRef(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (providerParam && providerParam !== provider) {
       dispatch(setProvider(providerParam));

@@ -15,6 +15,7 @@ function Calendar({ provider: providerParam }) {
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (providerParam && providerParam !== provider) {
             dispatch(setProvider(providerParam));

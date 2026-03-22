@@ -21,6 +21,7 @@ function Settings() {
     }, [dispatch]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (!userPrefs.isLoading) {
             setImdbEnabled(userPrefs.prefs.imdbEnabled);
