@@ -34,13 +34,12 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const ratingRef = useRef(null);
   const commentRef = useRef(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (providerParam && providerParam !== provider) {
       dispatch(setProvider(providerParam));
     }
     dispatch(getMovieDetail({ categoryId, movieId, repeatId, provider: providerParam }));
-  }, [dispatch, categoryId, movieId, repeatId, providerParam]);
+  }, [dispatch, categoryId, movieId, repeatId, providerParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (auth.isAuthenticated) dispatch(fetchUserPrefs());

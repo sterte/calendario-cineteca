@@ -21,14 +21,13 @@ function Settings() {
     }, [dispatch]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (!userPrefs.isLoading) {
             setImdbEnabled(userPrefs.prefs.imdbEnabled);
             setLetterboxdEnabled(userPrefs.prefs.letterboxdEnabled);
             setLetterboxdUsername(userPrefs.prefs.letterboxdUsername || '');
         }
-    }, [userPrefs.isLoading]); // intentional: sync form state only when prefs finish loading
+    }, [userPrefs.isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = () => {
         dispatch(updateUserPrefs({ imdbEnabled, letterboxdEnabled, letterboxdUsername }));

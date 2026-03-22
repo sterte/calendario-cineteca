@@ -15,12 +15,11 @@ function Calendar({ provider: providerParam }) {
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (providerParam && providerParam !== provider) {
             dispatch(setProvider(providerParam));
         }
-    }, [providerParam]);
+    }, [providerParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [filter, setFilter] = useState({});
