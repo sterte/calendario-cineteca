@@ -47,5 +47,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cinetecalendar-android-${{ github.ref_name }}.aab
-          path: android/app/build/outputs/bundle/release/*-signed.aab
+          path: android/app/build/outputs/bundle/release/*.aab
           retention-days: 30
