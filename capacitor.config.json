@@ -1,0 +1,9 @@
+{
+  "appId": "it.sterte.cinetecalendar.app",
+  "appName": "Cinetecalendar",
+  "webDir": "build",
+  "server": {
+    "url": "https://cinetecalendar.web.app",
+    "cleartext": false
+  }
+}
