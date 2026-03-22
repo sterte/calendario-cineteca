@@ -160,6 +160,8 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
               else if (p.includes('roma')) address = 'Cinema Roma d\'essai, Via Fondazza, 4, 40100 Bologna BO';
               else if (p.includes('chaplin')) address = 'Cinema Chaplin, P.za di Porta Saragozza, 5/a, 40123 Bologna BO';
               else if (p.includes('europa')) address = 'Cinema Europa, Via Pietralata, 55, 40100 Bologna BO';
+            } else if (provider === 'galliera') {
+              address = 'Cinema Teatro Galliera, Via Matteotti 27, 40128 Bologna BO';
             } else if (provider === 'popup') {
               const p = hour.place.toLowerCase();
               if (p.includes('arlecchino')) address = 'Pop Up Cinema Arlecchino, Via delle Lame 59/a, 40122 Bologna BO';
@@ -199,7 +201,9 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                         ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                         : provider === 'popup'
                           ? '--btn-background:#9f1c24;--btn-hover-background:#c2323b;--btn-border:#c2323b;--btn-hover-border:#c2323b;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                          : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                          : provider === 'galliera'
+                            ? '--btn-background:#722636;--btn-hover-background:#9a3f50;--btn-border:#9a3f50;--btn-hover-border:#9a3f50;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
+                            : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
                       }
                     />
                   </div>
@@ -284,7 +288,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
                 : provider === 'ccb'
                   ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-ccb.svg' alt='link-ccb' /></a>
                   : provider === 'galliera'
-                    ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-galliera.png' alt='link-galliera' /></a>
+                    ? <a className='d-flex align-self-center p-0' href={movie.movies.originalUrl} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-galliera.jpg' alt='link-galliera' /></a>
                     : <a className='d-flex align-self-center p-0' href={cinetecaUrl + '/' + categoryId + '/' + movieId + '/?' + repeatId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-base.png' alt='link-cineteca' /></a>
               }
             </div>

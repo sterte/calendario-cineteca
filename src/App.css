@@ -56,16 +56,15 @@ body.modal-open .modal {
   --color-jumbotron-text: #fff;
 }
 
-/* TODO: replace galliera colors with actual brand colors */
 [data-theme="galliera"] {
-  --color-primary:      #3a5a7c;
-  --color-primary-dark: #1a2f45;
-  --color-primary-light: #5a7a9c;
-  --color-light:        #5a7a9c;
-  --color-shadow-sm:    rgba(58, 90, 124, 0.15);
-  --color-shadow-md:    rgba(58, 90, 124, 0.45);
-  --color-row-odd:      rgba(58, 90, 124, 0.10);
-  --color-row-hover:    rgba(58, 90, 124, 0.25);
+  --color-primary:      #722636;
+  --color-primary-dark: #3e0f1b;
+  --color-primary-light: #9a3f50;
+  --color-light:        #8b3347;
+  --color-shadow-sm:    rgba(114, 38, 54, 0.15);
+  --color-shadow-md:    rgba(114, 38, 54, 0.45);
+  --color-row-odd:      rgba(114, 38, 54, 0.10);
+  --color-row-hover:    rgba(114, 38, 54, 0.25);
   --color-btn-text:     #fff;
   --color-jumbotron-text: #fff;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Collapse, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { getDayProgram } from '../redux/days';
 import { Fade, Stagger } from './Animations';
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,6 +25,7 @@ function Calendar({ provider: providerParam }) {
     const [filter, setFilter] = useState({});
     const [filterOpen, setFilterOpen] = useState(false);
     const [voFilter, setVoFilter] = useState(false);
+    const [pastOpen, setPastOpen] = useState(false);
 
     const locationFilters = {
         cineteca: [
@@ -96,15 +97,47 @@ function Calendar({ provider: providerParam }) {
         return <PageLoader />;
     }
 
-    const movielist = days.days.filter(day => day.day === formatDate(currentDate)).length === 0 ?
+    const todayStr = formatDate(new Date());
+    const isToday = formatDate(currentDate) === todayStr;
+
+    const hasStarted = (movie) => {
+        const [hh, mm] = movie.time.replace('H ', '').split(':');
+        const start = new Date();
+        start.setHours(parseInt(hh), parseInt(mm), 0, 0);
+        return new Date() >= start.getTime() + 30 * 60 * 1000;
+    };
+
+    const dayMovies = days.days.filter(day => day.day === formatDate(currentDate));
+    const filteredMovies = dayMovies.length === 0 ? [] :
+        dayMovies[0].movies.filter(movie => isMovieFiltered(movie));
+
+    const pastMovies = isToday ? filteredMovies.filter(m => hasStarted(m)) : [];
+    const upcomingMovies = isToday ? filteredMovies.filter(m => !hasStarted(m)) : filteredMovies;
+
+    const movielist = filteredMovies.length === 0 && dayMovies.length === 0 ?
         <Stagger in='true'>
             <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>
         </Stagger>
         :
-        days.days
-            .filter(day => day.day === formatDate(currentDate))[0].movies
-            .filter(movie => isMovieFiltered(movie))
-            .map(movie => movieListDetail(movie, false, provider));
+        <>
+            {pastMovies.length > 0 &&
+                <div className='col-12 mb-2'>
+                    <Button
+                        color='link'
+                        className='p-0 text-muted'
+                        style={{ fontSize: '0.9rem', textDecoration: 'none' }}
+                        onClick={() => setPastOpen(o => !o)}
+                    >
+                        <span className={`fa fa-chevron-${pastOpen ? 'up' : 'down'} me-2`} />
+                        {pastMovies.length} {pastMovies.length === 1 ? 'spettacolo già iniziato' : 'spettacoli già iniziati'}
+                    </Button>
+                    <Collapse isOpen={pastOpen}>
+                        {pastMovies.map(movie => movieListDetail(movie, false, provider))}
+                    </Collapse>
+                </div>
+            }
+            {upcomingMovies.map(movie => movieListDetail(movie, false, provider))}
+        </>;
 
     return (
         <div className='container white-back'>

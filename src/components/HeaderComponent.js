@@ -125,7 +125,7 @@ function Header() {
             : provider === 'popup'
             ? <img src='/assets/images/logo-popup.png' height="50" alt="Pop Up Cinema" style={{filter: 'brightness(0) invert(1)'}} />
             : provider === 'galliera'
-            ? <img src='/assets/images/logo-galliera.png' height="50" alt="Cinema Teatro Galliera" style={{filter: 'brightness(0) invert(1)'}} />
+            ? <img src='/assets/images/logo-galliera.jpg' height="50" alt="Cinema Teatro Galliera" />
             : <img src='/assets/images/logo-white.png' height="50" alt="Calendario Cineteca" />
         }
         </NavbarBrand>
@@ -171,7 +171,7 @@ function Header() {
             : provider === 'popup'
             ? null
             : provider === 'galliera'
-            ? <img src="/assets/images/logo-galliera.png" height="60" alt="Cinema Teatro Galliera" style={{marginRight: '12px'}} />
+            ? <img src="/assets/images/logo-galliera.jpg" height="60" alt="Cinema Teatro Galliera" style={{marginRight: '12px'}} />
             : <img src="/assets/images/logo-black.png" height="60" alt="Calendario Cineteca" />
         }
         {provider === 'ccb' ? 'Calendario Circuito Cinema Bologna'

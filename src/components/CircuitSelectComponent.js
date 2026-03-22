@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { setProvider } from '../redux/provider';
 
+const invertFilter = 'brightness(0) invert(1)';
+
 const circuits = [
     {
         id: 'cineteca',
         name: 'Cineteca di Bologna',
         logo: '/assets/images/logo-black.png',
-        logoStyle: {},
+        logoStyle: { filter: invertFilter },
         accent: '#f99e00',
         accentLight: '#fccd00',
     },
@@ -16,7 +18,7 @@ const circuits = [
         id: 'ccb',
         name: 'Circuito Cinema Bologna',
         logo: '/assets/images/logo-ccb.svg',
-        logoStyle: {},
+        logoStyle: { filter: invertFilter },
         accent: '#ffabad',
         accentLight: '#ffc7c8',
     },
@@ -24,17 +26,17 @@ const circuits = [
         id: 'popup',
         name: 'Pop Up Cinema',
         logo: '/assets/images/logo-popup.png',
-        logoStyle: {},
+        logoStyle: { filter: invertFilter },
         accent: '#9f1c24',
         accentLight: '#c2323b',
     },
     {
         id: 'galliera',
         name: 'Cinema Teatro Galliera',
-        logo: '/assets/images/logo-galliera.png', // TODO: replace with actual logo
+        logo: '/assets/images/logo-galliera.jpg',
         logoStyle: {},
-        accent: '#3a5a7c', // TODO: replace with actual brand color
-        accentLight: '#5a7a9c', // TODO: replace with actual brand color
+        accent: '#722636',
+        accentLight: '#9a3f50',
     },
 ];
 
@@ -99,7 +101,7 @@ function CircuitSelect() {
                                 src={c.logo}
                                 alt={c.name}
                                 height="70"
-                                style={{ ...c.logoStyle, filter: 'brightness(0) invert(1)' }}
+                                style={c.logoStyle}
                             />
                             : <span style={{ color: c.accent, fontWeight: 800, fontSize: '1.4rem', letterSpacing: '1px' }}>
                                 {c.name}

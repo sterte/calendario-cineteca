@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.1.0] - 2026-03-22
+### Added
+- Cinema Teatro Galliera as a new circuit: calendar, film detail page, bordeaux theme
+- IMDb/Letterboxd error icon (red X + faded logo) when fetch fails on film detail page
+
+### Added (cont.)
+- Screenings started 30+ minutes ago are collapsed into an accordion on the current day's calendar
+
+### Changed
+- `decodeEntities` consolidated into shared `parseUtils.js` (was duplicated in ccb, popup, galliera routers)
+- "Aggiungi al calendario" button uses circuit-specific color for Galliera (bordeaux)
+- Circuit selector logo filter moved to per-circuit config (Galliera logo shown without invert filter)
+
+### Fixed
+- Galliera calendar: leading punctuation (`–`, `|`, `.`, `*`) stripped from screening notes
+- Galliera calendar: HTML entities in movie titles decoded correctly (e.g. `&#8211;` → `–`)
+- Galliera calendar: `V.O.S.*` regex now captures trailing dot and asterisk correctly
+
 ## [2.0.1] - 2026-03-19
 ### Fixed
 - HTML entity encoding (`&#39;`, `&amp;`, etc.) in Popup Cinema movie titles and metadata
