@@ -385,3 +385,9 @@ a.cal-button:hover {
   transform: scale(0.72) !important;
   transform-origin: bottom right !important;
 }
+
+@media (pointer: coarse) {
+  #bmc-wbtn {
+    bottom: calc(18px + env(safe-area-inset-bottom, 48px)) !important;
+  }
+}
