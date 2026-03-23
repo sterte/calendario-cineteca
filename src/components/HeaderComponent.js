@@ -90,7 +90,7 @@ function Header() {
 
     return (
         <>
-        <Navbar dark expand="md" container={false}>
+        <Navbar dark expand="md" container={false} sticky="top">
         <div className="container-fluid">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 

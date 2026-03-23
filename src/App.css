@@ -93,6 +93,7 @@ body.modal-open .modal {
 .navbar-dark {
   background-color: #000000;
   border-bottom: 2px solid var(--color-primary);
+  padding-top: max(0.5rem, env(safe-area-inset-top));
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
