@@ -390,4 +390,7 @@ a.cal-button:hover {
   #bmc-wbtn {
     bottom: calc(18px + env(safe-area-inset-bottom, 48px)) !important;
   }
+  .scroll-to-top-btn {
+    bottom: calc(70px + env(safe-area-inset-bottom, 48px)) !important;
+  }
 }

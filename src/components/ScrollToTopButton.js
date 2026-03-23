@@ -18,7 +18,7 @@ const ScrollToTopButton = () => {
   };
 
   return (
-    <Button className='navigation-button' onClick={scrollToTop}
+    <Button className='navigation-button scroll-to-top-btn' onClick={scrollToTop}
      style={{
         position: 'fixed',
         right: '18px',
