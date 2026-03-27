@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "it.sterte.cinetecalendar.app",
+    "sha256_cert_fingerprints": [
+      "21:63:7D:BA:88:CD:F6:BC:76:BA:47:E6:26:C5:32:66:0F:34:8A:8B:52:69:87:5E:77:DE:5B:07:C6:7E:A3:14"
+    ]
+  }
+}]
