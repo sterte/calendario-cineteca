@@ -10,10 +10,10 @@ import TrackDetail from './TrackDetailComponent';
 import CircuitSelect from './CircuitSelectComponent';
 import ResetPassword from './ResetPasswordComponent';
 import TabBar from './TabBar';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
-import { clearTabs, setCurrentTab, swipeTabCircular } from '../redux/tabs';
+import { clearTabs, setCurrentTab } from '../redux/tabs';
 import { useSwipeable, RIGHT, LEFT } from 'react-swipeable';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -29,6 +29,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 function Main() {
     const location = useLocation();
+    const history = useHistory();
     const auth = useSelector(state => state.auth);
     const provider = useSelector(state => state.provider.activeProvider);
     const tabs = useSelector(state => state.tabs);
@@ -55,8 +56,15 @@ function Main() {
         swipeDuration: 500,
         onSwiped: (eventData) => {
             const step = eventData.dir === LEFT ? 1 : eventData.dir === RIGHT ? -1 : 0;
-            if (step !== 0) {
-                dispatch(swipeTabCircular(step));
+            if (step === 0) return;
+            const totalTabs = tabs.tabs.length + 1;
+            const newIndex = (tabs.selectedTabIndex + totalTabs + step) % totalTabs;
+            dispatch(setCurrentTab(newIndex));
+            if (newIndex === 0) {
+                history.push(`/calendar/${provider}`);
+            } else {
+                const tab = tabs.tabs[newIndex - 1];
+                if (tab) history.push(tab.url);
             }
         }
     });

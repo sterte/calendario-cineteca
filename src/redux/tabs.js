@@ -6,29 +6,40 @@ const tabsSlice = createSlice({
     reducers: {
         openTab: (state, action) => {
             const { id, title, url, provider, categoryId, movieId, repeatId } = action.payload;
-            if (!state.tabs.find(t => t.id === id)) {
+            const existingIdx = state.tabs.findIndex(t => t.id === id);
+            if (existingIdx === -1) {
                 state.tabs.push({ id, title, url, provider, categoryId, movieId, repeatId });
-                state.selectedTabIndex =  state.tabs.length;
+                state.selectedTabIndex = state.tabs.length;
+            } else {
+                // Tab already open — bring it to front
+                state.selectedTabIndex = existingIdx + 1;
             }
         },
         closeTab: (state, action) => {
+            const closedIdx = state.tabs.findIndex(t => t.id === action.payload);
             state.tabs = state.tabs.filter(t => t.id !== action.payload);
+            if (closedIdx !== -1) {
+                const closedTabIndex = closedIdx + 1; // +1 because Tab0 is Calendar
+                if (closedTabIndex === state.selectedTabIndex) {
+                    // Closed the active tab → fall back to Calendar
+                    state.selectedTabIndex = 0;
+                } else if (closedTabIndex < state.selectedTabIndex) {
+                    // Closed a tab before the active one → shift index down
+                    state.selectedTabIndex -= 1;
+                }
+            }
         },
         clearTabs: (state) => {
             state.tabs = [];
+            state.selectedTabIndex = 0;
         },
         setCurrentTab: (state, action) => {
-            if(action.payload <= state.tabs.length){
+            if (action.payload <= state.tabs.length) {
                 state.selectedTabIndex = action.payload;
             }
         },
-        swipeTabCircular: (state, action) => {
-            const currentTabSize = state.tabs.length + 1;
-            const newTabIndex = (state.selectedTabIndex + currentTabSize + action.payload) % currentTabSize;
-            state.selectedTabIndex = newTabIndex;
-        }
     },
 });
 
-export const { openTab, closeTab, clearTabs, setCurrentTab, swipeTabCircular } = tabsSlice.actions;
+export const { openTab, closeTab, clearTabs, setCurrentTab } = tabsSlice.actions;
 export const TabsReducer = tabsSlice.reducer;

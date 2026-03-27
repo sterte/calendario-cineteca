@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { closeTab, setCurrentTab } from '../redux/tabs';
 
+
 function TabBar() {
     const tabs = useSelector(state => state.tabs);
     const provider = useSelector(state => state.provider.activeProvider);
@@ -15,10 +16,9 @@ function TabBar() {
 
     const handleClose = (e, tab) => {
         e.stopPropagation();
-        dispatch(closeTab(tab.id));
+        dispatch(closeTab(tab.id)); // also adjusts selectedTabIndex internally
         if (location.pathname === tab.url) {
             history.push(calendarUrl);
-            dispatch(setCurrentTab(0));
         }
     };
 
