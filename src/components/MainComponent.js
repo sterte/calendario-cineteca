@@ -13,7 +13,7 @@ import TabBar from './TabBar';
 import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
-import { clearTabs, setCurrentTab } from '../redux/tabs';
+import { openTab, clearTabs, setCurrentTab } from '../redux/tabs';
 import { useSwipeable, RIGHT, LEFT } from 'react-swipeable';
 import { App as CapApp } from '@capacitor/app';
 
@@ -46,11 +46,26 @@ function Main() {
         dispatch(refreshToken());
     }, [auth.isAuthenticated, dispatch]);
 
-    // Handle App Links (deep links) on Android — navigate to the correct route
+    // Handle App Links (deep links) on Android
+    const handleDeepLink = (url) => {
+        const { pathname, search } = new URL(url);
+        const movieMatch = pathname.match(/^\/movie\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)$/);
+        if (movieMatch) {
+            const [, prov, catId, movId, repId] = movieMatch;
+            dispatch(openTab({ id: repId, title: '', url: pathname, provider: prov, categoryId: catId, movieId: movId, repeatId: repId }));
+        }
+        history.push(pathname + search);
+    };
+
     useEffect(() => {
+        // Cold start: app opened directly from a link — appUrlOpen fires before the listener
+        // is registered, so we pull the launch URL explicitly
+        CapApp.getLaunchUrl().then(({ url }) => {
+            if (url) handleDeepLink(url);
+        });
+        // Warm start: app already running in background, receives a new link
         const listenerPromise = CapApp.addListener('appUrlOpen', (event) => {
-            const url = new URL(event.url);
-            history.push(url.pathname + url.search);
+            handleDeepLink(event.url);
         });
         return () => { listenerPromise.then(l => l.remove()); };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps

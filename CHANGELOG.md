@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.2] - 2026-03-28
+### Fixed
+- Android deep link: cold-start navigation now lands on the correct movie page (previously landed on CircuitSelect)
+- Deep link now creates the movie tab and sets it as active, so the TabBar reflects the opened film
+
 ## [2.2.1] - 2026-03-27
 ### Fixed
 - Direct movie URL (e.g. from a saved calendar event) now shows the film instead of the Calendar tab
