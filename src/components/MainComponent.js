@@ -13,7 +13,7 @@ import TabBar from './TabBar';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
-import { clearTabs, swipeTabCircular } from '../redux/tabs';
+import { clearTabs, setCurrentTab, swipeTabCircular } from '../redux/tabs';
 import { useSwipeable, RIGHT, LEFT } from 'react-swipeable';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -44,12 +44,19 @@ function Main() {
         dispatch(refreshToken());
     }, [auth.isAuthenticated, dispatch]);
 
+    // Tab0 hosts Calendar and Rassegne — keep selectedTabIndex in sync when navigating via <Link> or NavLink
+    useEffect(() => {
+        if (location.pathname.startsWith('/calendar') || location.pathname.startsWith('/tracks')) {
+            dispatch(setCurrentTab(0));
+        }
+    }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const swipeHandlers = useSwipeable({
         swipeDuration: 500,
         onSwiped: (eventData) => {
             const step = eventData.dir === LEFT ? 1 : eventData.dir === RIGHT ? -1 : 0;
             if (step !== 0) {
-                dispatch(swipeTabCircular(step))
+                dispatch(swipeTabCircular(step));
             }
         }
     });
@@ -59,46 +66,79 @@ function Main() {
         return <CircuitSelect />;
     }
 
-    const isCalendarPath = tabs.selectedTabIndex === 0;
+    const isTracksPath = location.pathname.startsWith('/tracks');
+
+    // Overlay routes: rendered above the tab system (higher z-index), Tab0 stays active
+    const isOverlayPath = location.pathname.startsWith('/diary') ||
+                          location.pathname.startsWith('/personalarea') ||
+                          location.pathname.startsWith('/reset-password');
+
     const isMoviePath = location.pathname.startsWith('/movie');
     const currentMovieInTabs = isMoviePath ? tabs.tabs.find(t => t.url === location.pathname) : null;
-    const calendarProviderFromUrl = isCalendarPath ? location.pathname.split('/')[2] : provider;
+    const calendarProviderFromUrl = location.pathname.startsWith('/calendar')
+        ? (location.pathname.split('/')[2] || provider)
+        : provider;
 
     return (
         <div>
-            <Header />
-            <TabBar />
+            <div style={{ position: 'sticky', top: 0, zIndex: 1020 }}>
+                <Header />
+                {!isOverlayPath && <TabBar />}
+            </div>
             <div {...swipeHandlers}>
-                {/* Keep-alive: Calendar — always mounted, visible only on /calendar */}
-                <div style={{ display: isCalendarPath ? 'block' : 'none' }}>
-                    <Calendar provider={calendarProviderFromUrl} />
+
+                {/* ── Tab content ── hidden when on overlay routes */}
+                <div style={{ display: isOverlayPath ? 'none' : 'block' }}>
+
+                    {/* Tab0: Calendar (keep-alive) + Rassegne (inline, same tab) */}
+                    <div style={{ display: tabs.selectedTabIndex === 0 ? 'block' : 'none' }}>
+                        {/* Calendar always mounted for keep-alive; hidden while browsing rassegne */}
+                        <div style={{ display: isTracksPath ? 'none' : 'block' }}>
+                            <Calendar provider={calendarProviderFromUrl} />
+                        </div>
+                        {isTracksPath && (
+                            <Switch location={location}>
+                                <Route path="/tracks/:provider/:trackId" render={({ match }) =>
+                                    <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
+                                <Route path="/tracks/:provider" render={({ match }) =>
+                                    <Tracks provider={match.params.provider} />} />
+                                <Redirect from="/tracks" to={`/tracks/${provider}`} />
+                            </Switch>
+                        )}
+                    </div>
+
+                    {/* Movie tabs — each mounted once, visible only when active */}
+                    {tabs.tabs.map((tab, index) => (
+                        <div key={tab.id} style={{ display: tabs.selectedTabIndex === index + 1 ? 'block' : 'none' }}>
+                            <Movie provider={tab.provider} categoryId={tab.categoryId} movieId={tab.movieId} repeatId={tab.repeatId} visible={tabs.selectedTabIndex === index + 1} />
+                        </div>
+                    ))}
+
+                    {/* Fallback Switch: direct movie URL (no open tab) + null-renders to prevent spurious redirects */}
+                    <Switch location={location}>
+                        <Route path="/calendar" render={() => null} />
+                        <Route path="/tracks" render={() => null} />
+                        <Route path="/diary" render={() => null} />
+                        <Route path="/personalarea" render={() => null} />
+                        <Route path="/reset-password" render={() => null} />
+                        <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({ match }) => (
+                            currentMovieInTabs ? null : (
+                                <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
+                            )
+                        )} />
+                        <Redirect to="/" />
+                    </Switch>
                 </div>
 
-                {/* Keep-alive: Movie tabs — each mounted once, visible only when active */}
-                {tabs.tabs.map((tab, index) => (
-                    <div key={tab.id} style={{ display: (tabs.selectedTabIndex === (index + 1)) ? 'block' : 'none' }}>
-                        <Movie provider={tab.provider} categoryId={tab.categoryId} movieId={tab.movieId} repeatId={tab.repeatId} visible={location.pathname === tab.url} />
-                    </div>
-                ))}
+                {/* ── Overlay div ── covers tab content for non-tab pages */}
+                <div style={{ display: isOverlayPath ? 'block' : 'none', position: 'relative', zIndex: 10 }}>
+                    <Switch location={location}>
+                        <Route path="/reset-password" component={() => <ResetPassword />} />
+                        <PrivateRoute path="/diary" component={() => <PersonalArea />} />
+                        <PrivateRoute path="/personalarea" component={() => <Settings />} />
+                    </Switch>
+                </div>
 
-                {/* Switch: handles non-tab routes + fallback for direct movie URL (no tab) */}
-                <Switch location={location}>
-                    {/* Prevent redirect from firing on calendar paths (handled by keep-alive above) */}
-                    <Route path="/calendar" render={() => null} />
-                    {/* Movie via direct URL (no open tab): render normally */}
-                    <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({ match }) => (
-                        currentMovieInTabs ? null : (
-                            <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
-                        )
-                    )} />
-                    <Route path="/reset-password" component={() => <ResetPassword />} />
-                    <Route path="/tracks/:provider/:trackId" render={({ match }) => <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
-                    <Route path="/tracks/:provider" render={({ match }) => <Tracks provider={match.params.provider} />} />
-                    <Redirect from="/tracks" to={`/tracks/${provider}`} />
-                    <PrivateRoute path="/diary" component={() => <PersonalArea />} />
-                    <PrivateRoute path="/personalarea" component={() => <Settings />} />
-                    <Redirect to="/" />
-                </Switch>
             </div>
             <Footer />
         </div>

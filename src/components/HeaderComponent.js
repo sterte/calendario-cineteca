@@ -90,7 +90,7 @@ function Header() {
 
     return (
         <>
-        <Navbar dark expand="md" container={false} sticky="top">
+        <Navbar dark expand="md" container={false}>
         <div className="container-fluid">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 
@@ -161,7 +161,7 @@ function Header() {
         </Collapse>
         </div>
         </Navbar>
-        <div className='jumbotron mb-3'>
+        <div className='jumbotron'>
         <div className="container">
         <div className="row row-header">
         <div className="col-12 d-flex justify-content-center">

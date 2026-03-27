@@ -163,7 +163,10 @@ function Calendar({ provider: providerParam }) {
                                 <span className="d-none d-md-block">Giorno</span>
                             </Button>
                         </div>
-                        <div className='col-4 col-md-2 order-md-3 d-flex align-items-center justify-content-center flex-column'>
+                        <div className='col-4 col-md-2 order-md-3 d-flex align-items-center justify-content-center flex-column'
+                            style={{ cursor: isToday ? 'default' : 'pointer' }}
+                            onClick={() => !isToday && setCurrentDate(new Date())}
+                        >
                             <h5 className='mb-0'>{weekDays[currentDate.getDay()]}</h5>
                             <h4 className='mb-0'>{formatDate(currentDate, 'DD/MM/YYYY')}</h4>
                         </div>
