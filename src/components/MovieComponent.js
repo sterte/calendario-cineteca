@@ -306,12 +306,12 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                     : movie.imdbId &&
                     <>
                       <a className='d-flex align-self-center' href={imdbUrl + movie.imdbId} target="_blank" rel='noopener noreferrer'><img width='50' src='/assets/images/logo-imdb.png' alt='link-imdb' /></a>
-                      {movie.imdbRatingCount > -1 &&
+                      {movie.imdbRatingCount > -1 && movie.imdbRating != null &&
                         <div className='p-0 ms-2'>
                           <div className='d-flex align-self-center'>{movie.imdbRating} ({movie.imdbRatingCount})</div>
                           <div className='d-none d-md-block'>
                             <StarRatings
-                              rating={parseFloat(movie.imdbRating) / 2}
+                              rating={(parseFloat(movie.imdbRating) / 2) || 0}
                               numberOfStars={5}
                               starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
                               starEmptyColor="#a8a8a8"
