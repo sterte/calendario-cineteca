@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.2.0] - 2026-03-27
+### Added
+- In-app tab bar for navigating between Calendar and Film pages without full reloads (keep-alive)
+- Swipe left/right gesture to switch between tabs
+- Rassegne (track listings) integrated into Tab0 alongside the Calendar — no separate tab opened
+- Overlay panel (higher z-index) for Diary and Settings pages; tab bar hidden on those pages
+- Click on the central date display in the Calendar to jump back to today
+- Android app: splash screen and icons with Cineteca logo, safe-area padding for navigation bar, sticky navbar
+
+### Changed
+- Sticky header refactored: single wrapper div sticks to top, eliminating hardcoded `top: 65px` offset
+- `index.html` served with `Cache-Control: no-cache` so WebView always loads the latest deploy
+
+### Fixed
+- `closeTab` now correctly shifts `selectedTabIndex` when closing a tab before the active one
+- `clearTabs` resets `selectedTabIndex` to 0 (previously left stale index on circuit change)
+- `openTab` brings an already-open tab to front instead of silently ignoring the click
+- Swipe gesture now syncs the URL via `history.push` (previously only updated Redux state)
+- Past/started film titles now correctly shown in grey when using button-based navigation
+- Navigating to Calendar or Rassegne via navbar always selects Tab0
+- Non-tab routes (Diary, Settings, Reset Password) no longer trigger spurious redirect to `/`
+
 ## [2.1.0] - 2026-03-22
 ### Added
 - Cinema Teatro Galliera as a new circuit: calendar, film detail page, bordeaux theme
