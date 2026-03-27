@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
 import { clearTabs, setCurrentTab } from '../redux/tabs';
 import { useSwipeable, RIGHT, LEFT } from 'react-swipeable';
+import { App as CapApp } from '@capacitor/app';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useSelector(state => state.auth);
@@ -44,6 +45,15 @@ function Main() {
         if (!auth.isAuthenticated) return;
         dispatch(refreshToken());
     }, [auth.isAuthenticated, dispatch]);
+
+    // Handle App Links (deep links) on Android — navigate to the correct route
+    useEffect(() => {
+        const listenerPromise = CapApp.addListener('appUrlOpen', (event) => {
+            const url = new URL(event.url);
+            history.push(url.pathname + url.search);
+        });
+        return () => { listenerPromise.then(l => l.remove()); };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Tab0 hosts Calendar and Rassegne — keep selectedTabIndex in sync when navigating via <Link> or NavLink
     useEffect(() => {
