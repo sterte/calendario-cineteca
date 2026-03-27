@@ -343,7 +343,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                           <div className='d-flex align-self-center'>{letterboxd.lbRating.toFixed(1)}</div>
                           <div className='d-none d-md-block'>
                             <StarRatings
-                              rating={letterboxd.lbRating}
+                              rating={letterboxd.lbRating || 0}
                               numberOfStars={5}
                               starRatedColor={provider === 'ccb' ? '#ffabad' : provider === 'popup' ? '#9f1c24' : '#f99e00'}
                               starEmptyColor="#a8a8a8"
