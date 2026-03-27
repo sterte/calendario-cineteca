@@ -83,6 +83,8 @@ function Main() {
 
     const isMoviePath = location.pathname.startsWith('/movie');
     const currentMovieInTabs = isMoviePath ? tabs.tabs.find(t => t.url === location.pathname) : null;
+    // Direct movie URL (no open tab): Tab0 must not cover the movie rendered by the fallback Switch
+    const isDirectMoviePath = isMoviePath && !currentMovieInTabs;
     const calendarProviderFromUrl = location.pathname.startsWith('/calendar')
         ? (location.pathname.split('/')[2] || provider)
         : provider;
@@ -99,7 +101,7 @@ function Main() {
                 <div style={{ display: isOverlayPath ? 'none' : 'block' }}>
 
                     {/* Tab0: Calendar (keep-alive) + Rassegne (inline, same tab) */}
-                    <div style={{ display: tabs.selectedTabIndex === 0 ? 'block' : 'none' }}>
+                    <div style={{ display: tabs.selectedTabIndex === 0 && !isDirectMoviePath ? 'block' : 'none' }}>
                         {/* Calendar always mounted for keep-alive; hidden while browsing rassegne */}
                         <div style={{ display: isTracksPath ? 'none' : 'block' }}>
                             <Calendar provider={calendarProviderFromUrl} />
