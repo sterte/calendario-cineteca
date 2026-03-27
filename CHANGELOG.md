@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.1] - 2026-03-27
+### Fixed
+- Direct movie URL (e.g. from a saved calendar event) now shows the film instead of the Calendar tab
+- StarRatings crash when IMDb rating is null/undefined (film found on IMDb but no rating data)
+- StarRatings crash guard applied to Letterboxd rating as well
+
 ## [2.2.0] - 2026-03-27
 ### Added
 - In-app tab bar for navigating between Calendar and Film pages without full reloads (keep-alive)
