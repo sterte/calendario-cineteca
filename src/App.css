@@ -380,6 +380,70 @@ a.cal-button:hover {
   padding: 3rem 0;
 }
 
+/* ── Tab bar ─────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  overflow-x: auto;
+  background: #000;
+  border-bottom: 2px solid var(--color-light);
+  white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #aaa;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.tab-item:hover { color: #fff; }
+.tab-item.active {
+  color: #fff;
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-close {
+  margin-left: 6px;
+  font-size: 0.7rem;
+  color: #666;
+  padding: 1px 3px;
+  border-radius: 50%;
+  line-height: 1;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.tab-close:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.15);
+}
+
+/* ── Movie title button ───────────────────────────────────── */
+.movie-title-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.movie-title-btn h4 {
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+.past-movie-title .movie-title-btn h4 {
+  color: inherit;
+}
+
 /* ── Buy Me a Coffee widget ──────────────────────────────── */
 #bmc-wbtn {
   transform: scale(0.72) !important;

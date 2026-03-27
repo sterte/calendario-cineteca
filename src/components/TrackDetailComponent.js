@@ -5,6 +5,7 @@ import ScrollToTopButton from './ScrollToTopButton';
 import { getTrackDetail } from '../redux/trackDetail';
 import { setProvider } from '../redux/provider';
 import { movieListDetail } from './MovieUtils';
+import { useMovieClick } from '../hooks/useMovieClick';
 import { Fade, Stagger } from './Animations';
 import { Helmet } from 'react-helmet-async';
 
@@ -12,6 +13,7 @@ function TrackDetail({ provider: providerParam, trackId }) {
     const trackDetail = useSelector(state => state.trackDetail);
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
+    const onMovieClick = useMovieClick();
 
     useEffect(() => {
         if (providerParam && providerParam !== provider) {
@@ -29,7 +31,7 @@ function TrackDetail({ provider: providerParam, trackId }) {
             <h4 className='row mt-4 p-4 p-md-0'>Programma non disponibile per la data selezionata</h4>
         </Stagger>
         :
-        trackDetail.trackDetail.movies.map((movie) => movieListDetail(movie, true));
+        trackDetail.trackDetail.movies.map((movie) => movieListDetail(movie, true, provider, onMovieClick));
 
     return (
         <div className='container white-back'>

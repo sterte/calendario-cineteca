@@ -16,7 +16,7 @@ export const getMovieDetail = createAsyncThunk('movies/getMovieDetail', async ({
 	return response.json();
 });
 
-export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, year }, { dispatch }) => {
+export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, year, repeatId }, { dispatch }) => {
 	const res = await fetch(fetchUrl + '/imdb?title=' + encodeURIComponent(title) + '&year=' + year, {
 		headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
 	});
@@ -27,48 +27,38 @@ export const fetchImdb = createAsyncThunk('movies/fetchImdb', async ({ title, ye
 
 const moviesSlice = createSlice({
 	name: 'movies',
-	initialState: { isLoading: true, errMess: null, movies: [], isLoadingImdb: true, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null },
+	initialState: { movieCache: {} },
 	reducers: {},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getMovieDetail.pending, (state) => {
-				state.isLoading = true;
-				state.errMess = null;
-				state.movies = [];
-				state.isLoadingImdb = false;
-				state.imdbId = null;
-				state.imdbRating = null;
-				state.imdbRatingCount = null;
-				state.errMessImdb = null;
+			.addCase(getMovieDetail.pending, (state, action) => {
+				const { repeatId } = action.meta.arg;
+				state.movieCache[repeatId] = { isLoading: true, errMess: null, movies: null, isLoadingImdb: false, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null };
 			})
 			.addCase(getMovieDetail.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.movies = action.payload;
+				const { repeatId } = action.meta.arg;
+				const prev = state.movieCache[repeatId] || {};
+				state.movieCache[repeatId] = { ...prev, isLoading: false, movies: action.payload };
 			})
 			.addCase(getMovieDetail.rejected, (state, action) => {
-				state.isLoading = false;
-				state.errMess = action.error.message;
-				state.movies = [];
+				const { repeatId } = action.meta.arg;
+				const prev = state.movieCache[repeatId] || {};
+				state.movieCache[repeatId] = { ...prev, isLoading: false, errMess: action.error.message, movies: null };
 			})
-			.addCase(fetchImdb.pending, (state) => {
-				state.isLoadingImdb = true;
-				state.errMessImdb = null;
-				state.imdbId = null;
-				state.imdbRating = null;
-				state.imdbRatingCount = null;
+			.addCase(fetchImdb.pending, (state, action) => {
+				const { repeatId } = action.meta.arg;
+				const prev = state.movieCache[repeatId] || {};
+				state.movieCache[repeatId] = { ...prev, isLoadingImdb: true, errMessImdb: null, imdbId: null, imdbRating: null, imdbRatingCount: null };
 			})
 			.addCase(fetchImdb.fulfilled, (state, action) => {
-				state.isLoadingImdb = false;
-				state.imdbId = action.payload.imdbId;
-				state.imdbRating = action.payload.imdbRating;
-				state.imdbRatingCount = action.payload.imdbRatingCount;
+				const { repeatId } = action.meta.arg;
+				const prev = state.movieCache[repeatId] || {};
+				state.movieCache[repeatId] = { ...prev, isLoadingImdb: false, imdbId: action.payload.imdbId, imdbRating: action.payload.imdbRating, imdbRatingCount: action.payload.imdbRatingCount };
 			})
 			.addCase(fetchImdb.rejected, (state, action) => {
-				state.isLoadingImdb = false;
-				state.errMessImdb = action.error.message;
-				state.imdbId = null;
-				state.imdbRating = 0;
-				state.imdbRatingCount = -1;
+				const { repeatId } = action.meta.arg;
+				const prev = state.movieCache[repeatId] || {};
+				state.movieCache[repeatId] = { ...prev, isLoadingImdb: false, errMessImdb: action.error.message, imdbId: null, imdbRating: 0, imdbRatingCount: -1 };
 			});
 	}
 });

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Fade } from './Animations';
 
 export const Vo = (props) => {
@@ -47,7 +46,7 @@ export const isFuture = (movie, currentDate) => {
 }
 
 
-export const movieListDetail = (movie, showDay = false, provider = 'cineteca') => {
+export const movieListDetail = (movie, showDay = false, provider = 'cineteca', onMovieClick) => {
 let movieExtras = movie.extras;
 if(movie.extras.includes('Sold out')){
   movieExtras = movieExtras.replace('Sold out', '<b>Sold out</b>');
@@ -59,7 +58,7 @@ return (
             </div>
             <div className='col-12 col-md-8 ps-0'>
                 <div className={isFuture(movie, new Date()) ? '' : 'past-movie-title'}>
-                    <Link to={`/movie/${provider}/${movie.categoryId}/${movie.id}/${movie.repeatId}`}><h4>{movie.title}</h4></Link>
+                    <button className="movie-title-btn" onClick={() => onMovieClick(movie)}><h4>{movie.title}</h4></button>
                 </div>
                 {showDay &&
                 <div>

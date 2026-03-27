@@ -20,8 +20,10 @@ import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
 import StarRatings from 'react-star-ratings';
 import { Helmet } from 'react-helmet-async';
 
-function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
-  const movie = useSelector(state => state.movies);
+const DEFAULT_MOVIE_STATE = { isLoading: true, errMess: null, movies: null, isLoadingImdb: false, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null };
+
+function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible = true }) {
+  const movie = useSelector(state => state.movies.movieCache[repeatId] ?? DEFAULT_MOVIE_STATE);
   const auth = useSelector(state => state.auth);
   const provider = useSelector(state => state.provider.activeProvider);
   const letterboxd = useSelector(state => state.letterboxd);
@@ -35,7 +37,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   const commentRef = useRef(null);
 
   useEffect(() => {
-    if (providerParam && providerParam !== provider) {
+    if (visible && providerParam && providerParam !== provider) {
       dispatch(setProvider(providerParam));
     }
     dispatch(getMovieDetail({ categoryId, movieId, repeatId, provider: providerParam }));
@@ -46,12 +48,13 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   }, [auth.isAuthenticated, dispatch]);
 
   useEffect(() => {
+    if (!visible) return;
     if (!auth.isAuthenticated || userPrefs.isLoading) return;
     if (movie.isLoading || !movie.movies?.title) return;
     if (userPrefs.prefs.imdbEnabled && !movie.isLoadingImdb && !movie.imdbId && !movie.errMessImdb) {
       const year = parseInt(movie.movies.year) || 0;
       const originalTitle = movie.movies.originalTitle || movie.movies.title;
-      dispatch(fetchImdb({ title: originalTitle, year }));
+      dispatch(fetchImdb({ title: originalTitle, year, repeatId }));
     }
     if (userPrefs.prefs.letterboxdEnabled && !letterboxd.isLoadingFilm && !letterboxd.lbSlug && letterboxd.errMess === null) {
       const year = parseInt(movie.movies.year) || 0;
@@ -61,6 +64,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId }) {
   });
 
   useEffect(() => {
+    if (!visible) return;
     if (!auth.isAuthenticated || !userPrefs.prefs.letterboxdUsername) return;
     if (letterboxd.lbSlug && !letterboxd.isLoadingWatchlist && !letterboxd.watchlistChecked) {
       dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, username: userPrefs.prefs.letterboxdUsername }));

@@ -9,9 +9,11 @@ import Tracks from './TracksComponent';
 import TrackDetail from './TrackDetailComponent';
 import CircuitSelect from './CircuitSelectComponent';
 import ResetPassword from './ResetPasswordComponent';
+import TabBar from './TabBar';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
+import { clearTabs } from '../redux/tabs';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const auth = useSelector(state => state.auth);
@@ -28,11 +30,13 @@ function Main() {
     const location = useLocation();
     const auth = useSelector(state => state.auth);
     const provider = useSelector(state => state.provider.activeProvider);
+    const tabs = useSelector(state => state.tabs.tabs);
     const dispatch = useDispatch();
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', provider);
-    }, [provider]);
+        dispatch(clearTabs());
+    }, [provider]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!auth.isAuthenticated) return;
@@ -44,23 +48,47 @@ function Main() {
         return <CircuitSelect />;
     }
 
+    const isCalendarPath = location.pathname.startsWith('/calendar');
+    const isMoviePath = location.pathname.startsWith('/movie');
+    const currentMovieInTabs = isMoviePath ? tabs.find(t => t.url === location.pathname) : null;
+    const calendarProviderFromUrl = isCalendarPath ? location.pathname.split('/')[2] : provider;
+
     return (
         <div>
         <Header />
+        <TabBar />
+
+        {/* Keep-alive: Calendar — always mounted, visible only on /calendar */}
+        <div style={{ display: isCalendarPath ? 'block' : 'none' }}>
+            <Calendar provider={calendarProviderFromUrl} />
+        </div>
+
+        {/* Keep-alive: Movie tabs — each mounted once, visible only when active */}
+        {tabs.map(tab => (
+            <div key={tab.id} style={{ display: location.pathname === tab.url ? 'block' : 'none' }}>
+                <Movie provider={tab.provider} categoryId={tab.categoryId} movieId={tab.movieId} repeatId={tab.repeatId} visible={location.pathname === tab.url} />
+            </div>
+        ))}
+
+        {/* Switch: handles non-tab routes + fallback for direct movie URL (no tab) */}
         <Switch location={location}>
-        <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({match}) => (
-            <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
-        )} />
-        <Route path="/reset-password" component={() => <ResetPassword />} />
-        <Route path="/calendar/:provider" render={({match}) => <Calendar provider={match.params.provider} />} />
-        <Redirect from="/calendar" to="/calendar/cineteca" />
-        <Route path="/tracks/:provider/:trackId" render={({match}) => <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
-        <Route path="/tracks/:provider" render={({match}) => <Tracks provider={match.params.provider} />} />
-        <Redirect from="/tracks" to={`/tracks/${provider}`} />
-        <PrivateRoute path="/diary" component={() => <PersonalArea />} />
-        <PrivateRoute path="/personalarea" component={() => <Settings />} />
-        <Redirect to="/" />
+            {/* Prevent redirect from firing on calendar paths (handled by keep-alive above) */}
+            <Route path="/calendar" render={() => null} />
+            {/* Movie via direct URL (no open tab): render normally */}
+            <Route exact path="/movie/:provider/:categoryId/:movieId/:repeatId" render={({match}) => (
+                currentMovieInTabs ? null : (
+                    <Movie provider={match.params.provider} categoryId={match.params.categoryId} movieId={match.params.movieId} repeatId={match.params.repeatId} />
+                )
+            )} />
+            <Route path="/reset-password" component={() => <ResetPassword />} />
+            <Route path="/tracks/:provider/:trackId" render={({match}) => <TrackDetail provider={match.params.provider} trackId={match.params.trackId} />} />
+            <Route path="/tracks/:provider" render={({match}) => <Tracks provider={match.params.provider} />} />
+            <Redirect from="/tracks" to={`/tracks/${provider}`} />
+            <PrivateRoute path="/diary" component={() => <PersonalArea />} />
+            <PrivateRoute path="/personalarea" component={() => <Settings />} />
+            <Redirect to="/" />
         </Switch>
+
         <Footer />
         </div>
     );

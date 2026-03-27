@@ -8,12 +8,14 @@ import moment from 'moment';
 import ScrollToTopButton from './ScrollToTopButton';
 import { weekDays, movieListDetail } from './MovieUtils';
 import { setProvider } from '../redux/provider';
+import { useMovieClick } from '../hooks/useMovieClick';
 import { Helmet } from 'react-helmet-async';
 
 function Calendar({ provider: providerParam }) {
     const days = useSelector(state => state.days);
     const provider = useSelector(state => state.provider.activeProvider);
     const dispatch = useDispatch();
+    const onMovieClick = useMovieClick();
 
     useEffect(() => {
         if (providerParam && providerParam !== provider) {
@@ -132,11 +134,11 @@ function Calendar({ provider: providerParam }) {
                         {pastMovies.length} {pastMovies.length === 1 ? 'spettacolo già iniziato' : 'spettacoli già iniziati'}
                     </Button>
                     <Collapse isOpen={pastOpen}>
-                        {pastMovies.map(movie => movieListDetail(movie, false, provider))}
+                        {pastMovies.map(movie => movieListDetail(movie, false, provider, onMovieClick))}
                     </Collapse>
                 </div>
             }
-            {upcomingMovies.map(movie => movieListDetail(movie, false, provider))}
+            {upcomingMovies.map(movie => movieListDetail(movie, false, provider, onMovieClick))}
         </>;
 
     return (
