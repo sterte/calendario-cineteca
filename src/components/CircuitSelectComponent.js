@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { setProvider } from '../redux/provider';
+import { setCurrentTab } from '../redux/tabs';
 
 const invertFilter = 'brightness(0) invert(1)';
 
@@ -46,6 +47,7 @@ function CircuitSelect() {
 
     const choose = (id) => {
         dispatch(setProvider(id));
+        dispatch(setCurrentTab(0))
         history.push('/calendar/' + id);
     };
 

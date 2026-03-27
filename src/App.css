@@ -389,6 +389,9 @@ a.cal-button:hover {
   white-space: nowrap;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: sticky;
+  top: 65px;
+  z-index: 2;
 }
 .tab-bar::-webkit-scrollbar { display: none; }
 

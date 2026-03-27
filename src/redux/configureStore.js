@@ -11,7 +11,7 @@ import { Conversations } from './conversations.js';
 import { ProviderReducer } from './provider.js';
 import { LetterboxdReducer } from './letterboxd';
 import { UserPrefsReducer } from './userPrefs';
-import tabsReducer from './tabs';
+import { TabsReducer } from './tabs';
 
 export const ConfigureStore = () => {
 	const store = configureStore({
@@ -27,7 +27,7 @@ export const ConfigureStore = () => {
 			provider: ProviderReducer,
 			letterboxd: LetterboxdReducer,
 			userPrefs: UserPrefsReducer,
-			tabs: tabsReducer,
+			tabs: TabsReducer,
 		},
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware().concat(logger)
