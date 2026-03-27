@@ -31,6 +31,17 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Print keystore SHA-256 (TEMPORARY — remove after noting fingerprint)
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > /tmp/ks.jks
+          keytool -list -v \
+            -keystore /tmp/ks.jks \
+            -alias "${{ secrets.ANDROID_KEY_ALIAS }}" \
+            -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.ANDROID_KEY_PASSWORD }}" \
+            2>&1 | grep -i sha
+          rm /tmp/ks.jks
+
       - name: Build AAB
         run: cd android && ./gradlew bundleRelease
 
