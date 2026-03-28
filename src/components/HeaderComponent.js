@@ -310,10 +310,13 @@ function HelpCalendar() {
         <>
             <p>Il <strong>calendario</strong> mostra le proiezioni in programma giorno per giorno.</p>
             <ul className="ps-3">
-                <li className="mb-2"><span className="fa fa-chevron-left me-1" /><span className="fa fa-chevron-right me-2" />Naviga tra i giorni con le frecce o torna alla data odierna.</li>
+                <li className="mb-2"><span className="fa fa-chevron-left me-1" /><span className="fa fa-chevron-right me-2" />Naviga tra i giorni con le frecce. Tocca la data al centro per tornare subito a oggi.</li>
                 <li className="mb-2"><span className="fa fa-photo-film me-2" />Filtra le proiezioni per sala usando il menu a tendina.</li>
-                <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio, con orari, informazioni e funzioni aggiuntive.</li>
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto trovi{provider !== 'popup' && provider !== 'galliera' && <> le <strong>Rassegne</strong> — sezioni tematiche con tutti i film di un ciclo — e</>} la voce per cambiare circuito.</li>
+                <li className="mb-2">Clicca sul titolo di un film per aprirne la scheda dettaglio in un nuovo <strong>tab</strong>.</li>
+                <li className="mb-2"><span className="fa fa-hand-pointer me-2" />Scorri orizzontalmente per passare tra i tab aperti. Il tab <strong>Calendario</strong> nella barra in fondo è sempre disponibile.</li>
+                {provider !== 'popup' && provider !== 'galliera' && (
+                    <li className="mb-2"><span className="fa fa-bars me-2" />Usa la voce <strong>Rassegne</strong> nel menu in alto per esplorare i cicli tematici — rimangono nello stesso tab del Calendario.</li>
+                )}
                 {isAuthenticated && (
                     <li className="mb-2"><span className="fa fa-user-circle me-2" />Il pulsante utente in alto a destra ti permette di accedere al tuo <strong>Diario</strong>, all'<strong>Area Personale</strong> o di effettuare il logout.</li>
                 )}
@@ -327,9 +330,9 @@ function HelpMovie() {
     const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
-            <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma.</p>
+            <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma. Si apre in un <strong>tab</strong> — usa la barra in fondo o scorri orizzontalmente per tornare al Calendario senza perdere la posizione.</p>
             <ul className="ps-3">
-                <li className="mb-2"><span className="fa fa-calendar me-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale (Google, Apple, Outlook…).</li>
+                <li className="mb-2"><span className="fa fa-calendar me-2" />Il pulsante <strong>Aggiungi al calendario</strong> salva la proiezione nel tuo calendario personale. Se hai impostato un calendario preferito nell'Area Personale, l'evento viene aggiunto direttamente senza mostrare il menu.</li>
                 <li className="mb-2"><span className="fa fa-ticket me-2" />Il pulsante <strong>Acquista</strong> apre la pagina di acquisto del biglietto sul sito della Cineteca.</li>
                 {isAuthenticated && (<>
                     <li className="mb-2"><span className="fa fa-eye me-2" />Clicca sull'icona occhio per segnare il film come visto e aggiungerlo al tuo <strong>Diario</strong>.</li>
@@ -338,7 +341,6 @@ function HelpMovie() {
                     <li className="mb-2"><strong>Letterboxd</strong> — se abilitato nell'Area Personale, mostra il voto medio su Letterboxd. Clicca sul logo per aprire la scheda film su Letterboxd. Se hai impostato il tuo username Letterboxd, un bordo rosso sul logo indica che il film è nella tua watchlist.</li>
                     <li className="mb-2">I pulsanti <strong>Info AI</strong> e <strong>Film simili</strong> generano una scheda sintetica o suggerimenti di film affini tramite intelligenza artificiale.</li>
                 </>)}
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && provider !== 'galliera' && <>, consultare le <strong>Rassegne</strong></>} o cambiare circuito.</li>
             </ul>
             {!isAuthenticated && (
                 <p className="mt-3 mb-0 text-muted" style={{fontSize: '0.9rem', borderTop: '1px solid #eee', paddingTop: '0.75rem'}}>
@@ -354,12 +356,11 @@ function HelpTracks() {
     const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
-            <p>Le <strong>Rassegne</strong> raccolgono cicli tematici di film programmati dalla Cineteca.</p>
+            <p>Le <strong>Rassegne</strong> raccolgono cicli tematici di film programmati dalla Cineteca. Si aprono nello stesso tab del Calendario — puoi tornare al programma giornaliero semplicemente toccando <strong>Calendario</strong> nel menu in alto.</p>
             <ul className="ps-3">
-                <li className="mb-2">Nella pagina principale trovi l'elenco delle rassegne attive, ognuna con immagine, titolo, date e descrizione.</li>
+                <li className="mb-2">Trovi l'elenco delle rassegne attive, ognuna con immagine, titolo, date e descrizione.</li>
                 <li className="mb-2">Clicca sul titolo di una rassegna per vedere tutti i film che la compongono.</li>
-                <li className="mb-2">Dalla lista dei film puoi accedere alla scheda dettaglio di ciascun titolo.</li>
-                <li className="mb-2"><span className="fa fa-bars me-2" />Dal menu in alto puoi tornare al <strong>Calendario</strong>{provider !== 'popup' && provider !== 'galliera' && <> o alle <strong>Rassegne</strong></>} o cambiare circuito.</li>
+                <li className="mb-2">Clicca su un film per aprirne la scheda dettaglio in un nuovo <strong>tab</strong> — scorri orizzontalmente o usa la barra in fondo per tornare alle Rassegne.</li>
             </ul>
         </>
     );
@@ -387,6 +388,7 @@ function HelpSettings() {
                 <li className="mb-2"><strong>IMDb</strong> — abilita o disabilita la visualizzazione del voto IMDb nella scheda film. Quando attivo, il voto medio e il numero di votanti vengono mostrati accanto al logo IMDb.</li>
                 <li className="mb-2"><strong>Letterboxd</strong> — abilita o disabilita la visualizzazione del voto Letterboxd nella scheda film.</li>
                 <li className="mb-2"><strong>Username Letterboxd</strong> — inserisci il tuo username Letterboxd per attivare il controllo della watchlist: nella scheda film, un bordo rosso sul logo Letterboxd segnala che quel film è nella tua watchlist.</li>
+                <li className="mb-2"><strong>Calendario preferito</strong> — scegli il calendario su cui salvare le proiezioni (Google, Apple, Outlook…). Se impostato, il pulsante <strong>Aggiungi al calendario</strong> nella scheda film aggiunge l'evento direttamente, senza mostrare il menu di scelta.</li>
                 <li className="mb-2"><strong>Cambia password</strong> — invia un link di reset alla tua email per impostare una nuova password.</li>
             </ul>
         </>
