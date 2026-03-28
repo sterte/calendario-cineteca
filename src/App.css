@@ -369,10 +369,6 @@ a.cal-button:hover {
   background-color: var(--color-row-odd);
 }
 
-.atcb-text {
-  font-weight: 400;
-}
-
 /* ── HonestAILoader ──────────────────────────────────────── */
 .container:has(> [class*="_wrapper_hvge4"]) {
   display: flex;

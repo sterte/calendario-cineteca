@@ -3,7 +3,7 @@ import { fetchUrl } from '../shared/baseUrl';
 import { logoutUser } from './auth';
 
 const STORAGE_KEY = 'userPrefs';
-const defaultPrefs = { imdbEnabled: true, letterboxdEnabled: true, letterboxdUsername: '', email: '' };
+const defaultPrefs = { imdbEnabled: true, letterboxdEnabled: true, letterboxdUsername: '', preferredCalendar: '', email: '' };
 
 const loadFromStorage = () => {
     try {

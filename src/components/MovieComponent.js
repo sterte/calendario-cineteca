@@ -12,7 +12,7 @@ import { fetchLetterboxdFilm, fetchLetterboxdWatchlist } from '../redux/letterbo
 import { fetchUserPrefs } from '../redux/userPrefs';
 import { setProvider } from '../redux/provider';
 import { addFavourite } from '../redux/favourites';
-import { AddToCalendarButton } from 'add-to-calendar-button-react';
+import AddToCalendarDropdown from './AddToCalendarDropdown';
 import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
@@ -189,26 +189,16 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                 </div>
                 {isFuture &&
                   <div className='col-12 col-md-auto mt-2 mb-2 d-flex align-items-center'>
-                    <AddToCalendarButton
+                    <AddToCalendarDropdown
                       name={movie.movies.title}
                       startDate={startDateStr}
                       startTime={startTimeStr}
                       endDate={endDateStr}
                       endTime={endTimeStr}
-                      timeZone="Europe/Rome"
                       location={address}
                       description={eventDescription}
-                      options={['Google', 'Apple', 'Outlook.com', 'Yahoo', 'iCal']}
-                      label="Aggiungi al calendario"
-                      hideCheckmark
-                      styleLight={provider === 'ccb'
-                        ? '--btn-background:#ffabad;--btn-hover-background:#ffc7c8;--btn-border:#ffc7c8;--btn-hover-border:#ffc7c8;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                        : provider === 'popup'
-                          ? '--btn-background:#9f1c24;--btn-hover-background:#c2323b;--btn-border:#c2323b;--btn-hover-border:#c2323b;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                          : provider === 'galliera'
-                            ? '--btn-background:#722636;--btn-hover-background:#9a3f50;--btn-border:#9a3f50;--btn-hover-border:#9a3f50;--btn-text:#fff;--btn-hover-text:#fff;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                            : '--btn-background:#f99e00;--btn-hover-background:#fccd00;--btn-border:#fccd00;--btn-hover-border:#fccd00;--btn-text:#000;--btn-hover-text:#000;--btn-border-radius:20px;--btn-shadow:none;--btn-hover-shadow:none;--btn-active-shadow:none;--btn-padding-x:10px;--btn-padding-y:10px;--wrapper-padding:0;'
-                      }
+                      provider={provider}
+                      preferredCalendar={auth.isAuthenticated ? userPrefs.prefs.preferredCalendar : ''}
                     />
                   </div>
                 }

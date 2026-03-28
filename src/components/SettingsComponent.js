@@ -13,6 +13,7 @@ function Settings() {
     const [imdbEnabled, setImdbEnabled] = useState(true);
     const [letterboxdEnabled, setLetterboxdEnabled] = useState(true);
     const [letterboxdUsername, setLetterboxdUsername] = useState('');
+    const [preferredCalendar, setPreferredCalendar] = useState('');
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
@@ -26,11 +27,12 @@ function Settings() {
             setImdbEnabled(userPrefs.prefs.imdbEnabled);
             setLetterboxdEnabled(userPrefs.prefs.letterboxdEnabled);
             setLetterboxdUsername(userPrefs.prefs.letterboxdUsername || '');
+            setPreferredCalendar(userPrefs.prefs.preferredCalendar || '');
         }
     }, [userPrefs.isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = () => {
-        dispatch(updateUserPrefs({ imdbEnabled, letterboxdEnabled, letterboxdUsername }));
+        dispatch(updateUserPrefs({ imdbEnabled, letterboxdEnabled, letterboxdUsername, preferredCalendar }));
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
     };
@@ -70,6 +72,19 @@ function Settings() {
                             <small className='text-muted'>Usato per verificare la tua watchlist Letterboxd.</small>
                         </FormGroup>
                     )}
+
+                    <FormGroup className='mb-3 mt-3'>
+                        <Label htmlFor="cal-select">Calendario preferito</Label>
+                        <Input type="select" id="cal-select" value={preferredCalendar} onChange={e => setPreferredCalendar(e.target.value)}>
+                            <option value=''>— Mostra sempre il menu —</option>
+                            <option value='Google'>Google Calendar</option>
+                            <option value='Apple'>Apple Calendar</option>
+                            <option value='Outlook.com'>Outlook.com</option>
+                            <option value='Yahoo'>Yahoo Calendar</option>
+                            <option value='iCal'>iCal (.ics)</option>
+                        </Input>
+                        <small className='text-muted'>Se impostato, "Aggiungi al calendario" aggiunge direttamente senza mostrare il menu.</small>
+                    </FormGroup>
 
                     <div className='d-flex align-items-center mt-3'>
                         <Button className='navigation-button me-3' onClick={handleSave}>Salva</Button>
