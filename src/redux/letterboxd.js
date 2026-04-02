@@ -3,7 +3,12 @@ import { fetchUrl } from '../shared/baseUrl';
 import { getMovieDetail } from './movies';
 import { logoutUser } from './auth';
 
-export const fetchLetterboxdFilm = createAsyncThunk('letterboxd/fetchFilm', async ({ title, year }, { dispatch }) => {
+const DEFAULT_LB_STATE = {
+    isLoadingFilm: false, lbSlug: null, lbRating: null, lbUrl: null, errMess: null,
+    isLoadingWatchlist: false, watchlistChecked: false, inWatchlist: false, errMessWatchlist: null
+};
+
+export const fetchLetterboxdFilm = createAsyncThunk('letterboxd/fetchFilm', async ({ title, year, repeatId }, { dispatch }) => {
     const res = await fetch(fetchUrl + '/letterboxd/film?title=' + encodeURIComponent(title) + '&year=' + year, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     });
@@ -12,7 +17,7 @@ export const fetchLetterboxdFilm = createAsyncThunk('letterboxd/fetchFilm', asyn
     return res.json();
 });
 
-export const fetchLetterboxdWatchlist = createAsyncThunk('letterboxd/fetchWatchlist', async ({ filmSlug, username }, { dispatch }) => {
+export const fetchLetterboxdWatchlist = createAsyncThunk('letterboxd/fetchWatchlist', async ({ filmSlug, username, repeatId }, { dispatch }) => {
     const res = await fetch(
         fetchUrl + '/letterboxd/watchlist?username=' + encodeURIComponent(username) + '&filmSlug=' + encodeURIComponent(filmSlug),
         { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } }
@@ -25,61 +30,43 @@ export const fetchLetterboxdWatchlist = createAsyncThunk('letterboxd/fetchWatchl
 
 const letterboxdSlice = createSlice({
     name: 'letterboxd',
-    initialState: {
-        isLoadingFilm: false,
-        lbSlug: null,
-        lbRating: null,
-        lbUrl: null,
-        errMess: null,
-        isLoadingWatchlist: false,
-        watchlistChecked: false,
-        inWatchlist: false,
-        errMessWatchlist: null
-    },
+    initialState: { filmCache: {} },
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getMovieDetail.pending, (state) => {
-                state.isLoadingFilm = false;
-                state.lbSlug = null;
-                state.lbRating = null;
-                state.lbUrl = null;
-                state.errMess = null;
-                state.isLoadingWatchlist = false;
-                state.watchlistChecked = false;
-                state.inWatchlist = false;
-                state.errMessWatchlist = null;
+            .addCase(getMovieDetail.pending, (state, action) => {
+                const { repeatId } = action.meta.arg;
+                state.filmCache[repeatId] = { ...DEFAULT_LB_STATE };
             })
-            .addCase(fetchLetterboxdFilm.pending, (state) => {
-                state.isLoadingFilm = true;
-                state.lbSlug = null;
-                state.lbRating = null;
-                state.lbUrl = null;
-                state.errMess = null;
+            .addCase(fetchLetterboxdFilm.pending, (state, action) => {
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingFilm: true, lbSlug: null, lbRating: null, lbUrl: null, errMess: null };
             })
             .addCase(fetchLetterboxdFilm.fulfilled, (state, action) => {
-                state.isLoadingFilm = false;
-                state.lbSlug = action.payload.lbSlug;
-                state.lbRating = action.payload.lbRating;
-                state.lbUrl = action.payload.lbUrl;
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingFilm: false, lbSlug: action.payload.lbSlug, lbRating: action.payload.lbRating, lbUrl: action.payload.lbUrl };
             })
             .addCase(fetchLetterboxdFilm.rejected, (state, action) => {
-                state.isLoadingFilm = false;
-                state.errMess = action.error.message;
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingFilm: false, errMess: action.error.message };
             })
-            .addCase(fetchLetterboxdWatchlist.pending, (state) => {
-                state.isLoadingWatchlist = true;
-                state.watchlistChecked = true;
-                state.inWatchlist = false;
-                state.errMessWatchlist = null;
+            .addCase(fetchLetterboxdWatchlist.pending, (state, action) => {
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingWatchlist: true, watchlistChecked: true, inWatchlist: false, errMessWatchlist: null };
             })
             .addCase(fetchLetterboxdWatchlist.fulfilled, (state, action) => {
-                state.isLoadingWatchlist = false;
-                state.inWatchlist = action.payload;
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingWatchlist: false, inWatchlist: action.payload };
             })
             .addCase(fetchLetterboxdWatchlist.rejected, (state, action) => {
-                state.isLoadingWatchlist = false;
-                state.errMessWatchlist = action.error.message;
+                const { repeatId } = action.meta.arg;
+                const prev = state.filmCache[repeatId] || {};
+                state.filmCache[repeatId] = { ...prev, isLoadingWatchlist: false, errMessWatchlist: action.error.message };
             });
     }
 });

@@ -26,7 +26,8 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
   const movie = useSelector(state => state.movies.movieCache[repeatId] ?? DEFAULT_MOVIE_STATE);
   const auth = useSelector(state => state.auth);
   const provider = useSelector(state => state.provider.activeProvider);
-  const letterboxd = useSelector(state => state.letterboxd);
+  const DEFAULT_LB_STATE = { isLoadingFilm: false, lbSlug: null, lbRating: null, lbUrl: null, errMess: null, isLoadingWatchlist: false, watchlistChecked: false, inWatchlist: false, errMessWatchlist: null };
+  const letterboxd = useSelector(state => state.letterboxd.filmCache[repeatId] ?? DEFAULT_LB_STATE);
   const userPrefs = useSelector(state => state.userPrefs);
   const dispatch = useDispatch();
 
@@ -59,7 +60,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
     if (userPrefs.prefs.letterboxdEnabled && !letterboxd.isLoadingFilm && !letterboxd.lbSlug && letterboxd.errMess === null) {
       const year = parseInt(movie.movies.year) || 0;
       const originalTitle = movie.movies.originalTitle || movie.movies.title;
-      dispatch(fetchLetterboxdFilm({ title: originalTitle, year }));
+      dispatch(fetchLetterboxdFilm({ title: originalTitle, year, repeatId }));
     }
   });
 
@@ -67,7 +68,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
     if (!visible) return;
     if (!auth.isAuthenticated || !userPrefs.prefs.letterboxdUsername) return;
     if (letterboxd.lbSlug && !letterboxd.isLoadingWatchlist && !letterboxd.watchlistChecked) {
-      dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, username: userPrefs.prefs.letterboxdUsername }));
+      dispatch(fetchLetterboxdWatchlist({ filmSlug: letterboxd.lbSlug, username: userPrefs.prefs.letterboxdUsername, repeatId }));
     }
   });
 
