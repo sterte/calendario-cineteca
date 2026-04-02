@@ -1,5 +1,16 @@
 # Changelog
 
+## [UNDEFINED] - TBD
+### Added
+- User preference: auto-switch to film tab on open (default: enabled); when disabled, tab opens in background and user stays in Calendar
+- User preference: preferred calendar — if set, "Aggiungi al calendario" adds the event directly without showing the menu
+### Fixed
+- Letterboxd data now cached per repeatId (filmCache), fixing data bleed across multiple open tabs
+### Changed
+- "Add to calendar" replaced with custom datebook-based component, removing third-party disclaimer
+- API: rate limiting (300 req / 15 min per IP) and CORS restricted to whitelist origins
+- Help texts updated for tab/swipe navigation, calendar preference, and autoSwitchTab
+
 ## [2.2.2] - 2026-03-28
 ### Fixed
 - Android deep link: cold-start navigation now lands on the correct movie page (previously landed on CircuitSelect)
