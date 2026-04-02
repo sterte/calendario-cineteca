@@ -5,14 +5,14 @@ const tabsSlice = createSlice({
     initialState: { tabs: [], selectedTabIndex: 0 },
     reducers: {
         openTab: (state, action) => {
-            const { id, title, url, provider, categoryId, movieId, repeatId } = action.payload;
+            const { id, title, url, provider, categoryId, movieId, repeatId, autoSwitch = true } = action.payload;
             const existingIdx = state.tabs.findIndex(t => t.id === id);
             if (existingIdx === -1) {
                 state.tabs.push({ id, title, url, provider, categoryId, movieId, repeatId });
-                state.selectedTabIndex = state.tabs.length;
+                if (autoSwitch) state.selectedTabIndex = state.tabs.length;
             } else {
-                // Tab already open — bring it to front
-                state.selectedTabIndex = existingIdx + 1;
+                // Tab already open — bring it to front only if switching
+                if (autoSwitch) state.selectedTabIndex = existingIdx + 1;
             }
         },
         closeTab: (state, action) => {

@@ -388,6 +388,7 @@ function HelpSettings() {
                 <li className="mb-2"><strong>IMDb</strong> — abilita o disabilita la visualizzazione del voto IMDb nella scheda film. Quando attivo, il voto medio e il numero di votanti vengono mostrati accanto al logo IMDb.</li>
                 <li className="mb-2"><strong>Letterboxd</strong> — abilita o disabilita la visualizzazione del voto Letterboxd nella scheda film.</li>
                 <li className="mb-2"><strong>Username Letterboxd</strong> — inserisci il tuo username Letterboxd per attivare il controllo della watchlist: nella scheda film, un bordo rosso sul logo Letterboxd segnala che quel film è nella tua watchlist.</li>
+                <li className="mb-2"><strong>Spostati automaticamente sul tab del film</strong> — se attivo (default), aprire un film porta direttamente alla sua scheda. Se disattivo, il tab viene aperto in background e puoi raggiungerlo dalla barra in fondo senza lasciare il Calendario.</li>
                 <li className="mb-2"><strong>Calendario preferito</strong> — scegli il calendario su cui salvare le proiezioni (Google, Apple, Outlook…). Se impostato, il pulsante <strong>Aggiungi al calendario</strong> nella scheda film aggiunge l'evento direttamente, senza mostrare il menu di scelta.</li>
                 <li className="mb-2"><strong>Cambia password</strong> — invia un link di reset alla tua email per impostare una nuova password.</li>
             </ul>

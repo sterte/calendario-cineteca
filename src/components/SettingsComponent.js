@@ -14,6 +14,7 @@ function Settings() {
     const [letterboxdEnabled, setLetterboxdEnabled] = useState(true);
     const [letterboxdUsername, setLetterboxdUsername] = useState('');
     const [preferredCalendar, setPreferredCalendar] = useState('');
+    const [autoSwitchTab, setAutoSwitchTab] = useState(true);
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
@@ -28,11 +29,12 @@ function Settings() {
             setLetterboxdEnabled(userPrefs.prefs.letterboxdEnabled);
             setLetterboxdUsername(userPrefs.prefs.letterboxdUsername || '');
             setPreferredCalendar(userPrefs.prefs.preferredCalendar || '');
+            setAutoSwitchTab(userPrefs.prefs.autoSwitchTab !== false);
         }
     }, [userPrefs.isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = () => {
-        dispatch(updateUserPrefs({ imdbEnabled, letterboxdEnabled, letterboxdUsername, preferredCalendar }));
+        dispatch(updateUserPrefs({ imdbEnabled, letterboxdEnabled, letterboxdUsername, preferredCalendar, autoSwitchTab }));
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
     };
@@ -73,7 +75,12 @@ function Settings() {
                         </FormGroup>
                     )}
 
-                    <FormGroup className='mb-3 mt-3'>
+                    <FormGroup check className='mb-3 mt-3'>
+                        <Input type="checkbox" id="autoswitch-check" checked={autoSwitchTab} onChange={e => setAutoSwitchTab(e.target.checked)} />
+                        <Label check htmlFor="autoswitch-check">Spostati automaticamente sul tab del film all'apertura</Label>
+                    </FormGroup>
+
+                    <FormGroup className='mb-3'>
                         <Label htmlFor="cal-select">Calendario preferito</Label>
                         <Input type="select" id="cal-select" value={preferredCalendar} onChange={e => setPreferredCalendar(e.target.value)}>
                             <option value=''>— Mostra sempre il menu —</option>

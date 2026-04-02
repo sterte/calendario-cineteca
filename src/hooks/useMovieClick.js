@@ -6,6 +6,7 @@ export function useMovieClick() {
     const dispatch = useDispatch();
     const history = useHistory();
     const provider = useSelector(state => state.provider.activeProvider);
+    const autoSwitchTab = useSelector(state => state.userPrefs.prefs.autoSwitchTab);
 
     return (movie) => {
         const url = `/movie/${provider}/${movie.categoryId}/${movie.id}/${movie.repeatId}`;
@@ -17,7 +18,8 @@ export function useMovieClick() {
             categoryId: movie.categoryId,
             movieId: movie.id,
             repeatId: movie.repeatId,
+            autoSwitch: autoSwitchTab !== false,
         }));
-        history.push(url);
+        if (autoSwitchTab !== false) history.push(url);
     };
 }
