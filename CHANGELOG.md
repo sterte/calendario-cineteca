@@ -1,6 +1,6 @@
 # Changelog
 
-## [UNDEFINED] - TBD
+## [2.2.3] - 2026-04-02
 ### Added
 - User preference: auto-switch to film tab on open (default: enabled); when disabled, tab opens in background and user stays in Calendar
 - User preference: preferred calendar — if set, "Aggiungi al calendario" adds the event directly without showing the menu
