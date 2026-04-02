@@ -10,6 +10,7 @@
 - "Add to calendar" replaced with custom datebook-based component, removing third-party disclaimer
 - API: rate limiting (300 req / 15 min per IP) and CORS restricted to whitelist origins
 - Help texts updated for tab/swipe navigation, calendar preference, and autoSwitchTab
+- Firebase config unified into single `firebase.json` at monorepo root
 
 ## [2.2.2] - 2026-03-28
 ### Fixed

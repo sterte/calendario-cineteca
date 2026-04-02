@@ -1,0 +1,20 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const AiConversation = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    title: {
+        type: String,
+        required: false
+    },
+    conversationId: {
+        type: Number,
+        required: true
+    }
+});
+
+module.exports = mongoose.model('AiConversation', AiConversation);
