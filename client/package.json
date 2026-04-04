@@ -1,6 +1,6 @@
 {
   "name": "calendario-cineteca",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^8.2.0",

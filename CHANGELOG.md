@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0] - 2026-04-04
+### Added
+- Navbar replaced with left-side drawer (Bootstrap Offcanvas): slides in from the left, dark theme matching TabBar
+- Drawer opens via swipe from the left edge of the screen (react-swipeable, `initial[0] < 20px`) — gesture is exclusive with tab-swipe
+- `navOpen` state lifted to Redux (`tabs` slice) so MainComponent can open the drawer from the swipe handler
+- Film detail page: "Condividi" button (share icon) to the left of check-in — uses native OS share sheet (Web Share API); only shown on devices that support it
+### Fixed
+- Galliera calendar: switched source from homepage to `/category/cinema/` (correct scheduling post)
+- Galliera calendar: "IN ARRIVO" entries with combined date+time header (`● date ore HH:MM` + link on next line) now parsed correctly
+- Galliera calendar: `● in replica DATE ore TIME` entries now correctly repeat the preceding film on the new date
+- Galliera calendar: multi-time entries (`ore 19:00 e 21:30`) now generate one screening per time slot
+
 ## [2.2.3] - 2026-04-02
 ### Added
 - User preference: auto-switch to film tab on open (default: enabled); when disabled, tab opens in background and user stays in Calendar

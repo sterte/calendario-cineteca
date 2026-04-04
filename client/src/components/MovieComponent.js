@@ -255,6 +255,13 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                 <div className='col-auto d-flex align-self-center'>
                   <h2>{movie.movies.title}</h2>
                 </div>
+                {navigator.share &&
+                  <div className='col-auto'>
+                    <Button className='navigation-button' onClick={() => navigator.share({ url: window.location.href, title: movie.movies.title })}>
+                      <span className="fa fa-share-nodes" />
+                    </Button>
+                  </div>
+                }
                 {auth.isAuthenticated &&
                   <div className='col-auto'>
                     <Button className='navigation-button' onClick={() => toggleEditModal(movie.movies.title)}>
