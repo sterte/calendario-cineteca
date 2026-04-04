@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem,
+import { Navbar, NavbarBrand, Nav, NavbarToggler, NavItem,
     Button, Modal, ModalHeader, ModalBody,
+    Offcanvas, OffcanvasHeader, OffcanvasBody,
     Form, FormGroup, Label, Input,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import { HonestAILoader } from 'honest-ai-loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, logoutUser, signupUser, clearAuthError, clearSignupSuccess, requestPasswordReset, clearResetStatus } from '../redux/auth';
+import { setNavOpen } from '../redux/tabs';
 
 function Header() {
     const auth = useSelector(state => state.auth);
@@ -16,7 +18,8 @@ function Header() {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const [isNavOpen, setIsNavOpen] = useState(false);
+    const isNavOpen = useSelector(state => state.tabs.navOpen);
+    const setIsNavOpen = (val) => dispatch(setNavOpen(val));
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isHelpOpen, setIsHelpOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -90,7 +93,7 @@ function Header() {
 
     return (
         <>
-        <Navbar dark expand="md" container={false}>
+        <Navbar dark expand={false} container={false}>
         <div className="container-fluid">
         <NavbarToggler onClick={() => setIsNavOpen(open => !open)} />
 
@@ -131,34 +134,37 @@ function Header() {
         </NavbarBrand>
         </div>
 
-        <Collapse isOpen={isNavOpen} navbar>
-        <Nav navbar className="me-auto">
+        <Offcanvas isOpen={isNavOpen} toggle={() => setIsNavOpen(false)} direction="start" style={{backgroundColor: '#000', color: '#fff'}}>
+        <OffcanvasHeader close={<button className="btn-close btn-close-white" onClick={() => setIsNavOpen(false)} />} style={{backgroundColor: '#000'}} />
+        <OffcanvasBody>
+        <Nav navbar vertical className="offcanvas-nav">
         <NavItem>
-        <NavLink className="nav-link" to={`/calendar/${provider}`}>
-        <span className="fa fa-calendar fa-lg"></span> Calendario
+        <NavLink className="nav-link" to={`/calendar/${provider}`} onClick={() => setIsNavOpen(false)}>
+        <span className="fa fa-calendar fa-lg me-2"></span> Calendario
         </NavLink>
         </NavItem>
         {provider !== 'popup' && provider !== 'galliera' &&
         <NavItem>
-        <NavLink className="nav-link" to={`/tracks/${provider}`}>
-        <span className="fa fa-film fa-lg"></span> Rassegne
+        <NavLink className="nav-link" to={`/tracks/${provider}`} onClick={() => setIsNavOpen(false)}>
+        <span className="fa fa-film fa-lg me-2"></span> Rassegne
         </NavLink>
         </NavItem>
         }
         <NavItem>
-        <NavLink className="nav-link" to="/circuits">
-        <span className="fa fa-rotate fa-lg"></span> Cambia circuito
+        <NavLink className="nav-link" to="/circuits" onClick={() => setIsNavOpen(false)}>
+        <span className="fa fa-rotate fa-lg me-2"></span> Cambia circuito
         </NavLink>
         </NavItem>
         {!auth.isAuthenticated &&
         <NavItem>
-        <span className="nav-link" style={{cursor: 'pointer'}} onClick={toggleLoginModal}>
-        <span className="fa fa-sign-in fa-lg"></span> Login
+        <span className="nav-link" style={{cursor: 'pointer'}} onClick={() => { setIsNavOpen(false); toggleLoginModal(); }}>
+        <span className="fa fa-sign-in fa-lg me-2"></span> Login
         </span>
         </NavItem>
         }
         </Nav>
-        </Collapse>
+        </OffcanvasBody>
+        </Offcanvas>
         </div>
         </Navbar>
         <div className='jumbotron'>
@@ -327,7 +333,6 @@ function HelpCalendar() {
 
 function HelpMovie() {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
             <p>La <strong>scheda film</strong> raccoglie tutte le informazioni su un titolo in programma. Si apre in un <strong>tab</strong> — usa la barra in fondo o scorri orizzontalmente per tornare al Calendario senza perdere la posizione.</p>
@@ -353,7 +358,6 @@ function HelpMovie() {
 }
 
 function HelpTracks() {
-    const provider = useSelector(state => state.provider.activeProvider);
     return (
         <>
             <p>Le <strong>Rassegne</strong> raccolgono cicli tematici di film programmati dalla Cineteca. Si aprono nello stesso tab del Calendario — puoi tornare al programma giornaliero semplicemente toccando <strong>Calendario</strong> nel menu in alto.</p>

@@ -153,6 +153,18 @@ a.cal-button:hover {
   color: var(--bs-nav-link-color);
 }
 
+.offcanvas-nav .nav-link {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.1rem;
+  padding: 0.6rem 0;
+}
+
+.offcanvas-nav .nav-link:hover,
+.offcanvas-nav .nav-link.active {
+  color: #fff;
+  text-decoration-color: var(--color-primary);
+}
+
 .nav-link:hover {
   text-decoration: underline;
   text-underline-offset: 4px;

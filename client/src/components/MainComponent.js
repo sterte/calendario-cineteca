@@ -13,7 +13,7 @@ import TabBar from './TabBar';
 import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshToken } from '../redux/auth';
-import { openTab, clearTabs, setCurrentTab } from '../redux/tabs';
+import { openTab, clearTabs, setCurrentTab, setNavOpen } from '../redux/tabs';
 import { useSwipeable, RIGHT, LEFT } from 'react-swipeable';
 import { App as CapApp } from '@capacitor/app';
 
@@ -80,6 +80,11 @@ function Main() {
     const swipeHandlers = useSwipeable({
         swipeDuration: 500,
         onSwiped: (eventData) => {
+            // Edge swipe: starts within 20px of left border → open nav drawer (exclusive with tab swipe)
+            if (eventData.dir === RIGHT && eventData.initial[0] < 20 && eventData.absX > 50) {
+                dispatch(setNavOpen(true));
+                return;
+            }
             const step = eventData.dir === LEFT ? 1 : eventData.dir === RIGHT ? -1 : 0;
             if (step === 0) return;
             const totalTabs = tabs.tabs.length + 1;

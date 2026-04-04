@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const tabsSlice = createSlice({
     name: 'tabs',
-    initialState: { tabs: [], selectedTabIndex: 0 },
+    initialState: { tabs: [], selectedTabIndex: 0, navOpen: false },
     reducers: {
         openTab: (state, action) => {
             const { id, title, url, provider, categoryId, movieId, repeatId, autoSwitch = true } = action.payload;
@@ -38,8 +38,11 @@ const tabsSlice = createSlice({
                 state.selectedTabIndex = action.payload;
             }
         },
+        setNavOpen: (state, action) => {
+            state.navOpen = action.payload;
+        },
     },
 });
 
-export const { openTab, closeTab, clearTabs, setCurrentTab } = tabsSlice.actions;
+export const { openTab, closeTab, clearTabs, setCurrentTab, setNavOpen } = tabsSlice.actions;
 export const TabsReducer = tabsSlice.reducer;
