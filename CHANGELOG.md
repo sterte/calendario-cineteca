@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.3.1] - 2026-04-11
+### Fixed
+- Share button now uses `@capacitor/share` plugin for native Android/iOS share sheet (previously used Web Share API which is unavailable in Capacitor WebView)
+- GitHub Actions Android build workflow restored to repository root (was incorrectly placed in `client/.github/workflows/` after monorepo restructuring)
+
 ## [2.3.0] - 2026-04-04
 ### Added
 - Navbar replaced with left-side drawer (Bootstrap Offcanvas): slides in from the left, dark theme matching TabBar
