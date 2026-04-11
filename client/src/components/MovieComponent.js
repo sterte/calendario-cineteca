@@ -17,6 +17,7 @@ import ScrollToTopButton from './ScrollToTopButton';
 import '../App.css';
 import { weekDays, monthToNum, monthToCompleteName } from './MovieUtils';
 import { cinetecaUrl, imdbUrl, fetchUrl } from '../shared/baseUrl';
+import { Share } from '@capacitor/share';
 import StarRatings from 'react-star-ratings';
 import { Helmet } from 'react-helmet-async';
 
@@ -255,13 +256,11 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                 <div className='col-auto d-flex align-self-center'>
                   <h2>{movie.movies.title}</h2>
                 </div>
-                {navigator.share &&
-                  <div className='col-auto'>
-                    <Button className='navigation-button' onClick={() => navigator.share({ url: window.location.href, title: movie.movies.title })}>
-                      <span className="fa fa-share-nodes" />
-                    </Button>
-                  </div>
-                }
+                <div className='col-auto'>
+                  <Button className='navigation-button' onClick={() => Share.share({ url: window.location.href, title: movie.movies.title })}>
+                    <span className="fa fa-share-nodes" />
+                  </Button>
+                </div>
                 {auth.isAuthenticated &&
                   <div className='col-auto'>
                     <Button className='navigation-button' onClick={() => toggleEditModal(movie.movies.title)}>
