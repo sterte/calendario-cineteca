@@ -41,7 +41,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
 
         // Title
         const titleEls = parsed.getElementsByClassName('title-big');
-        const title = titleEls.length > 0 ? titleEls[0].textContent.trim() : '';
+        const title = titleEls.length > 0 ? decodeEntities(titleEls[0].textContent.trim()) : '';
 
         // Hero image (wp-post-image class)
         const heroImgs = parsed.getElementsByClassName('wp-post-image');
@@ -67,7 +67,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
 
         // Original title from og:title: "Italian Title (original title) - v. o. - Circuito Cinema Bologna"
         const ogTitleMatch = html.match(/property="og:title" content="([^"]+)"/);
-        const ogTitle = ogTitleMatch ? ogTitleMatch[1] : '';
+        const ogTitle = ogTitleMatch ? decodeEntities(ogTitleMatch[1]) : '';
         const parenMatch = ogTitle.match(/\(([^)]+)\)/);
         let originalTitle = parenMatch ? parenMatch[1] : '';
         // Capitalize words of original title
@@ -82,7 +82,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
         for (let i = 0; i < infoItems.length; i++) {
             if (infoItems[i].innerHTML.includes('Paese:')) {
                 const spans = infoItems[i].getElementsByTagName('span');
-                if (spans.length > 1) country = spans[1].textContent.trim();
+                if (spans.length > 1) country = decodeEntities(spans[1].textContent.trim());
                 break;
             }
         }
@@ -92,7 +92,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
         const subtitleEls = parsed.getElementsByClassName('item-subtitle');
         if (subtitleEls.length > 0) {
             const raw = subtitleEls[0].textContent.trim();
-            director = raw.replace(/^di\s+/i, '').trim();
+            director = decodeEntities(raw.replace(/^di\s+/i, '').trim());
         }
 
         // Duration as number (e.g. "93 min" → 93)
@@ -131,7 +131,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
             // Time and cinema from label--sala elements (first=time, second=cinema)
             const salaLabels = art.getElementsByClassName('label--sala');
             const time = salaLabels.length > 0 ? salaLabels[0].textContent.trim() : '';
-            const cinema = salaLabels.length > 1 ? salaLabels[1].textContent.trim() : '';
+            const cinema = salaLabels.length > 1 ? decodeEntities(salaLabels[1].textContent.trim()) : '';
 
             // Date from h4.date-title: "giovedì 26/02/2026"
             const dateEls = art.getElementsByClassName('date-title');

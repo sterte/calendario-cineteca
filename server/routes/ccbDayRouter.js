@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('./cors');
 const DOMParser = require('dom-parser');
+const { decodeEntities } = require('../parseUtils');
 
 const ccbUrl = 'https://www.circuitocinemabologna.it';
 const weekDaysShort = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
@@ -40,7 +41,7 @@ const parseCcbDayProgram = (html, day) => {
             if (!titleContainer.length) continue;
             const titleLinks = titleContainer[0].getElementsByTagName('a');
             if (!titleLinks.length) continue;
-            const title = titleLinks[0].textContent.trim();
+            const title = decodeEntities(titleLinks[0].textContent.trim());
             const movieUrl = titleLinks[0].getAttribute('href') || '';
             // slug is last non-empty path segment
             const slug = movieUrl.replace(/\/$/, '').split('/').pop() || '';
