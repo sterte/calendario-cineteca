@@ -5,6 +5,8 @@
 - CCB calendar: HTML entities in film titles now decoded correctly (e.g. "Le città di pianura")
 - CCB film detail: HTML entities decoded in title, director, country, cinema name fields
 - CCB film detail: synopsis restored after site renamed CSS class `one-col-text` → `two-col-text`
+### Changed
+- Film detail: synopsis now appears before today's screenings (all circuits)
 
 ## [2.3.1] - 2026-04-11
 ### Fixed

@@ -368,12 +368,13 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
             </div>
           }
 
+          <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.summary }} />
+
           <div className='col-12 p-0 d-flex align-self-center' style={{ zIndex: 1 }}>
             {movie.movies.currentHour.day && composeCalendarButton(movie.movies.currentHour, durationNumber, provider !== 'galliera')}
           </div>
 
           <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.currentHour.additionalInfo }} />
-          <div className='col-12 mt-2' dangerouslySetInnerHTML={{ __html: movie.movies.summary }} />
           {movie.movies.hours.length ?
             <div className='row d-flex justify-content-center'>
               <div className='col-12 mt-4'>
