@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.2] - 2026-05-27
+### Fixed
+- CCB calendar: HTML entities in film titles now decoded correctly (e.g. "Le città di pianura")
+- CCB film detail: HTML entities decoded in title, director, country, cinema name fields
+- CCB film detail: synopsis restored after site renamed CSS class `one-col-text` → `two-col-text`
+
 ## [2.3.1] - 2026-04-11
 ### Fixed
 - Share button now uses `@capacitor/share` plugin for native Android/iOS share sheet (previously used Web Share API which is unavailable in Capacitor WebView)
