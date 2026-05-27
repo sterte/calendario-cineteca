@@ -48,7 +48,7 @@ const parseCcbMovieDetail = (html, movieSlug) => {
         const image = heroImgs.length > 0 ? heroImgs[0].getAttribute('src') || '' : '';
 
         // Synopsis
-        const synopsisEls = parsed.getElementsByClassName('one-col-text');
+        const synopsisEls = parsed.getElementsByClassName('two-col-text');
         const summary = synopsisEls.length > 0 ? synopsisEls[0].innerHTML.trim() : '';
 
         // Duration from info-box--item containing "Durata:"
