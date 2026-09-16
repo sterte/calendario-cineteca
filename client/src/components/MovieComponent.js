@@ -23,6 +23,11 @@ import { Helmet } from 'react-helmet-async';
 
 const DEFAULT_MOVIE_STATE = { isLoading: true, errMess: null, movies: null, isLoadingImdb: false, imdbId: null, imdbRating: null, imdbRatingCount: null, errMessImdb: null };
 
+const getYoutubeEmbedUrl = (url) => {
+  const match = (url || '').match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
+  return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
+};
+
 function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible = true }) {
   const movie = useSelector(state => state.movies.movieCache[repeatId] ?? DEFAULT_MOVIE_STATE);
   const auth = useSelector(state => state.auth);
@@ -35,6 +40,7 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [aiModal, setAiModal] = useState({ open: false, title: '', content: '', isLoading: false, error: null });
+  const [trailerModalOpen, setTrailerModalOpen] = useState(false);
   const ratingRef = useRef(null);
   const commentRef = useRef(null);
 
@@ -48,6 +54,13 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
   useEffect(() => {
     if (auth.isAuthenticated) dispatch(fetchUserPrefs());
   }, [auth.isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (!trailerModalOpen) return;
+    const onKeyDown = (e) => { if (e.key === 'Escape') setTrailerModalOpen(false); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [trailerModalOpen]);
 
   useEffect(() => {
     if (!visible) return;
@@ -276,8 +289,17 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
                 }
               </div>
             </div>
-            <div className='col-12 d-flex col-md-3 mt-3 mt-md-0'>
+            <div className='col-12 d-flex col-md-3 mt-3 mt-md-0 position-relative'>
               <img src={movie.movies.image} className='img-fluid' alt={'img-' + movie.movies.image} />
+              {movie.movies.trailerUrl &&
+                <Button
+                  className='position-absolute top-50 start-50 translate-middle rounded-circle d-flex align-items-center justify-content-center p-0'
+                  style={{ width: '3rem', height: '3rem', backgroundColor: 'rgba(0,0,0,0.6)', border: 'none' }}
+                  onClick={() => setTrailerModalOpen(true)}
+                  title='Guarda il trailer'>
+                  <span className='fa fa-play text-white' />
+                </Button>
+              }
             </div>
           </div>
 
@@ -430,6 +452,29 @@ function Movie({ provider: providerParam, categoryId, movieId, repeatId, visible
           {aiModal.content && <div dangerouslySetInnerHTML={{ __html: aiModal.content }} />}
         </ModalBody>
       </Modal>
+
+      {trailerModalOpen &&
+        <div
+          className='position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center'
+          style={{ backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 2000 }}
+          onClick={() => setTrailerModalOpen(false)}>
+          <Button
+            className='position-fixed top-0 end-0 m-3 rounded-circle d-flex align-items-center justify-content-center p-0'
+            style={{ width: '2.5rem', height: '2.5rem', backgroundColor: 'rgba(255,255,255,0.15)', border: 'none' }}
+            onClick={() => setTrailerModalOpen(false)}
+            title='Chiudi'>
+            <span className='fa fa-times text-white' />
+          </Button>
+          <iframe
+            src={getYoutubeEmbedUrl(movie.movies.trailerUrl)}
+            title={'Trailer - ' + movie.movies.title}
+            allow='autoplay; encrypted-media'
+            allowFullScreen
+            style={{ width: 'min(100vw, 177.78vh)', height: 'min(100vh, 56.25vw)', border: 'none' }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      }
     </>
   );
 }

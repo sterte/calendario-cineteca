@@ -55,8 +55,11 @@ const parseMovieDetail = (html, originalUrl) => {
             if (durMatch) durationMinutes = parseInt(durMatch[1]);
         }
         var image = parsed.getElementsByClassName('c-show-single-gallery')[0].getElementsByTagName('img');
-        image = image.length > 0 ? image[0].getAttribute('src') : '';             
-        
+        image = image.length > 0 ? image[0].getAttribute('src') : '';
+
+        var trailerEls = parsed.getElementsByClassName('c-show-single-gallery__trailer');
+        var trailerUrl = trailerEls.length > 0 ? trailerEls[0].getAttribute('href') : '';
+
         var buyLink = parsed.getElementsByClassName('c-button-entry-condition--buy').length > 0 ? parsed.getElementsByClassName('c-button-entry-condition--buy') : '';
         buyLink = buyLink.length > 0 ?  buyLink[0].getAttribute('href') : '';
         
@@ -147,7 +150,7 @@ const parseMovieDetail = (html, originalUrl) => {
             }
         }        
                 
-        movie = {title, duration: durata, originalTitle, country, year, director, durationMinutes, summary: sinossi, image, currentHour, hours: days, originalUrl, buyLink};
+        movie = {title, duration: durata, originalTitle, country, year, director, durationMinutes, summary: sinossi, image, trailerUrl, currentHour, hours: days, originalUrl, buyLink};
         return movie;
     }catch(error){
         console.log(error)

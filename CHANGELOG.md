@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.4.0] - 2026-09-16
+### Added
+- Film detail (Cineteca di Bologna): trailer play button over the cover image, opens a borderless fullscreen overlay with inline YouTube playback (letterboxed responsively, adapts to device rotation via CSS, no page navigation away from the app)
+
 ## [2.3.2] - 2026-05-27
 ### Fixed
 - CCB calendar: HTML entities in film titles now decoded correctly (e.g. "Le città di pianura")
